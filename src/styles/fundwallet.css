@@ -11,8 +11,8 @@
 /* Main Card */
 .fund-wallet-card {
   background: #ffffff;
-  border-radius: 10px;
-  padding: 10px;
+  border-radius: 6px;
+  padding: 20px;
 }
 
 /* Payment Option */
@@ -116,3 +116,4 @@
     font-size: 18px;
   }
 }
+
