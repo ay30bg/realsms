@@ -76,7 +76,7 @@
 /* ----------------- Mobile View ----------------- */
 @media (max-width: 600px) {
   .fund-wallet-page {
-    padding: 3px;
+    padding: 1px;
   }
 
   .fund-title {
@@ -116,4 +116,5 @@
     font-size: 18px;
   }
 }
+
 
