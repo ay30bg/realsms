@@ -6,9 +6,10 @@ import flutterwaveLogo from "../assets/flutterwave.png";
 const FundWallet = () => {
   return (
     <div className="fund-wallet-page">
-      <h2 className="fund-title">Fund Wallet</h2>
-
+      
       <div className="fund-wallet-card">
+        <h2 className="fund-title">Fund Wallet</h2>
+
         {/* USDT */}
         <div className="payment-option">
           <div className="payment-left">
