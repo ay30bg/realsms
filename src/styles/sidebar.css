@@ -82,7 +82,7 @@
 /* ======================= */
 @media (max-width: 768px) {
   .sidebar {
-    width: 80px; /* narrow for icons only */
+    width: 60px;
     padding: 20px 10px;
   }
 
@@ -105,4 +105,5 @@
     font-size: 15px; /* make icons bigger */
   }
 }
+
 
