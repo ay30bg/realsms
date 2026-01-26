@@ -9,7 +9,6 @@
   background-color: #fff;
   padding: 20px;
   border-radius: 6px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
 /* =====================
@@ -341,3 +340,4 @@
     margin-top: 20px;  /* spacing in the page */
   }
 }
+
