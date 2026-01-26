@@ -1,0 +1,118 @@
+.fund-wallet-page {
+  padding: 20px;
+}
+
+.fund-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+/* Main Card */
+.fund-wallet-card {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+/* Payment Option */
+.payment-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  background: #fff;
+}
+
+.payment-option:last-child {
+  margin-bottom: 0;
+}
+
+.payment-option:hover {
+  border-color: #2f6f33;
+}
+
+/* Left section */
+.payment-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Icon */
+.payment-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: contain;
+  background: #f9fafb;
+  padding: 6px;
+}
+
+/* Text */
+.payment-text h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: #111827;
+}
+
+.payment-text span {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* Arrow */
+.payment-arrow {
+  font-size: 20px;
+  color: #9ca3af;
+}
+
+/* ----------------- Mobile View ----------------- */
+@media (max-width: 600px) {
+  .fund-wallet-page {
+    padding: 3px;
+  }
+
+  .fund-title {
+    font-size: 18px;
+    margin-bottom: 14px;
+  }
+
+  .fund-wallet-card {
+    padding: 14px;
+    border-radius: 6px;
+  }
+
+  .payment-option {
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+
+  .payment-left {
+    gap: 10px;
+  }
+
+  .payment-icon {
+    width: 36px;
+    height: 36px;
+    padding: 5px;
+  }
+
+  .payment-text h4 {
+    font-size: 14px;
+  }
+
+  .payment-text span {
+    font-size: 12px;
+  }
+
+  .payment-arrow {
+    font-size: 18px;
+  }
+}
