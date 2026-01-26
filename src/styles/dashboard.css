@@ -103,7 +103,7 @@
 /* ----------------- Mobile View ----------------- */
 @media (max-width: 640px) {
   .dashboard {
-    padding: 3px;
+    padding: 1px;
   }
 
   /* Welcome card */
@@ -152,3 +152,4 @@
     font-size: 16px;
   }
 }
+
