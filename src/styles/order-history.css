@@ -1,0 +1,96 @@
+/* PAGE — main container */
+.order-history-page {
+  padding: 20px;
+  overflow-x: hidden; /* lock horizontal scroll */
+}
+
+/* CARD */
+.order-history-card {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 6px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* TABLE CONTAINER — controls table width */
+.order-table-container {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden; /* prevent scroll */
+}
+
+/* TABLE */
+.order-history-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* key: fixed layout prevents shrink */
+  font-size: 14px;
+}
+
+/* HEADER & BODY */
+.order-history-table thead,
+.order-history-table tbody {
+  display: table;
+  width: 100%;
+  table-layout: fixed; /* keep alignment */
+}
+
+/* CELLS */
+.order-history-table th,
+.order-history-table td {
+  padding: 12px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+  overflow: hidden; /* hide overflow */
+  text-overflow: ellipsis; /* show ... if text too long */
+  white-space: nowrap; /* prevent wrapping on desktop */
+}
+
+/* HEADER STYLING */
+.order-history-table th {
+  background-color: #f3f4f6;
+  font-weight: 600;
+  color: #374151;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ROW HOVER */
+.order-history-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+/* STATUS BADGES */
+.status {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* MOBILE — screens under 640px */
+@media (max-width: 640px) {
+  .order-history-page {
+    padding: 6px;
+  }
+
+  .order-history-card {
+    padding: 12px;
+  }
+
+  .order-history-table {
+    font-size: 12px;
+    table-layout: auto; /* allow flexible column widths */
+  }
+
+  .order-history-table th,
+  .order-history-table td {
+    white-space: normal; /* allow wrapping on small screens */
+    overflow: visible;   /* show full text */
+    text-overflow: clip; /* no ... on mobile */
+  }
+}

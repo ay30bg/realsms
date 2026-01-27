@@ -1,0 +1,291 @@
+/* Page */
+.opay-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column; /* stack from top */
+  align-items: center;
+  justify-content: flex-start; /* card near top */
+  padding: 20px 10px;
+  overflow-x: hidden; /* prevent horizontal scroll */
+}
+
+/* Card */
+.opay-card {
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06); /* subtle shadow */
+  position: relative;
+  overflow: hidden;
+  margin-top: 20px; /* slight spacing from top */
+}
+
+/* Back button */
+.back-btn {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  padding: 8px;
+  cursor: pointer;
+  color: #16a34a;
+}
+
+/* Header */
+.opay-header {
+  text-align: center;
+  padding: 32px 20px 18px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.opay-header img {
+  width: 72px;
+  margin-bottom: 10px;
+}
+
+.opay-header h3 {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.opay-header p {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* Body */
+.opay-body {
+  padding: 24px 20px 28px;
+}
+
+.opay-body label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Amount input */
+.amount-input {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 0 12px;
+  margin-top: 6px;
+  transition: border 0.2s ease;
+}
+
+.amount-input:focus-within {
+  border-color: #16a34a;
+}
+
+.amount-input.error {
+  border-color: #dc2626;
+}
+
+.amount-input span {
+  font-size: 18px;
+  font-weight: 600;
+  color: #000;
+}
+
+.amount-input input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 14px 10px;
+  font-size: 16px;
+}
+
+/* Error text */
+.error-text {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #dc2626;
+}
+
+/* Min/Max helper text */
+.min-max-text {
+  font-size: 13px;
+  color: #4b5563;
+  margin-top: 6px;
+  display: flex;
+  justify-content: flex-start;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.min-max-text span {
+  font-weight: 600;
+  color: #16a34a;
+}
+
+/* Quick amount buttons */
+.quick-amounts {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 14px 0 6px;
+}
+
+.quick-btn {
+  padding: 10px 6px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  background: #f8f8fa;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.quick-btn:hover {
+  border-color: #16a34a;
+  background: #ecfdf5;
+}
+
+.quick-btn.active {
+  background: #e1f5ea;
+  color: #37ac80;
+  border-color: #e1f5ea;
+}
+
+/* Button */
+.fund-btn {
+  width: 100%;
+  margin-top: 18px;
+  padding: 14px;
+  background: #00b875;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 60px;
+  cursor: pointer;
+}
+
+.fund-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background: #b9e5ce;
+}
+
+/* Loader */
+.loader {
+  width: 22px;
+  height: 22px;
+  border: 3px solid rgba(255,255,255,0.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Secured badge */
+.secure-badge {
+  margin-top: 14px;
+  font-size: 13px;
+  text-align: center;
+  color: #6b7280;
+}
+
+/* Mobile tweaks */
+@media (max-width: 480px) {
+
+  .opay-page {
+    padding-top: 40px;
+    padding-bottom: 20px;
+    justify-content: flex-start;
+    min-height: auto;
+  }
+
+  .opay-card {
+    width: 95%;
+    max-width: none;
+    border-radius: 12px;
+    padding-bottom: 20px;
+    margin-top: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .back-btn {
+    top: 16px;
+    left: 16px;
+    font-size: 16px;
+    padding: 8px;
+  }
+
+  .opay-header {
+    padding: 24px 16px 16px;
+  }
+
+  .opay-header img {
+    width: 60px;
+    margin-bottom: 8px;
+  }
+
+  .opay-header h3 {
+    font-size: 18px;
+  }
+
+  .opay-header p {
+    font-size: 13px;
+  }
+
+  .opay-body {
+    padding: 20px 16px 24px;
+  }
+
+  .amount-input {
+    padding: 0 10px;
+  }
+
+  .amount-input input {
+    padding: 12px 8px;
+    font-size: 15px;
+  }
+
+  .quick-amounts {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin: 12px 0 6px;
+  }
+
+  .quick-btn {
+    padding: 8px 4px;
+    font-size: 12px;
+  }
+
+  .fund-btn {
+    padding: 12px;
+    font-size: 15px;
+    border-radius: 50px;
+  }
+
+  .min-max-text {
+    font-size: 12px;
+  }
+
+  .error-text {
+    font-size: 12px;
+  }
+
+  .loader {
+    width: 18px;
+    height: 18px;
+    border-width: 2px;
+  }
+
+  .secure-badge {
+    font-size: 12px;
+    margin-top: 10px;
+  }
+}
