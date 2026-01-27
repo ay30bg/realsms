@@ -113,6 +113,7 @@
     font-size: 13px;
     color: #4b5563;
     margin-top: 6px;
+    margin-bottom: 14px;
     display: flex;
     justify-content: flex-start;
     gap: 8px;
@@ -272,6 +273,7 @@
 
     .min-max-text {
         font-size: 12px;
+        margin-bottom: 20px;
     }
 
     .error-text {
