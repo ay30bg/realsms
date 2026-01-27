@@ -3,13 +3,10 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    /* stack from top */
     align-items: center;
     justify-content: flex-start;
-    /* card near top */
     padding: 20px 10px;
     overflow-x: hidden;
-    /* prevent horizontal scroll */
 }
 
 /* Card */
@@ -204,10 +201,8 @@
 
 /* Mobile tweaks */
 @media (max-width: 480px) {
-
     .opay-page {
-        padding-top: 40px;
-        padding-bottom: 20px;
+        padding: 20px 5px;
         justify-content: flex-start;
         min-height: auto;
     }
