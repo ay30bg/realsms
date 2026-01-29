@@ -192,5 +192,21 @@ body {
   .register-mobile-logo {
     display: block;
   }
+
+  .terms {
+    display: grid;
+    grid-template-columns: auto 1fr; /* checkbox + text */
+    gap: 8px;
+    align-items: center; /* vertical center of checkbox with multi-line text */
+  }
+
+  .terms input[type="checkbox"] {
+    margin-top: 0; /* ensure no extra offset */
+  }
+
+  .terms p {
+    margin: 0;
+  }
 }
+
 
