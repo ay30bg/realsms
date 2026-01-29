@@ -23,6 +23,7 @@
   border: 1px solid #e5e7eb;
   font-size: 15px;
   background-color: #fff;
+  color: #000;
   cursor: pointer;
 
   -webkit-appearance: none;
@@ -358,6 +359,7 @@
     margin-top: 20px;  /* spacing in the page */
   }
 }
+
 
 
 
