@@ -293,6 +293,10 @@
     padding: 1px;
   }
 
+ .buy-number-card{
+ box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+   
   .server-select {
     padding: 10px;
     font-size: 14px;
@@ -344,6 +348,7 @@
     margin-top: 20px;  /* spacing in the page */
   }
 }
+
 
 
 
