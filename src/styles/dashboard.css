@@ -67,10 +67,6 @@
   cursor: default;
 }
 
-.stat-card:hover {
-  transform: translateY(-4px);
-}
-
 .stat-card.dark {
   background-color: #1e1e1e;
   color: #f9fafb;
