@@ -336,9 +336,11 @@
     right: auto;
     left: auto;
     width: 100%;
-    border-radius: 12px;
+    border-radius: 8px;
+    border: 2px solid #e5e7eb;
     box-shadow: none;
     margin-top: 20px;  /* spacing in the page */
   }
 }
+
 
