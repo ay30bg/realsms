@@ -11,8 +11,9 @@ import {
 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import "../styles/topbar.css";
+import { useBalance } from "../context/BalanceContext"; // ✅ import balance context
 
-const Topbar = ({ balance = 25000, toggleSidebar }) => {
+const Topbar = ({ toggleSidebar }) => {
   const [darkMode, setDarkMode] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [displayBalance, setDisplayBalance] = useState(0);
@@ -26,11 +27,14 @@ const Topbar = ({ balance = 25000, toggleSidebar }) => {
     navigate("/login");
   };
 
+  // ✅ Get real balance from context
+  const { balance } = useBalance();
+
   // Animate balance count-up
   useEffect(() => {
     let start = 0;
     const end = balance;
-    const duration = 1000;
+    const duration = 1000; // 1s
     const increment = end / (duration / 20);
 
     const counter = setInterval(() => {
@@ -73,7 +77,10 @@ const Topbar = ({ balance = 25000, toggleSidebar }) => {
         {/* Profile */}
         <div className="profile" onClick={toggleDropdown} style={{ cursor: "pointer" }}>
           <FiUser size={20} style={{ marginRight: "5px" }} />
-          <p className="username" style={{ display: "inline-flex", alignItems: "center", margin: 0 }}>
+          <p
+            className="username"
+            style={{ display: "inline-flex", alignItems: "center", margin: 0 }}
+          >
             Ayomide Yekeen
             <FiChevronDown
               size={16}
@@ -92,7 +99,11 @@ const Topbar = ({ balance = 25000, toggleSidebar }) => {
               <p style={{ display: "flex", alignItems: "center", gap: "5px" }}>
                 <FiSettings /> ACCOUNT
               </p>
-              <p className="logout" onClick={handleLogout} style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+              <p
+                className="logout"
+                onClick={handleLogout}
+                style={{ display: "flex", alignItems: "center", gap: "5px" }}
+              >
                 <FiLogOut /> LOGOUT
               </p>
             </div>
