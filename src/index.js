@@ -3,11 +3,14 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { BalanceProvider } from './context/BalanceContext'; // ✅ import BalanceProvider
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <BalanceProvider> {/* ✅ Wrap your app */}
+      <App />
+    </BalanceProvider>
   </React.StrictMode>
 );
 
