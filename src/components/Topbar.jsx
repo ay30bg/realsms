@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   FiUser,
-  FiSun,
-  FiMoon,
   FiCreditCard,
   FiChevronDown,
   FiSettings,
@@ -14,12 +12,10 @@ import "../styles/topbar.css";
 import { useBalance } from "../context/BalanceContext"; // ✅ import balance context
 
 const Topbar = ({ toggleSidebar }) => {
-  const [darkMode, setDarkMode] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [displayBalance, setDisplayBalance] = useState(0);
 
   const navigate = useNavigate();
-  const toggleDarkMode = () => setDarkMode(!darkMode);
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
 
   const handleLogout = () => {
@@ -50,7 +46,7 @@ const Topbar = ({ toggleSidebar }) => {
   }, [balance]);
 
   return (
-    <div className={`topbar ${darkMode ? "dark" : ""}`}>
+    <div className="topbar">
       {/* Left section: Hamburger + optional logo/title */}
       <div className="topbar-left">
         <div className="hamburger" onClick={toggleSidebar}>
@@ -58,7 +54,7 @@ const Topbar = ({ toggleSidebar }) => {
         </div>
       </div>
 
-      {/* Right section: Balance, Dark Mode, Profile */}
+      {/* Right section: Balance and Profile */}
       <div className="topbar-right">
         {/* Balance */}
         <div className="balance">
@@ -67,11 +63,6 @@ const Topbar = ({ toggleSidebar }) => {
             <span>Balance</span>
             <strong>₦{displayBalance.toLocaleString()}</strong>
           </div>
-        </div>
-
-        {/* Dark mode toggle */}
-        <div className="dark-mode-toggle" onClick={toggleDarkMode}>
-          {darkMode ? <FiSun size={20} /> : <FiMoon size={20} />}
         </div>
 
         {/* Profile */}
