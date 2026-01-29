@@ -177,11 +177,12 @@ body {
 
   .login-card {
     margin: 0 auto;
-    padding: 18px; /* compact padding */
-    border-radius: 12px;
+    padding: 18px; 
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
     max-height: calc(100vh - 20px);
-    overflow-y: auto; /* card scroll only if needed */
-    margin-top: 0; /* remove desktop offset */
+    overflow-y: auto; 
+    margin-top: 0; 
   }
 
   .login-mobile-logo {
@@ -196,4 +197,5 @@ body {
     margin-bottom: 16px; /* compact */
   }
 }
+
 
