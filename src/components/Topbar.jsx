@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  FiUser,
   FiCreditCard,
   FiChevronDown,
   FiSettings,
@@ -9,7 +8,7 @@ import {
 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import "../styles/topbar.css";
-import { useBalance } from "../context/BalanceContext"; // ✅ import balance context
+import { useBalance } from "../context/BalanceContext"; // ✅ use balance from context
 
 const Topbar = ({ toggleSidebar }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -45,9 +44,12 @@ const Topbar = ({ toggleSidebar }) => {
     return () => clearInterval(counter);
   }, [balance]);
 
+  // ✅ Avatar URL
+  const avatarUrl = "https://i.pravatar.cc/40"; // replace with your user's avatar
+
   return (
     <div className="topbar">
-      {/* Left section: Hamburger + optional logo/title */}
+      {/* Left section: Hamburger */}
       <div className="topbar-left">
         <div className="hamburger" onClick={toggleSidebar}>
           <FiMenu size={24} />
@@ -65,25 +67,44 @@ const Topbar = ({ toggleSidebar }) => {
           </div>
         </div>
 
-        {/* Profile */}
-        <div className="profile" onClick={toggleDropdown} style={{ cursor: "pointer" }}>
-          <FiUser size={20} style={{ marginRight: "5px" }} />
-          <p
-            className="username"
-            style={{ display: "inline-flex", alignItems: "center", margin: 0 }}
+        {/* Profile / Avatar */}
+        <div
+          className="profile"
+          onClick={toggleDropdown}
+          style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+        >
+          <img
+            src={avatarUrl}
+            alt="User Avatar"
+            style={{
+              width: "32px",
+              height: "32px",
+              borderRadius: "50%",
+              marginRight: "2px",
+            }}
+          />
+
+          <div
+            className="username-container"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              margin: 0,
+            }}
           >
-            Ayomide Yekeen
+            <span className="username-text">Ayomide Yekeen</span>
             <FiChevronDown
+              className="username-arrow"
               size={16}
               style={{
                 marginLeft: "5px",
                 position: "relative",
                 top: "2px",
                 transition: "transform 0.3s",
-                transform: dropdownOpen ? "rotate(180deg)" : "rotate(0deg)"
+                transform: dropdownOpen ? "rotate(180deg)" : "rotate(0deg)",
               }}
             />
-          </p>
+          </div>
 
           {dropdownOpen && (
             <div className="dropdown-menu">
