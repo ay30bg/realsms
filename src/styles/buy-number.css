@@ -135,12 +135,6 @@
   vertical-align: middle;
 }
 
-.copy-btn.copied {
-  background-color: #367e3a;
-  cursor: default;
-  opacity: 0.9;
-}
-
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
@@ -272,7 +266,8 @@
   font-weight: 500;
 }
 
-.copy-btn {
+.copy-btn, 
+.copy-btn.copied {
   background: #367e3a;
   color: #fff;
   border: none;
@@ -348,6 +343,7 @@
     margin-top: 20px;  /* spacing in the page */
   }
 }
+
 
 
 
