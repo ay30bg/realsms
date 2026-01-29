@@ -2,18 +2,35 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import StatCard from "../components/StatCard";
 import { FiCreditCard, FiShoppingCart, FiCheckCircle } from "react-icons/fi";
+import { useBalance } from "../context/BalanceContext"; // ✅ import
 
 const Dashboard = ({ darkMode }) => {
   const navigate = useNavigate();
+  const { balance } = useBalance(); // ✅ real balance
 
   useEffect(() => {
     document.title = "Dashboard - RealSMS";
   }, []);
 
   const stats = [
-    { title: "Wallet Balance", value: "₦25,000", icon: <FiCreditCard />, color: "#10b981" },
-    { title: "Active Orders", value: 3, icon: <FiShoppingCart />, color: "#f59e0b" },
-    { title: "Completed Orders", value: 12, icon: <FiCheckCircle />, color: "#3b82f6" },
+    {
+      title: "Wallet Balance",
+      value: `₦${balance.toLocaleString()}`, // ✅ dynamic
+      icon: <FiCreditCard />,
+      color: "#10b981",
+    },
+    {
+      title: "Active Orders",
+      value: 3,
+      icon: <FiShoppingCart />,
+      color: "#f59e0b",
+    },
+    {
+      title: "Completed Orders",
+      value: 12,
+      icon: <FiCheckCircle />,
+      color: "#3b82f6",
+    },
   ];
 
   const handleFundWallet = () => {
