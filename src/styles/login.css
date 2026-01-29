@@ -164,10 +164,6 @@ body {
    MOBILE VIEW
 ===================== */
 @media (max-width: 900px) {
-  body {
-    overflow: hidden; /* NO PAGE SCROLL */
-  }
-
   .login-wrapper {
     grid-template-columns: 1fr;
     padding: 16px;
@@ -200,3 +196,4 @@ body {
     margin-bottom: 16px; /* compact */
   }
 }
+
