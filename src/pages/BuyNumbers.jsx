@@ -5,6 +5,12 @@ import { servers, services } from "../data/services";
 import "../styles/buy-number.css";
 
 const BuyNumbers = ({ darkMode }) => {
+
+  // ✅ PAGE TITLE
+  useEffect(() => {
+    document.title = "Buy Numbers - RealSMS";
+  }, []);
+
   const [selectedServer, setSelectedServer] = useState(null);
   const [activeOrder, setActiveOrder] = useState(null);
   const [orderStatus, setOrderStatus] = useState("idle");
@@ -18,7 +24,6 @@ const BuyNumbers = ({ darkMode }) => {
     const serverId = Number(e.target.value);
     const server = servers.find((s) => s.id === serverId);
 
-    // Reset everything
     setSelectedServer(null);
     setActiveOrder(null);
     setOrderStatus("idle");
@@ -27,7 +32,6 @@ const BuyNumbers = ({ darkMode }) => {
     setSearch("");
     setLoading(true);
 
-    // Simulate fetching services
     setTimeout(() => {
       setSelectedServer(server || null);
       setLoading(false);
@@ -40,28 +44,23 @@ const BuyNumbers = ({ darkMode }) => {
     const countryCode = "+234";
     const generatedNumber = `${countryCode}${localNumber}`;
 
-    // Reset previous OTP/order
     setOtp(null);
     setTimeLeft(300);
     setOrderStatus("idle");
     setActiveOrder(null);
 
-    // Spinner delay first
     setTimeout(() => {
-      // Stop button spinner
       if (stopButtonSpinner) stopButtonSpinner();
 
-      // Show OTP box and start waiting
       setActiveOrder({ ...service, generatedNumber });
       setOrderStatus("waiting");
 
-      // Simulate OTP received after 2 seconds
       setTimeout(() => {
         const simulatedOtp = Math.floor(100000 + Math.random() * 900000);
         setOtp(simulatedOtp);
         setOrderStatus("received");
-      }, 2000); // OTP delay
-    }, 3000); // spinner duration
+      }, 2000);
+    }, 3000);
   };
 
   // TIMER FOR WAITING OTP
@@ -82,17 +81,15 @@ const BuyNumbers = ({ darkMode }) => {
     return () => clearInterval(timer);
   }, [orderStatus]);
 
-  const filteredServices =
-    selectedServer
-      ? services
+  const filteredServices = selectedServer
+    ? services
         .filter((s) => s.serverId === selectedServer.id)
         .filter((s) =>
           s.name.toLowerCase().includes(search.toLowerCase())
         )
-      : [];
+    : [];
 
   return (
-
     <div className={`marketplace ${darkMode ? "dark" : ""}`}>
       <div className="buy-number-card">
         <h2>Buy Numbers</h2>
@@ -155,7 +152,10 @@ const BuyNumbers = ({ darkMode }) => {
               <p>
                 <strong>Number:</strong> {activeOrder.generatedNumber}
               </p>
-              <button className="close-btn" onClick={() => setActiveOrder(null)}>
+              <button
+                className="close-btn"
+                onClick={() => setActiveOrder(null)}
+              >
                 ×
               </button>
             </div>
@@ -164,7 +164,8 @@ const BuyNumbers = ({ darkMode }) => {
               <>
                 <p>Waiting for OTP...</p>
                 <p className="timer">
-                  {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, "0")}
+                  {Math.floor(timeLeft / 60)}:
+                  {String(timeLeft % 60).padStart(2, "0")}
                 </p>
               </>
             )}
@@ -181,7 +182,9 @@ const BuyNumbers = ({ darkMode }) => {
               </>
             )}
 
-            {orderStatus === "expired" && <p className="error">OTP expired</p>}
+            {orderStatus === "expired" && (
+              <p className="error">OTP expired</p>
+            )}
           </div>
         )}
       </div>
