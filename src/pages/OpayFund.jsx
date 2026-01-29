@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/opay-fund.css";
 import opayLogo from "../assets/opay.png";
@@ -12,6 +12,11 @@ const OpayFund = () => {
   const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // ✅ PAGE TITLE
+  useEffect(() => {
+    document.title = "Opay Fund - RealSMS";
+  }, []);
 
   // Disable button conditions
   const isPayDisabled =
@@ -45,7 +50,6 @@ const OpayFund = () => {
   return (
     <div className="opay-page">
       <div className="opay-card">
-
         {/* Back button */}
         <button className="back-btn" onClick={() => navigate("/fund-wallet")}>
           ← Back
