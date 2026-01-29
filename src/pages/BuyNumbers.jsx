@@ -3,9 +3,9 @@ import { FiSearch } from "react-icons/fi";
 import ServiceCard from "../components/ServiceCard";
 import { servers, services } from "../data/services";
 import "../styles/buy-number.css";
+import { useBalance } from "../context/BalanceContext"; // ✅ Import balance context
 
 const BuyNumbers = ({ darkMode }) => {
-
   // PAGE TITLE
   useEffect(() => {
     document.title = "Buy Numbers - RealSMS";
@@ -19,6 +19,9 @@ const BuyNumbers = ({ darkMode }) => {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  // ✅ Get balance functions
+  const { balance, deductBalance } = useBalance();
 
   // SERVER CHANGE
   const handleServerChange = (e) => {
@@ -42,6 +45,16 @@ const BuyNumbers = ({ darkMode }) => {
 
   // HANDLE BUY
   const handleBuy = (service, stopButtonSpinner) => {
+    // ✅ Check balance first
+    if (balance < service.price) {
+      alert("Insufficient balance to buy this service");
+      if (stopButtonSpinner) stopButtonSpinner();
+      return;
+    }
+
+    // ✅ Deduct balance
+    deductBalance(service.price);
+
     const localNumber = Math.floor(7000000000 + Math.random() * 99999999);
     const countryCode = "+234";
     const generatedNumber = `${countryCode}${localNumber}`;
@@ -108,6 +121,9 @@ const BuyNumbers = ({ darkMode }) => {
       <div className="buy-number-card">
         <h2>Buy Numbers</h2>
 
+        {/* ✅ Show balance */}
+        <p className="balance">Balance: ₦{balance.toLocaleString()}</p>
+
         {/* SERVER SELECT */}
         <select
           className="server-select"
@@ -152,6 +168,8 @@ const BuyNumbers = ({ darkMode }) => {
                     key={service.id}
                     service={service}
                     onBuy={handleBuy}
+                    darkMode={darkMode}
+                    disabled={balance < service.price} // ✅ disable if not enough balance
                   />
                 ))}
               </div>
