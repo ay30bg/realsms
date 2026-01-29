@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/fundwallet.css";
 import usdtLogo from "../assets/usdt-logo.png";
@@ -6,6 +6,11 @@ import opayLogo from "../assets/opay.png";
 
 const FundWallet = () => {
   const navigate = useNavigate();
+
+  // ✅ PAGE TITLE
+  useEffect(() => {
+    document.title = "Fund Wallet - RealSMS";
+  }, []);
 
   return (
     <div className="fund-wallet-page">
