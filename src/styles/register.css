@@ -163,11 +163,11 @@ body {
    MOBILE (NO PAGE SCROLL + CARD UP)
 ===================== */
 @media (max-width: 900px) {
-  html,
+  /* html,
   body {
     height: 100%;
     overflow: hidden;
-  }
+  } */
 
   .register-wrapper {
     grid-template-columns: 1fr;
@@ -193,3 +193,4 @@ body {
     display: block;
   }
 }
+
