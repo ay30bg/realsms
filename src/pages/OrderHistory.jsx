@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { mockOrders } from "../data/mockOrders";
 import { formatMoney } from "../utils/formatMoney";
 import "../styles/order-history.css";
 
 const OrderHistory = () => {
   const [orders] = useState(mockOrders || []);
+
+  // ✅ PAGE TITLE
+  useEffect(() => {
+    document.title = "Order History - RealSMS";
+  }, []);
 
   return (
     <div className="order-history-page">
