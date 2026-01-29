@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import StatCard from "../components/StatCard";
 import { FiCreditCard, FiShoppingCart, FiCheckCircle } from "react-icons/fi";
 
 const Dashboard = ({ darkMode }) => {
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.title = "Dashboard - RealSMS";
@@ -14,6 +16,10 @@ const Dashboard = ({ darkMode }) => {
     { title: "Completed Orders", value: 12, icon: <FiCheckCircle />, color: "#3b82f6" },
   ];
 
+  const handleFundWallet = () => {
+    navigate("/fund-wallet");
+  };
+
   return (
     <div className={`dashboard ${darkMode ? "dark" : ""}`}>
       <div className="welcome-card">
@@ -21,7 +27,7 @@ const Dashboard = ({ darkMode }) => {
           <h2>Welcome Back, User!</h2>
           <p>Here's a quick overview of your account.</p>
         </div>
-        <button>Fund Wallet</button>
+        <button onClick={handleFundWallet}>Fund Wallet</button>
       </div>
 
       <div className="stats-container">
