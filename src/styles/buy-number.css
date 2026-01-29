@@ -1,3 +1,4 @@
+
 /* =====================
    ROOT / WRAPPER
 ===================== */
@@ -165,6 +166,20 @@
 .service-card:active {
   transform: scale(0.98);
 }
+
+.service-card.disabled {
+  opacity: 0.6;
+}
+
+.service-right button.disabled-btn {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.service-right button:disabled {
+  opacity: 0.7;
+}
+
 
 .service-left {
   display: flex;
