@@ -67,7 +67,7 @@
   .support-card {
     padding: 35px 25px;
     margin-top: 0; 
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
     border-radius: 6px;
   }
 
@@ -89,3 +89,4 @@
     height: 18px;
   }
 }
+
