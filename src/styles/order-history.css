@@ -80,6 +80,8 @@
 
   .order-history-card {
     padding: 12px;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
   }
 
   .order-history-table {
@@ -94,3 +96,4 @@
     text-overflow: clip; /* no ... on mobile */
   }
 }
+
