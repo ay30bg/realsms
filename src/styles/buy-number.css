@@ -278,10 +278,11 @@
   margin-top: 8px;
 }
 
-.copy-btn.copied {
-  background: #16a34a; /* brighter green */
+.copy-btn.copied:disabled {
+  background: #16a34a;
   cursor: default;
 }
+
 
 .otp-box button:disabled {
   background: #9ca3af;
@@ -347,6 +348,7 @@
     margin-top: 20px;  /* spacing in the page */
   }
 }
+
 
 
 
