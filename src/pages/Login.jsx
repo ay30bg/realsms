@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import heroImg from "../assets/hero-img.png";
 import logo from "../assets/logo.png";
@@ -8,6 +8,11 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
+  // ✅ PAGE TITLE
+  useEffect(() => {
+    document.title = "Login - RealSMS";
+  }, []);
 
   const handleLogin = () => {
     if (email === "user@test.com" && password === "123456") {
@@ -27,7 +32,6 @@ const Login = () => {
 
       {/* Right Card */}
       <div className="login-card">
-
         {/* MOBILE LOGO */}
         <div className="login-mobile-logo">
           <img src={logo} alt="Logo" />
