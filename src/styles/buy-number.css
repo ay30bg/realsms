@@ -266,8 +266,7 @@
   font-weight: 500;
 }
 
-.copy-btn, 
-.copy-btn.copied {
+.copy-btn {
   background: #367e3a;
   color: #fff;
   border: none;
@@ -277,6 +276,11 @@
   font-size: 14px;
   width: 100%;
   margin-top: 8px;
+}
+
+.copy-btn.copied {
+  background: #16a34a; /* brighter green */
+  cursor: default;
 }
 
 .otp-box button:disabled {
@@ -343,6 +347,7 @@
     margin-top: 20px;  /* spacing in the page */
   }
 }
+
 
 
 
