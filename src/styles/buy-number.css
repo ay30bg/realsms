@@ -18,11 +18,20 @@
 .server-select {
   width: 100%;
   padding: 12px 14px;
+  padding-right: 40px;
   border-radius: 6px;
   border: 1px solid #e5e7eb;
   font-size: 15px;
-  background: #fff;
+  background-color: #fff;
   cursor: pointer;
+
+  -webkit-appearance: none;
+  appearance: none;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='gray'%3E%3Cpath d='M5.5 7.5l4.5 4.5 4.5-4.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
 }
 
 .server-select option {
@@ -349,6 +358,7 @@
     margin-top: 20px;  /* spacing in the page */
   }
 }
+
 
 
 
