@@ -121,9 +121,6 @@ const BuyNumbers = ({ darkMode }) => {
       <div className="buy-number-card">
         <h2>Buy Numbers</h2>
 
-        {/* ✅ Show balance */}
-        <p className="balance">Balance: ₦{balance.toLocaleString()}</p>
-
         {/* SERVER SELECT */}
         <select
           className="server-select"
@@ -231,3 +228,4 @@ const BuyNumbers = ({ darkMode }) => {
 };
 
 export default BuyNumbers;
+
