@@ -67,16 +67,16 @@ body {
 .eye-icon {
   position: absolute;
   right: 10px;
-  top: 50%; /* vertically center */
-  transform: translateY(-50%); /* adjust for perfect vertical center */
+  top: 50%; 
+  transform: translateY(-60%); /* move up slightly from exact center */
   cursor: pointer;
   color: #555;
   font-size: 1.2rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: color 0.2s ease; /* optional hover effect */
 }
-
 
 /* =====================
    MOBILE LOGO
@@ -227,6 +227,7 @@ body {
     margin-bottom: 16px; /* compact */
   }
 }
+
 
 
 
