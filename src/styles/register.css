@@ -45,7 +45,37 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  margin-top: -40px; /* lifted slightly for desktop */
+  margin-top: -40px;
+}
+
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 40px; 
+  height: 45px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  padding-left: 10px;
+  font-size: 1rem;
+}
+
+.eye-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-80%);
+  cursor: pointer;
+  color: #555;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
 }
 
 /* MOBILE LOGO */
@@ -209,6 +239,7 @@ body {
     margin: 0;
   }
 }
+
 
 
 
