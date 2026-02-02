@@ -56,15 +56,25 @@ body {
 
 .password-wrapper input {
   width: 100%;
-  padding-right: 40px; /* space for eye icon */
+  padding-right: 40px; /* space for the eye icon */
+  height: 45px; /* set a consistent height */
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  padding-left: 10px;
+  font-size: 1rem;
 }
 
 .eye-icon {
   position: absolute;
   right: 10px;
+  top: 50%; /* vertically center */
+  transform: translateY(-50%); /* adjust for perfect vertical center */
   cursor: pointer;
   color: #555;
   font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 
@@ -217,6 +227,7 @@ body {
     margin-bottom: 16px; /* compact */
   }
 }
+
 
 
 
