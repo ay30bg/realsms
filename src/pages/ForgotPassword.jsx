@@ -1,6 +1,6 @@
 // ForgotPassword.jsx
 import React from "react";
-import "./forgot.css";
+import "../styles/forgot.css";
 import heroImg from "./hero.png"; // replace with your image path
 import logo from "./logo.svg";    // replace with your logo path
 
