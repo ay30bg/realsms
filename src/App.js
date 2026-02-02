@@ -13,6 +13,7 @@ import OrderHistory from "./pages/OrderHistory";
 import FundWallet from "./pages/FundWallet";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
 import Support from "./pages/Support";
 import OpayFund from "./pages/OpayFund";
 
@@ -23,6 +24,7 @@ function App() {
         {/* Auth Pages */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
 
         {/* Protected Pages inside Layout */}
         <Route
