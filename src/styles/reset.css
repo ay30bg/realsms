@@ -1,0 +1,176 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: #faf7f5;
+  margin: 0;
+  overflow-x: hidden;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* =====================
+   WRAPPER
+===================== */
+.reset-wrapper {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  padding: 40px;
+  gap: 40px;
+}
+
+/* =====================
+   LEFT ILLUSTRATION
+===================== */
+.reset-illustration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reset-illustration img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* =====================
+   RESET CARD
+===================== */
+.reset-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 480px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-top: -40px;
+}
+
+/* =====================
+   MOBILE LOGO
+===================== */
+.reset-mobile-logo {
+  display: none;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.reset-mobile-logo img {
+  width: 140px;
+  height: auto;
+}
+
+/* =====================
+   HEADER
+===================== */
+.reset-header h2 {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.reset-header p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 14px;
+  line-height: 1.4;
+}
+
+/* =====================
+   FORM
+===================== */
+.reset-form label {
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.reset-form input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 15px;
+  margin-bottom: 14px;
+}
+
+.reset-form input:focus {
+  outline: none;
+  border-color: #ff7a00;
+}
+
+/* =====================
+   BUTTON
+===================== */
+.reset-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 8px;
+  background: #367e3a;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.reset-btn:hover {
+  background: #2f6f33;
+}
+
+/* =====================
+   FOOTER
+===================== */
+.reset-footer {
+  text-align: center;
+  font-size: 14px;
+}
+
+.reset-footer a {
+  font-weight: 600;
+  color: #000;
+  text-decoration: none;
+}
+
+/* =====================
+   MOBILE VIEW
+===================== */
+@media (max-width: 900px) {
+  .reset-wrapper {
+    grid-template-columns: 1fr;
+    padding: 16px;
+    min-height: 100vh;
+    align-items: flex-start;
+  }
+
+  .reset-illustration {
+    display: none;
+  }
+
+  .reset-card {
+    margin: 0 auto;
+    padding: 18px;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    max-height: calc(100vh - 20px);
+    overflow-y: auto;
+    margin-top: 10px;
+  }
+
+  .reset-mobile-logo {
+    display: block;
+  }
+
+  .reset-btn {
+    border-radius: 6px;
+  }
+
+  .reset-header h2 {
+    font-size: 24px;
+  }
+}
