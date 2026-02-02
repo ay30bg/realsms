@@ -4,16 +4,17 @@ import axios from "axios";
 import heroImg from "../assets/hero-img.png";
 import logo from "../assets/logo.png";
 import "../styles/login.css";
+import { FiEye, FiEyeOff } from "react-icons/fi"; // 👈 Import eye icons
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // 👈 toggle for password
 
   const navigate = useNavigate();
-  const API_URL = process.env.REACT_APP_API_URL; // ✅ Use env variable
+  const API_URL = process.env.REACT_APP_API_URL;
 
-  // Set page title
   useEffect(() => {
     document.title = "Login - RealSMS";
   }, []);
@@ -26,7 +27,6 @@ const Login = () => {
 
     try {
       setLoading(true);
-
       const res = await axios.post(`${API_URL}/api/auth/login`, {
         email,
         password,
@@ -39,9 +39,7 @@ const Login = () => {
       alert("Login successful");
       navigate("/"); // Redirect to dashboard/home
     } catch (err) {
-      alert(
-        err.response?.data?.message || "Invalid login credentials"
-      );
+      alert(err.response?.data?.message || "Invalid login credentials");
     } finally {
       setLoading(false);
     }
@@ -74,11 +72,19 @@ const Login = () => {
           />
 
           <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <div className="password-wrapper">
+            <input
+              type={showPassword ? "text" : "password"} // 👈 toggle type
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <span
+              className="eye-icon"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FiEyeOff /> : <FiEye />}
+            </span>
+          </div>
 
           <div className="forgot-password">
             <Link to="/forgot-password">Forgot password?</Link>
