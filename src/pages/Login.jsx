@@ -85,6 +85,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 import heroImg from "../assets/hero-img.png";
 import logo from "../assets/logo.png";
 import "../styles/login.css";
@@ -92,48 +93,57 @@ import "../styles/login.css";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
+  // ✅ PAGE TITLE
   useEffect(() => {
     document.title = "Login - RealSMS";
   }, []);
 
   const handleLogin = async () => {
     if (!email || !password) {
-      alert("Please fill all fields");
+      alert("Email and password are required");
       return;
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      setLoading(true);
 
-      const data = await res.json();
+      const res = await axios.post(
+        "http://localhost:5000/api/auth/login",
+        {
+          email,
+          password,
+        }
+      );
 
-      if (!res.ok) {
-        alert(data.message || "Invalid credentials");
-        return;
-      }
+      // ✅ Save token
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
 
-      localStorage.setItem("token", data.token);
+      alert("Login successful");
       navigate("/");
     } catch (err) {
-      alert("Unable to connect to server");
+      alert(
+        err.response?.data?.message || "Invalid login credentials"
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="login-wrapper">
+      {/* Left Illustration */}
       <div className="login-illustration">
         <img src={heroImg} alt="Login visual" />
       </div>
 
+      {/* Right Card */}
       <div className="login-card">
+        {/* MOBILE LOGO */}
         <div className="login-mobile-logo">
           <img src={logo} alt="Logo" />
         </div>
@@ -161,18 +171,28 @@ const Login = () => {
             <Link to="/forgot-password">Forgot password?</Link>
           </div>
 
-          <button className="login-btn" onClick={handleLogin}>
-            Sign In
+          <button
+            className="login-btn"
+            onClick={handleLogin}
+            disabled={loading}
+          >
+            {loading ? "Signing in..." : "Sign In"}
           </button>
 
           <p className="signup-text">
             Don&apos;t have an account? <Link to="/register">Sign Up</Link>
           </p>
         </div>
+
+        <p className="login-footer">
+          Protected by reCAPTCHA and subject to the
+          <span> Privacy Policy </span>
+          and
+          <span> Terms of Service</span>
+        </p>
       </div>
     </div>
   );
 };
 
 export default Login;
-
