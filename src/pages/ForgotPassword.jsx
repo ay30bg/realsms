@@ -1,8 +1,8 @@
 // ForgotPassword.jsx
 import React from "react";
 import "../styles/forgot.css";
-import heroImg from "./hero.png"; // replace with your image path
-import logo from "./logo.svg";    // replace with your logo path
+import heroImg from "../assets/hero-img.png";
+import logo from "../assets/logo.png";
 
 export default function ForgotPassword() {
   return (
