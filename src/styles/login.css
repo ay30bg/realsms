@@ -68,14 +68,14 @@ body {
   position: absolute;
   right: 10px;
   top: 50%; 
-  transform: translateY(-70%); /* move up slightly from exact center */
+  transform: translateY(-80%); 
   cursor: pointer;
   color: #555;
   font-size: 1.2rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.2s ease; /* optional hover effect */
+  transition: color 0.2s ease;
 }
 
 /* =====================
@@ -227,6 +227,7 @@ body {
     margin-bottom: 16px; /* compact */
   }
 }
+
 
 
 
