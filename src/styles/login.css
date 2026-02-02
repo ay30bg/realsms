@@ -48,6 +48,26 @@ body {
   margin-top: -40px; /* desktop: slightly lifted */
 }
 
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 40px; /* space for eye icon */
+}
+
+.eye-icon {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  color: #555;
+  font-size: 1.2rem;
+}
+
+
 /* =====================
    MOBILE LOGO
 ===================== */
@@ -197,5 +217,6 @@ body {
     margin-bottom: 16px; /* compact */
   }
 }
+
 
 
