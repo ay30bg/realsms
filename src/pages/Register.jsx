@@ -151,6 +151,7 @@ const Register = () => {
 
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     document.title = "Register - RealSMS";
@@ -179,7 +180,7 @@ const Register = () => {
       setLoading(true);
 
       const res = await axios.post(
-        "http://localhost:5000/api/auth/register",
+        `${API_URL}/api/auth/register`,
         {
           firstName: form.firstName,
           lastName: form.lastName,
@@ -191,9 +192,7 @@ const Register = () => {
       alert(res.data.message || "Account created successfully");
       navigate("/login");
     } catch (err) {
-      alert(
-        err.response?.data?.message || "Registration failed, try again"
-      );
+      alert(err.response?.data?.message || "Registration failed, try again");
     } finally {
       setLoading(false);
     }
@@ -201,12 +200,10 @@ const Register = () => {
 
   return (
     <div className="register-wrapper">
-      {/* LEFT IMAGE */}
       <div className="register-illustration">
         <img src={heroImg} alt="Signup visual" />
       </div>
 
-      {/* RIGHT FORM */}
       <div className="register-card">
         <div className="register-mobile-logo">
           <img src={logo} alt="Logo" />
@@ -284,4 +281,3 @@ const Register = () => {
 };
 
 export default Register;
-
