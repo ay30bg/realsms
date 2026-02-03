@@ -4,13 +4,13 @@ import axios from "axios";
 import heroImg from "../assets/hero-img.png";
 import logo from "../assets/logo.png";
 import "../styles/login.css";
-import { FiEye, FiEyeOff } from "react-icons/fi"; // 👈 Import eye icons
+import { FiEye, FiEyeOff } from "react-icons/fi"; 
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // 👈 toggle for password
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_API_URL;
@@ -37,7 +37,7 @@ const Login = () => {
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
       alert("Login successful");
-      navigate("/"); // Redirect to dashboard/home
+      navigate("/dashboard"); // Redirect to dashboard/home
     } catch (err) {
       alert(err.response?.data?.message || "Invalid login credentials");
     } finally {
@@ -115,3 +115,4 @@ const Login = () => {
 };
 
 export default Login;
+
