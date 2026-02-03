@@ -178,3 +178,101 @@
   word-break: break-all;
   text-align: center;
 }
+
+/* Mobile tweaks for Fund USDT Page */
+@media (max-width: 480px) {
+  .fund-usdt-page {
+    padding: 20px 5px;
+    justify-content: flex-start;
+    min-height: auto;
+  }
+
+  .fund-usdt-card {
+    width: 100%;
+    max-width: 460px;
+    margin: 0 auto;
+    border-radius: 6px;
+    padding-bottom: 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  }
+
+  .back-btn {
+    top: 16px;
+    left: 16px;
+    font-size: 16px;
+    padding: 8px;
+  }
+
+  .fund-header {
+    padding: 24px 16px 16px;
+  }
+
+  .fund-header img {
+    width: 60px;
+    margin-bottom: 8px;
+  }
+
+  .fund-header h3 {
+    font-size: 18px;
+  }
+
+  .fund-header p {
+    font-size: 13px;
+  }
+
+  .fund-body {
+    padding: 20px 16px 24px;
+  }
+
+  .amount-input {
+    padding: 0 10px;
+  }
+
+  .amount-input input {
+    padding: 12px 8px;
+    font-size: 15px;
+  }
+
+  .quick-amounts {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin: 12px 0 6px;
+  }
+
+  .quick-btn {
+    padding: 8px 4px;
+    font-size: 12px;
+  }
+
+  .fund-btn {
+    padding: 12px;
+    font-size: 15px;
+    border-radius: 50px;
+  }
+
+  .min-max-text {
+    font-size: 12px;
+    margin-bottom: 20px;
+  }
+
+  .error-text {
+    font-size: 12px;
+  }
+
+  .loader {
+    width: 18px;
+    height: 18px;
+    border-width: 2px;
+  }
+
+  .secure-badge {
+    font-size: 12px;
+    margin-top: 10px;
+  }
+
+  .trx-address-info {
+    font-size: 12px;
+    margin-top: 10px;
+  }
+}
+
