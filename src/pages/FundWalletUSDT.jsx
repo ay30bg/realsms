@@ -179,7 +179,7 @@ const FundWalletUSDT = () => {
       if (!res.ok) throw new Error(data.message || "Payment failed");
 
       // 🔁 Redirect to NowPayments checkout
-      window.location.href = data.invoice_url;
+      window.location.href = data.payment_url;
     } catch (err) {
       setError(err.message);
     } finally {
