@@ -18,7 +18,10 @@ const FundWallet = () => {
         <h2 className="fund-title">Fund Wallet</h2>
 
         {/* USDT */}
-        <div className="payment-option">
+        <div
+          className="payment-option clickable"
+          onClick={() => navigate("/fund-wallet/usdt")} // ✅ updated route
+        >
           <div className="payment-left">
             <img src={usdtLogo} alt="USDT" className="payment-icon" />
             <div className="payment-text">
@@ -49,4 +52,3 @@ const FundWallet = () => {
 };
 
 export default FundWallet;
-
