@@ -23,7 +23,7 @@ function App() {
     <Router>
       <Routes>
         {/* Auth Pages */}
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
@@ -34,7 +34,7 @@ function App() {
           element={
             <Layout>
               <Routes>
-                <Route path="/" element={<Dashboard />} />
+                <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/buy-numbers" element={<BuyNumbers />} />
                 <Route path="/active-orders" element={<ActiveOrder />} />
                 <Route path="/order-history" element={<OrderHistory />} />
