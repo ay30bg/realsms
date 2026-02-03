@@ -17,6 +17,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Support from "./pages/Support";
 import OpayFund from "./pages/OpayFund";
+import USDTFund from "./pages/FundWalletUSDT";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
                 <Route path="/order-history" element={<OrderHistory />} />
                 <Route path="/fund-wallet" element={<FundWallet />} />
                 <Route path="/fund-wallet/opay" element={<OpayFund />} />
+                <Route path="/fund-wallet/usdt" element={<USDTFund />} />
                 <Route path="/support" element={<Support />} />
               </Routes>
             </Layout>
