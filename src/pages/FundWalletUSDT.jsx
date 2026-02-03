@@ -143,12 +143,12 @@ const FundWalletUSDT = () => {
   const handlePay = async () => {
     setError("");
 
-    if (!amount || amount < MIN_AMOUNT) {
+    if (!amount || Number(amount) < MIN_AMOUNT) {
       setError(`Minimum amount is ${MIN_AMOUNT} USDT`);
       return;
     }
 
-    if (amount > MAX_AMOUNT) {
+    if (Number(amount) > MAX_AMOUNT) {
       setError(`Maximum amount is ${MAX_AMOUNT} USDT`);
       return;
     }
@@ -157,10 +157,8 @@ const FundWalletUSDT = () => {
       setLoading(true);
 
       const token = localStorage.getItem("token");
-      const user = JSON.parse(localStorage.getItem("user"));
-
-      if (!user?._id) {
-        throw new Error("User not authenticated");
+      if (!token) {
+        throw new Error("Session expired. Please login again.");
       }
 
       const res = await fetch(
@@ -169,20 +167,16 @@ const FundWalletUSDT = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`, // 🔐 JWT only
           },
           body: JSON.stringify({
             amount: Number(amount),
-            userId: user._id,
           }),
         }
       );
 
       const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.message || "Payment initialization failed");
-      }
+      if (!res.ok) throw new Error(data.message || "Payment failed");
 
       // 🔁 Redirect to NowPayments checkout
       window.location.href = data.invoice_url;
@@ -197,7 +191,10 @@ const FundWalletUSDT = () => {
     <div className="fund-usdt-page">
       <div className="fund-usdt-card">
 
-        <button className="back-btn" onClick={() => navigate("/fund-wallet")}>
+        <button
+          className="back-btn"
+          onClick={() => navigate("/fund-wallet")}
+        >
           ← Back
         </button>
 
@@ -248,10 +245,10 @@ const FundWalletUSDT = () => {
 
           <button
             className="fund-btn"
-            disabled={loading}
             onClick={handlePay}
+            disabled={loading}
           >
-            {loading ? "Redirecting…" : "Proceed to Payment"}
+            {loading ? "Redirecting..." : "Proceed to Payment"}
           </button>
 
           <div className="secure-badge">
@@ -264,4 +261,3 @@ const FundWalletUSDT = () => {
 };
 
 export default FundWalletUSDT;
-
