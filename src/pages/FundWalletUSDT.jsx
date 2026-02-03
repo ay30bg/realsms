@@ -95,7 +95,7 @@ const FundWalletUSDT = () => {
                   setError("");
                 }}
               >
-                {amt} USDT
+                {amt} ₮
               </button>
             ))}
           </div>
