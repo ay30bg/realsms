@@ -24,7 +24,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       </div>
 
       <nav>
-        <NavLink to="/" onClick={toggleSidebar}>
+        <NavLink to="/dashboard" onClick={toggleSidebar}>
           <FiHome className="sidebar-icon" /> <span>Dashboard</span>
         </NavLink>
         <NavLink to="/buy-numbers" onClick={toggleSidebar}>
@@ -45,3 +45,4 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 };
 
 export default Sidebar;
+
