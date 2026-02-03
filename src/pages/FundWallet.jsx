@@ -23,7 +23,7 @@ const FundWallet = () => {
             <img src={usdtLogo} alt="USDT" className="payment-icon" />
             <div className="payment-text">
               <h4>USDT</h4>
-              <span>SOL Network</span>
+              <span>TRX Network</span>
             </div>
           </div>
           <span className="payment-arrow">→</span>
@@ -49,3 +49,4 @@ const FundWallet = () => {
 };
 
 export default FundWallet;
+
