@@ -19,7 +19,7 @@ const Topbar = ({ toggleSidebar }) => {
 
   const handleLogout = () => {
     setDropdownOpen(false);
-    navigate("/login");
+    navigate("/");
   };
 
   // ✅ Get real balance from context
@@ -127,3 +127,4 @@ const Topbar = ({ toggleSidebar }) => {
 };
 
 export default Topbar;
+
