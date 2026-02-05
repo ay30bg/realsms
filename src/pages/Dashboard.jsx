@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import StatCard from "../components/StatCard";
-import { FiCreditCard, FiArrowDownCircle, FiCheckCircle } from "react-icons/fi";
+import { FiCreditCard, FiArrowDownCircle, FiShoppingBag } from "react-icons/fi";
 import { useBalance } from "../context/BalanceContext"; // ✅ import
 
 const Dashboard = ({ darkMode }) => {
@@ -28,7 +28,7 @@ const Dashboard = ({ darkMode }) => {
     {
       title: "Total Purchases",
       value: 12,
-      icon: <FiCheckCircle />,
+      icon: <FiShoppingBag />,
       color: "#3b82f6",
     },
   ];
@@ -64,6 +64,7 @@ const Dashboard = ({ darkMode }) => {
 };
 
 export default Dashboard;
+
 
 
 
