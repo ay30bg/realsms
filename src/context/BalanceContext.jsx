@@ -118,7 +118,7 @@ export const BalanceProvider = ({ children }) => {
   // -----------------------------
   // API Base URL from environment
   // -----------------------------
-  const API_URL = process.env.REACT_APP_API_URL/api;
+  const API_URL = process.env.REACT_APP_API_URL;
 
   // -----------------------------
   // Fetch balance from backend
@@ -127,7 +127,7 @@ export const BalanceProvider = ({ children }) => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-      const res = await axios.get(`${API_URL}/wallet/balance`, {
+      const res = await axios.get(`${API_URL}/api/wallet/balance`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBalance(res.data.walletBalance);
@@ -145,7 +145,7 @@ export const BalanceProvider = ({ children }) => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        `${API_URL}/wallet/debit`,
+        `${API_URL}/api/wallet/debit`,
         { amount },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -165,7 +165,7 @@ export const BalanceProvider = ({ children }) => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        `${API_URL}/wallet/credit`,
+        `${API_URL}/api/wallet/credit`,
         { amount },
         { headers: { Authorization: `Bearer ${token}` } }
       );
