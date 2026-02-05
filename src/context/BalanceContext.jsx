@@ -118,7 +118,7 @@ export const BalanceProvider = ({ children }) => {
   // -----------------------------
   // API Base URL from environment
   // -----------------------------
-  const API_URL = process.env.REACT_APP_API_URL;
+  const API_URL = process.env.REACT_APP_API_URL/api;
 
   // -----------------------------
   // Fetch balance from backend
