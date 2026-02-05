@@ -55,6 +55,12 @@
   padding: 24px 20px 28px;
 }
 
+.fund-body label {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+
 .amount-input {
   display: flex;
   align-items: center;
@@ -93,11 +99,19 @@
 }
 
 .min-max-text {
-  font-size: 13px;
-  color: #4b5563;
-  margin-top: 6px;
-  margin-bottom: 14px;
-  font-weight: 500;
+    font-size: 13px;
+    color: #4b5563;
+    margin-top: 6px;
+    margin-bottom: 14px;
+    display: flex;
+    justify-content: flex-start;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.min-max-text span {
+    font-weight: 600;
+    color: #16a34a;
 }
 
 .quick-amounts {
