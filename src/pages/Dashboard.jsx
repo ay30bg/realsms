@@ -1,4 +1,4 @@
-'import React, { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import StatCard from "../components/StatCard";
 import { FiCreditCard, FiShoppingCart, FiCheckCircle } from "react-icons/fi";
@@ -64,5 +64,6 @@ const Dashboard = ({ darkMode }) => {
 };
 
 export default Dashboard;
+
 
 
