@@ -124,10 +124,10 @@ export const BalanceProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchBalance();
+    fetchBalance(); // fetch on mount
   }, []);
 
-  // ✅ Debit wallet and refresh balance
+  // Debit wallet and refresh balance
   const debitWallet = async (amount) => {
     try {
       await axios.post(
@@ -135,15 +135,14 @@ export const BalanceProvider = ({ children }) => {
         { amount },
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
-      // Refresh balance after successful debit
-      await fetchBalance();
+      await fetchBalance(); // ✅ update state after DB change
     } catch (err) {
       console.error("Failed to debit wallet", err);
       throw err;
     }
   };
 
-  // ✅ Credit wallet and refresh balance
+  // Credit wallet and refresh balance
   const creditWallet = async (amount) => {
     try {
       await axios.post(
@@ -151,7 +150,7 @@ export const BalanceProvider = ({ children }) => {
         { amount },
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
-      await fetchBalance();
+      await fetchBalance(); // ✅ update state after DB change
     } catch (err) {
       console.error("Failed to credit wallet", err);
       throw err;
