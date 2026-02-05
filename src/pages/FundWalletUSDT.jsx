@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import "../styles/fundwallet-usdt.css";
 import usdtLogo from "../assets/usdt-logo.png";
 
-const quickAmounts = [3, 5, 10, 50];
-const MIN_AMOUNT = 3;
+const quickAmounts = [10, 20, 35, 50];
+const MIN_AMOUNT = 10;
 const MAX_AMOUNT = 10000;
 
 const FundWalletUSDT = () => {
