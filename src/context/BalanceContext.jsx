@@ -103,17 +103,32 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 
+// -----------------------------
+// Create Context
+// -----------------------------
 const BalanceContext = createContext(null);
 
+// -----------------------------
+// Provider
+// -----------------------------
 export const BalanceProvider = ({ children }) => {
   const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(true);
 
+  // -----------------------------
+  // API Base URL from environment
+  // -----------------------------
+  const API_URL = process.env.REACT_APP_API_URL;
+
+  // -----------------------------
+  // Fetch balance from backend
+  // -----------------------------
   const fetchBalance = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("/api/wallet/balance", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      const token = localStorage.getItem("token"); // your auth token
+      const res = await axios.get(`${API_URL}/wallet/balance`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
       setBalance(res.data.walletBalance);
     } catch (err) {
@@ -123,51 +138,77 @@ export const BalanceProvider = ({ children }) => {
     }
   };
 
-  useEffect(() => {
-    fetchBalance(); // fetch on mount
-  }, []);
-
-  // Debit wallet and refresh balance
+  // -----------------------------
+  // Debit wallet
+  // -----------------------------
   const debitWallet = async (amount) => {
     try {
+      const token = localStorage.getItem("token");
       await axios.post(
-        "/api/wallet/debit",
+        `${API_URL}/wallet/debit`,
         { amount },
-        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-      await fetchBalance(); // ✅ update state after DB change
+
+      // Refresh balance after successful debit
+      await fetchBalance();
     } catch (err) {
-      console.error("Failed to debit wallet", err);
+      console.error("Failed to debit wallet:", err);
       throw err;
     }
   };
 
-  // Credit wallet and refresh balance
+  // -----------------------------
+  // Credit wallet
+  // -----------------------------
   const creditWallet = async (amount) => {
     try {
+      const token = localStorage.getItem("token");
       await axios.post(
-        "/api/wallet/credit",
+        `${API_URL}/wallet/credit`,
         { amount },
-        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-      await fetchBalance(); // ✅ update state after DB change
+
+      // Refresh balance after credit
+      await fetchBalance();
     } catch (err) {
-      console.error("Failed to credit wallet", err);
+      console.error("Failed to credit wallet:", err);
       throw err;
     }
   };
 
+  // -----------------------------
+  // Fetch balance on mount
+  // -----------------------------
+  useEffect(() => {
+    fetchBalance();
+  }, []);
+
+  // -----------------------------
+  // Context value
+  // -----------------------------
   return (
     <BalanceContext.Provider
-      value={{ balance, loading, debitWallet, creditWallet, fetchBalance }}
+      value={{
+        balance,
+        loading,
+        debitWallet,
+        creditWallet,
+        fetchBalance,
+      }}
     >
       {children}
     </BalanceContext.Provider>
   );
 };
 
+// -----------------------------
+// Custom hook
+// -----------------------------
 export const useBalance = () => {
   const context = useContext(BalanceContext);
-  if (!context) throw new Error("useBalance must be used inside BalanceProvider");
+  if (!context)
+    throw new Error("useBalance must be used inside BalanceProvider");
   return context;
 };
