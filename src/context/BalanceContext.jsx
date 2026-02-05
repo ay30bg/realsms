@@ -35,7 +35,7 @@
 //   return context;
 // };
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
 import axios from "axios";
 
 const BalanceContext = createContext(null);
@@ -44,11 +44,11 @@ export const BalanceProvider = ({ children }) => {
   const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  // Get token from localStorage (adjust if you use cookies)
+  // Token from localStorage (adjust if using cookies)
   const token = localStorage.getItem("token");
 
-  // Fetch wallet balance from backend
-  const fetchBalance = async () => {
+  // ------------------ Fetch Wallet Balance ------------------
+  const fetchBalance = useCallback(async () => {
     setLoading(true);
     try {
       const res = await axios.get("/api/wallet/balance", {
@@ -62,53 +62,56 @@ export const BalanceProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
 
-  // Credit wallet after payment (called from webhook handler or frontend notification)
-  const creditWallet = async (amount) => {
-    try {
-      const res = await axios.post(
-        "/api/wallet/credit",
-        { amount },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setBalance(res.data.walletBalance);
-      return res.data;
-    } catch (err) {
-      console.error("Failed to credit wallet", err);
-      throw err;
-    }
-  };
+  // ------------------ Credit Wallet ------------------
+  const creditWallet = useCallback(
+    async (amount) => {
+      try {
+        const res = await axios.post(
+          "/api/wallet/credit",
+          { amount },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setBalance(res.data.walletBalance);
+        return res.data;
+      } catch (err) {
+        console.error("Failed to credit wallet", err);
+        throw err;
+      }
+    },
+    [token]
+  );
 
-  // Debit wallet for purchases
-  const debitWallet = async (amount) => {
-    try {
-      const res = await axios.post(
-        "/api/wallet/debit",
-        { amount },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setBalance(res.data.walletBalance);
-      return res.data;
-    } catch (err) {
-      console.error("Failed to debit wallet", err);
-      throw err;
-    }
-  };
+  // ------------------ Debit Wallet ------------------
+  const debitWallet = useCallback(
+    async (amount) => {
+      try {
+        const res = await axios.post(
+          "/api/wallet/debit",
+          { amount },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setBalance(res.data.walletBalance);
+        return res.data;
+      } catch (err) {
+        console.error("Failed to debit wallet", err);
+        throw err;
+      }
+    },
+    [token]
+  );
 
-  // Fetch balance once on mount
+  // ------------------ Fetch balance once on mount ------------------
   useEffect(() => {
     fetchBalance();
-  }, []);
+  }, [fetchBalance]); // ✅ useCallback ensures this is safe
 
+  // ------------------ Context Provider ------------------
   return (
     <BalanceContext.Provider
       value={{
@@ -124,7 +127,7 @@ export const BalanceProvider = ({ children }) => {
   );
 };
 
-// Custom hook
+// ------------------ Custom Hook ------------------
 export const useBalance = () => {
   const context = useContext(BalanceContext);
   if (!context) {
@@ -132,4 +135,3 @@ export const useBalance = () => {
   }
   return context;
 };
-
