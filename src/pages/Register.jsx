@@ -4,8 +4,7 @@ import axios from "axios";
 import heroImg from "../assets/hero-img.png";
 import logo from "../assets/logo.png";
 import "../styles/register.css";
-import { FiEye, FiEyeOff } from "react-icons/fi"; // 👈 eye icons
-
+import { FiEye, FiEyeOff } from "react-icons/fi"; 
 const Register = () => {
   const [form, setForm] = useState({
     firstName: "",
@@ -14,7 +13,7 @@ const Register = () => {
     password: "",
     agree: false,
   });
-  const [showPassword, setShowPassword] = useState(false); // 👈 toggle password
+  const [showPassword, setShowPassword] = useState(false); 
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_API_URL;
@@ -52,7 +51,7 @@ const Register = () => {
       });
 
       alert(res.data.message || "Account created successfully");
-      navigate("/login");
+      navigate("/");
     } catch (err) {
       alert(err.response?.data?.message || "Registration failed, try again");
     } finally {
@@ -151,3 +150,4 @@ const Register = () => {
 };
 
 export default Register;
+
