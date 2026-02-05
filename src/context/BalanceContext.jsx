@@ -100,7 +100,7 @@
 // };
 
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
 // -----------------------------
@@ -123,10 +123,10 @@ export const BalanceProvider = ({ children }) => {
   // -----------------------------
   // Fetch balance from backend
   // -----------------------------
-  const fetchBalance = async () => {
+  const fetchBalance = useCallback(async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem("token"); // your auth token
+      const token = localStorage.getItem("token");
       const res = await axios.get(`${API_URL}/wallet/balance`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -136,7 +136,7 @@ export const BalanceProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_URL]);
 
   // -----------------------------
   // Debit wallet
@@ -183,7 +183,7 @@ export const BalanceProvider = ({ children }) => {
   // -----------------------------
   useEffect(() => {
     fetchBalance();
-  }, []);
+  }, [fetchBalance]);
 
   // -----------------------------
   // Context value
