@@ -98,7 +98,7 @@ const FundWalletUSDT = () => {
             />
           </div>
 
-          <p className="min-max">
+          <p className="min-max-text">
             Min: {MIN_AMOUNT} • Max: {MAX_AMOUNT} USDT
           </p>
 
