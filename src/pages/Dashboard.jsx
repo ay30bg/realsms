@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+CB import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import StatCard from "../components/StatCard";
 import { FiCreditCard, FiShoppingCart, FiCheckCircle } from "react-icons/fi";
@@ -20,13 +20,13 @@ const Dashboard = ({ darkMode }) => {
       color: "#10b981",
     },
     {
-      title: "Active Orders",
+      title: "Total Deposits",
       value: 3,
       icon: <FiShoppingCart />,
       color: "#f59e0b",
     },
     {
-      title: "Completed Orders",
+      title: "Total Purchases",
       value: 12,
       icon: <FiCheckCircle />,
       color: "#3b82f6",
@@ -64,3 +64,4 @@ const Dashboard = ({ darkMode }) => {
 };
 
 export default Dashboard;
+
