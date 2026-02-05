@@ -152,13 +152,15 @@ const Topbar = ({ toggleSidebar }) => {
     navigate("/");
   };
 
-  // ✅ Get real balance from context
-  const { balance = 0, loading } = useBalance(); // default 0
+  // ✅ Get balance & loading from context
+  const { balance = 0, loading } = useBalance();
 
-  // Animate balance count-up
+  // Animate balance count-up after it loads
   useEffect(() => {
+    if (loading) return; // don't animate while loading
+
     let start = 0;
-    const end = balance || 0; // safe fallback
+    const end = balance;
     const duration = 1000; // 1s
     const increment = end / (duration / 20);
 
@@ -172,7 +174,7 @@ const Topbar = ({ toggleSidebar }) => {
     }, 20);
 
     return () => clearInterval(counter);
-  }, [balance]);
+  }, [balance, loading]);
 
   // ✅ Avatar URL
   const avatarUrl = "https://i.pravatar.cc/40";
@@ -194,7 +196,10 @@ const Topbar = ({ toggleSidebar }) => {
           <div className="balance-text">
             <span>Balance</span>
             <strong>
-              ₦{displayBalance !== undefined ? displayBalance.toLocaleString() : "0"}
+              ₦
+              {loading
+                ? "..." // placeholder while loading
+                : displayBalance.toLocaleString()}
             </strong>
           </div>
         </div>
@@ -259,4 +264,3 @@ const Topbar = ({ toggleSidebar }) => {
 };
 
 export default Topbar;
-
