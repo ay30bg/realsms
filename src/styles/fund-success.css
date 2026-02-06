@@ -1,0 +1,105 @@
+/* Page wrapper */
+.fund-status-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f0fdf4, #ecfeff);
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Card */
+.fund-status-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 420px;
+  padding: 40px 30px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Success state */
+.fund-status-card.success {
+  border-top: 6px solid #22c55e;
+}
+
+/* React icon */
+.status-icon {
+  font-size: 80px;
+  margin-bottom: 20px;
+}
+
+/* Green success icon */
+.success-icon {
+  color: #22c55e;
+}
+
+/* Title */
+.fund-status-card h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #111827;
+}
+
+/* Message */
+.fund-status-card p {
+  font-size: 15px;
+  color: #6b7280;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+/* Button */
+.back-btn {
+  background: #22c55e;
+  color: #ffffff;
+  border: none;
+  outline: none;
+  padding: 12px 22px;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+/* Button hover */
+.back-btn:hover {
+  background: #16a34a;
+  transform: translateY(-1px);
+}
+
+/* Button active */
+.back-btn:active {
+  transform: translateY(0);
+}
+
+/* Fade animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile tweaks */
+@media (max-width: 480px) {
+  .fund-status-card {
+    padding: 30px 20px;
+  }
+
+  .status-icon {
+    font-size: 65px;
+  }
+
+  .fund-status-card h2 {
+    font-size: 20px;
+  }
+}
