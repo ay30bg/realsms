@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import successImg from "../assets/success.png"; // optional success illustration
+import { FaCheckCircle } from "react-icons/fa";
 import "../styles/fund-success.css";
 
 const FundSuccess = () => {
@@ -13,7 +13,9 @@ const FundSuccess = () => {
   return (
     <div className="fund-status-page">
       <div className="fund-status-card success">
-        <img src={successImg} alt="Success" className="status-img" />
+        {/* ✅ React Icon instead of image */}
+        <FaCheckCircle className="status-icon success-icon" />
+
         <h2>🎉 Payment Successful!</h2>
         <p>Your wallet has been funded successfully.</p>
 
