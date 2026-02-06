@@ -29,33 +29,39 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* 🔐 Auth Pages */}
+        {/* ================= AUTH ROUTES ================= */}
         <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
 
-        {/* 🔒 Protected Pages wrapped with Layout */}
+        {/* ================= PROTECTED ROUTES (Layout) ================= */}
         <Route element={<Layout />}>
-          {/* redirect after login */}
+          {/* Redirect example (optional) */}
+          <Route path="/home" element={<Navigate to="/dashboard" replace />} />
+
+          {/* Dashboard */}
           <Route path="/dashboard" element={<Dashboard />} />
+
+          {/* Numbers */}
           <Route path="/buy-numbers" element={<BuyNumbers />} />
           <Route path="/active-orders" element={<ActiveOrder />} />
           <Route path="/order-history" element={<OrderHistory />} />
 
-          {/* 💰 Funding */}
+          {/* Wallet Funding */}
           <Route path="/fund-wallet" element={<FundWallet />} />
           <Route path="/fund-wallet/opay" element={<OpayFund />} />
           <Route path="/fund-wallet/usdt" element={<USDTFund />} />
           <Route path="/fund-success" element={<FundSuccess />} />
           <Route path="/fund-cancel" element={<FundCancel />} />
 
-          {/* 📞 Support */}
+          {/* Support */}
           <Route path="/support" element={<Support />} />
         </Route>
 
-        {/* fallback route */}
-        <Route path="*" element={<Navigate to="/" />} />
+        {/* ================= 404 FALLBACK ================= */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   );
