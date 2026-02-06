@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
 // Layout
 import Layout from "./components/Layout";
@@ -30,8 +35,9 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
 
-        {/* 🔒 Protected Pages */}
+        {/* 🔒 Protected Pages wrapped with Layout */}
         <Route element={<Layout />}>
+          {/* redirect after login */}
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/buy-numbers" element={<BuyNumbers />} />
           <Route path="/active-orders" element={<ActiveOrder />} />
@@ -47,10 +53,12 @@ function App() {
           {/* 📞 Support */}
           <Route path="/support" element={<Support />} />
         </Route>
+
+        {/* fallback route */}
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
   );
 }
 
 export default App;
-
