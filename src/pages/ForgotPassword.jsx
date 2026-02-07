@@ -82,7 +82,7 @@ export default function ForgotPassword() {
 
         {/* Footer */}
         <div className="forgot-footer">
-          <a href="/login">Back to Login</a>
+          <a href="/">Back to Login</a>
         </div>
       </div>
     </div>
