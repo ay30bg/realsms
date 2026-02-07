@@ -2,17 +2,17 @@ import React, { useEffect, useState } from "react";
 import "../styles/reset.css";
 import heroImg from "../assets/hero-img.png";
 import logo from "../assets/logo.png";
-import axios from "axios";
+import axios from "axios"; 
 import { useParams, useNavigate } from "react-router-dom";
-import { FiEye, FiEyeOff } from "react-icons/fi"; // 👈 import eye icons
+import { FiEye, FiEyeOff } from "react-icons/fi"; 
 
 export default function ResetPassword() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // 👈 toggle for password
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // 👈 toggle for confirm
+  const [showPassword, setShowPassword] = useState(false); 
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); 
 
   const { token } = useParams();
   const navigate = useNavigate();
