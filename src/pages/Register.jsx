@@ -141,7 +141,7 @@ const Register = () => {
           </button>
 
           <p className="signin-text">
-            I have an account? <Link to="/login">Sign In</Link>
+            I have an account? <Link to="/">Sign In</Link>
           </p>
         </div>
       </div>
@@ -150,4 +150,5 @@ const Register = () => {
 };
 
 export default Register;
+
 
