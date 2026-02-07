@@ -102,7 +102,7 @@ export default function ResetPassword() {
         </form>
 
         <div className="reset-footer">
-          <a href="/login">Back to Login</a>
+          <a href="/">Back to Login</a>
         </div>
       </div>
     </div>
