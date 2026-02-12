@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/opay-fund.css";
-import opayLogo from "../assets/opay.png";
+import paystackLogo from "../assets/paystack.png";
 
 const quickAmounts = [1000, 5000, 10000, 50000];
 const MIN_AMOUNT = 100;
@@ -14,7 +14,7 @@ const OpayFund = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    document.title = "Opay Fund - RealSMS";
+    document.title = "Fund Wallet with Paystack - RealSMS";
   }, []);
 
   const isPayDisabled =
@@ -72,7 +72,7 @@ const OpayFund = () => {
         </button>
 
         <div className="opay-header">
-          <img src={opayLogo} alt="Opay" />
+          <img src={paystackLogo} alt="Opay" />
           <h3>Fund Wallet</h3>
           <p>Pay securely with Opay</p>
         </div>
@@ -127,5 +127,6 @@ const OpayFund = () => {
 };
 
 export default OpayFund;
+
 
 
