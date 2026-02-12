@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/fundwallet.css";
 import usdtLogo from "../assets/usdt-logo.png";
-import opayLogo from "../assets/opay.png";
+import paystackLogo from "../assets/paystack.png";
 
 const FundWallet = () => {
   const navigate = useNavigate();
@@ -40,7 +40,7 @@ const FundWallet = () => {
           <div className="payment-left">
             <img src={opayLogo} alt="Opay" className="payment-icon" />
             <div className="payment-text">
-              <h4>Pay with Opay</h4>
+              <h4>Pay with Paystack</h4>
               <span>Wallet · Bank Transfer</span>
             </div>
           </div>
@@ -52,4 +52,5 @@ const FundWallet = () => {
 };
 
 export default FundWallet;
+
 
