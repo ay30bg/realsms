@@ -38,7 +38,7 @@ const FundWallet = () => {
           onClick={() => navigate("/fund-wallet/opay")}
         >
           <div className="payment-left">
-            <img src={opayLogo} alt="Opay" className="payment-icon" />
+            <img src={paystackLogo} alt="Opay" className="payment-icon" />
             <div className="payment-text">
               <h4>Pay with Paystack</h4>
               <span>Wallet · Bank Transfer</span>
@@ -52,5 +52,6 @@ const FundWallet = () => {
 };
 
 export default FundWallet;
+
 
 
