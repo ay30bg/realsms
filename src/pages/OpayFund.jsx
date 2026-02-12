@@ -131,7 +131,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/opay-fund.css";
+import "../styles/paystack-fund.css";
 import paystackLogo from "../assets/paystack.png"; // Paystack logo
 
 const quickAmounts = [1000, 5000, 10000, 50000];
@@ -258,5 +258,6 @@ const PaystackFund = () => {
 };
 
 export default PaystackFund;
+
 
 
