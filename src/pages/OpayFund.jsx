@@ -1,61 +1,205 @@
+// // import React, { useState, useEffect } from "react";
+// // import { useNavigate } from "react-router-dom";
+// // import "../styles/opay-fund.css";
+// // import paystackLogo from "../assets/paystack.png";
+
+// // const quickAmounts = [1000, 5000, 10000, 50000];
+// // const MIN_AMOUNT = 100;
+// // const MAX_AMOUNT = 500000;
+
+// // const OpayFund = () => {
+// //   const navigate = useNavigate();
+// //   const [amount, setAmount] = useState("");
+// //   const [loading, setLoading] = useState(false);
+// //   const [error, setError] = useState("");
+
+// //   useEffect(() => {
+// //     document.title = "Fund Wallet with Paystack - RealSMS";
+// //   }, []);
+
+// //   const isPayDisabled =
+// //     !amount || Number(amount) < MIN_AMOUNT || Number(amount) > MAX_AMOUNT || loading;
+
+// //   const handlePay = async () => {
+// //     setError("");
+
+// //     if (!amount || Number(amount) < MIN_AMOUNT) {
+// //       setError(`Minimum funding amount is ₦${MIN_AMOUNT}`);
+// //       return;
+// //     }
+
+// //     if (Number(amount) > MAX_AMOUNT) {
+// //       setError(`Maximum funding amount is ₦${MAX_AMOUNT}`);
+// //       return;
+// //     }
+
+// //     const token = localStorage.getItem("token"); // ✅ must have JWT stored after login
+// //     if (!token) {
+// //       setError("You must be logged in to fund your wallet.");
+// //       return;
+// //     }
+
+// //     try {
+// //       setLoading(true);
+
+// //       const res = await fetch(`${process.env.REACT_APP_API_URL}/api/opay/init`, {
+// //         method: "POST",
+// //         headers: {
+// //           "Content-Type": "application/json",
+// //           Authorization: `Bearer ${token}`, // ✅ send JWT here
+// //         },
+// //         body: JSON.stringify({ amount: Number(amount) }), // no userId needed
+// //       });
+
+// //       const data = await res.json();
+
+// //       if (!res.ok) throw new Error(data.message || "Payment failed");
+
+// //       // Redirect to Opay cashier page
+// //       window.location.href = data.paymentUrl;
+// //     } catch (err) {
+// //       setError(err.message);
+// //     } finally {
+// //       setLoading(false);
+// //     }
+// //   };
+
+// //   return (
+// //     <div className="opay-page">
+// //       <div className="opay-card">
+// //         <button className="back-btn" onClick={() => navigate("/fund-wallet")}>
+// //           ← Back
+// //         </button>
+
+// //         <div className="opay-header">
+// //           <img src={paystackLogo} alt="Opay" />
+// //           <h3>Fund Wallet</h3>
+// //           <p>Pay securely with Opay</p>
+// //         </div>
+
+// //         <div className="opay-body">
+// //           <label>Amount</label>
+// //           <div className="amount-input-wrapper">
+// //             <div className={`amount-input ${error ? "error" : ""}`}>
+// //               <span>₦</span>
+// //               <input
+// //                 type="number"
+// //                 placeholder="0.00"
+// //                 value={amount}
+// //                 onChange={(e) => {
+// //                   setAmount(e.target.value);
+// //                   if (error) setError("");
+// //                 }}
+// //               />
+// //             </div>
+// //             <p className="min-max-text">
+// //               Min: ₦{MIN_AMOUNT.toLocaleString()} • Max: ₦{MAX_AMOUNT.toLocaleString()}
+// //             </p>
+// //           </div>
+
+// //           <div className="quick-amounts">
+// //             {quickAmounts.map((amt) => (
+// //               <button
+// //                 key={amt}
+// //                 type="button"
+// //                 className={`quick-btn ${Number(amount) === amt ? "active" : ""}`}
+// //                 onClick={() => {
+// //                   setAmount(amt);
+// //                   setError("");
+// //                 }}
+// //               >
+// //                 ₦{amt.toLocaleString()}
+// //               </button>
+// //             ))}
+// //           </div>
+
+// //           {error && <p className="error-text">{error}</p>}
+
+// //           <button className="fund-btn" onClick={handlePay} disabled={isPayDisabled}>
+// //             {loading ? <span className="loader"></span> : "Pay with Opay"}
+// //           </button>
+
+// //           <div className="secure-badge">🔒 Secured by Opay</div>
+// //         </div>
+// //       </div>
+// //     </div>
+// //   );
+// // };
+
+// // export default OpayFund;
+
+
 // import React, { useState, useEffect } from "react";
 // import { useNavigate } from "react-router-dom";
-// import "../styles/opay-fund.css";
+// import "../styles/paystack-fund.css";
 // import paystackLogo from "../assets/paystack.png";
 
 // const quickAmounts = [1000, 5000, 10000, 50000];
 // const MIN_AMOUNT = 100;
 // const MAX_AMOUNT = 500000;
 
-// const OpayFund = () => {
+// const PaystackFund = () => {
 //   const navigate = useNavigate();
 //   const [amount, setAmount] = useState("");
 //   const [loading, setLoading] = useState(false);
 //   const [error, setError] = useState("");
 
 //   useEffect(() => {
-//     document.title = "Fund Wallet with Paystack - RealSMS";
+//     document.title = "Fund Wallet - Paystack";
 //   }, []);
 
 //   const isPayDisabled =
-//     !amount || Number(amount) < MIN_AMOUNT || Number(amount) > MAX_AMOUNT || loading;
+//     !amount ||
+//     Number(amount) < MIN_AMOUNT ||
+//     Number(amount) > MAX_AMOUNT ||
+//     loading;
 
 //   const handlePay = async () => {
 //     setError("");
 
-//     if (!amount || Number(amount) < MIN_AMOUNT) {
-//       setError(`Minimum funding amount is ₦${MIN_AMOUNT}`);
+//     if (!amount) {
+//       setError("Enter amount");
+//       return;
+//     }
+
+//     if (Number(amount) < MIN_AMOUNT) {
+//       setError(`Minimum amount is ₦${MIN_AMOUNT.toLocaleString()}`);
 //       return;
 //     }
 
 //     if (Number(amount) > MAX_AMOUNT) {
-//       setError(`Maximum funding amount is ₦${MAX_AMOUNT}`);
+//       setError(`Maximum amount is ₦${MAX_AMOUNT.toLocaleString()}`);
 //       return;
 //     }
 
-//     const token = localStorage.getItem("token"); // ✅ must have JWT stored after login
+//     const token = localStorage.getItem("token");
 //     if (!token) {
-//       setError("You must be logged in to fund your wallet.");
+//       setError("Login required");
 //       return;
 //     }
 
 //     try {
 //       setLoading(true);
 
-//       const res = await fetch(`${process.env.REACT_APP_API_URL}/api/opay/init`, {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//           Authorization: `Bearer ${token}`, // ✅ send JWT here
-//         },
-//         body: JSON.stringify({ amount: Number(amount) }), // no userId needed
-//       });
+//       const res = await fetch(
+//         `${process.env.REACT_APP_API_URL}/api/paystack/init`,
+//         {
+//           method: "POST",
+//           headers: {
+//             "Content-Type": "application/json",
+//             Authorization: `Bearer ${token}`,
+//           },
+//           body: JSON.stringify({ amount: Number(amount) }),
+//         }
+//       );
 
 //       const data = await res.json();
 
-//       if (!res.ok) throw new Error(data.message || "Payment failed");
+//       if (!res.ok) {
+//         throw new Error(data.message || "Payment failed");
+//       }
 
-//       // Redirect to Opay cashier page
+//       // Redirect to Paystack
 //       window.location.href = data.paymentUrl;
 //     } catch (err) {
 //       setError(err.message);
@@ -65,43 +209,44 @@
 //   };
 
 //   return (
-//     <div className="opay-page">
-//       <div className="opay-card">
-//         <button className="back-btn" onClick={() => navigate("/fund-wallet")}>
+//     <div className="paystack-page">
+//       <div className="paystack-card">
+//         <button className="back-btn" onClick={() => navigate(-1)}>
 //           ← Back
 //         </button>
 
-//         <div className="opay-header">
-//           <img src={paystackLogo} alt="Opay" />
+//         <div className="paystack-header">
+//           <img src={paystackLogo} alt="Paystack" />
 //           <h3>Fund Wallet</h3>
-//           <p>Pay securely with Opay</p>
+//           <p>Secure payment via Paystack</p>
 //         </div>
 
-//         <div className="opay-body">
+//         <div className="paystack-body">
 //           <label>Amount</label>
-//           <div className="amount-input-wrapper">
-//             <div className={`amount-input ${error ? "error" : ""}`}>
-//               <span>₦</span>
-//               <input
-//                 type="number"
-//                 placeholder="0.00"
-//                 value={amount}
-//                 onChange={(e) => {
-//                   setAmount(e.target.value);
-//                   if (error) setError("");
-//                 }}
-//               />
-//             </div>
-//             <p className="min-max-text">
-//               Min: ₦{MIN_AMOUNT.toLocaleString()} • Max: ₦{MAX_AMOUNT.toLocaleString()}
-//             </p>
+
+//           <div className={`amount-input ${error ? "error" : ""}`}>
+//             <span>₦</span>
+//             <input
+//               type="number"
+//               min={MIN_AMOUNT}
+//               max={MAX_AMOUNT}
+//               value={amount}
+//               placeholder="0"
+//               onChange={(e) => {
+//                 setAmount(e.target.value);
+//                 setError("");
+//               }}
+//             />
 //           </div>
+
+//           <p className="min-max-text">
+//             Min: ₦{MIN_AMOUNT.toLocaleString()} • Max: ₦{MAX_AMOUNT.toLocaleString()}
+//           </p>
 
 //           <div className="quick-amounts">
 //             {quickAmounts.map((amt) => (
 //               <button
 //                 key={amt}
-//                 type="button"
 //                 className={`quick-btn ${Number(amount) === amt ? "active" : ""}`}
 //                 onClick={() => {
 //                   setAmount(amt);
@@ -115,26 +260,29 @@
 
 //           {error && <p className="error-text">{error}</p>}
 
-//           <button className="fund-btn" onClick={handlePay} disabled={isPayDisabled}>
-//             {loading ? <span className="loader"></span> : "Pay with Opay"}
+//           <button
+//             className="fund-btn"
+//             onClick={handlePay}
+//             disabled={isPayDisabled}
+//           >
+//             {loading ? "Processing..." : "Pay with Paystack"}
 //           </button>
 
-//           <div className="secure-badge">🔒 Secured by Opay</div>
+//           <div className="secure-badge">🔒 Secured by Paystack</div>
 //         </div>
 //       </div>
 //     </div>
 //   );
 // };
 
-// export default OpayFund;
-
+// export default PaystackFund;
 
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/paystack-fund.css";
 import paystackLogo from "../assets/paystack.png";
 
-const quickAmounts = [1000, 5000, 10000, 50000];
+const QUICK_AMOUNTS = [1000, 5000, 10000, 50000];
 const MIN_AMOUNT = 100;
 const MAX_AMOUNT = 500000;
 
@@ -148,40 +296,39 @@ const PaystackFund = () => {
     document.title = "Fund Wallet - Paystack";
   }, []);
 
+  // Determine if Pay button should be disabled
   const isPayDisabled =
-    !amount ||
-    Number(amount) < MIN_AMOUNT ||
-    Number(amount) > MAX_AMOUNT ||
-    loading;
+    loading || !amount || Number(amount) < MIN_AMOUNT || Number(amount) > MAX_AMOUNT;
 
+  // Handle Paystack payment
   const handlePay = async () => {
     setError("");
 
-    if (!amount) {
-      setError("Enter amount");
+    const numericAmount = Number(amount);
+
+    if (!numericAmount) {
+      setError("Enter a valid amount");
       return;
     }
-
-    if (Number(amount) < MIN_AMOUNT) {
+    if (numericAmount < MIN_AMOUNT) {
       setError(`Minimum amount is ₦${MIN_AMOUNT.toLocaleString()}`);
       return;
     }
-
-    if (Number(amount) > MAX_AMOUNT) {
+    if (numericAmount > MAX_AMOUNT) {
       setError(`Maximum amount is ₦${MAX_AMOUNT.toLocaleString()}`);
       return;
     }
 
     const token = localStorage.getItem("token");
     if (!token) {
-      setError("Login required");
+      setError("You must be logged in to fund wallet");
       return;
     }
 
     try {
       setLoading(true);
 
-      const res = await fetch(
+      const response = await fetch(
         `${process.env.REACT_APP_API_URL}/api/paystack/init`,
         {
           method: "POST",
@@ -189,17 +336,15 @@ const PaystackFund = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ amount: Number(amount) }),
+          body: JSON.stringify({ amount: numericAmount }),
         }
       );
 
-      const data = await res.json();
+      const data = await response.json();
 
-      if (!res.ok) {
-        throw new Error(data.message || "Payment failed");
-      }
+      if (!response.ok) throw new Error(data.message || "Payment failed");
 
-      // Redirect to Paystack
+      // Redirect user to Paystack
       window.location.href = data.paymentUrl;
     } catch (err) {
       setError(err.message);
@@ -216,14 +361,13 @@ const PaystackFund = () => {
         </button>
 
         <div className="paystack-header">
-          <img src={paystackLogo} alt="Paystack" />
+          <img src={paystackLogo} alt="Paystack Logo" />
           <h3>Fund Wallet</h3>
           <p>Secure payment via Paystack</p>
         </div>
 
         <div className="paystack-body">
           <label>Amount</label>
-
           <div className={`amount-input ${error ? "error" : ""}`}>
             <span>₦</span>
             <input
@@ -233,7 +377,8 @@ const PaystackFund = () => {
               value={amount}
               placeholder="0"
               onChange={(e) => {
-                setAmount(e.target.value);
+                const value = e.target.value.replace(/\D/, ""); // remove non-numbers
+                setAmount(value);
                 setError("");
               }}
             />
@@ -244,14 +389,13 @@ const PaystackFund = () => {
           </p>
 
           <div className="quick-amounts">
-            {quickAmounts.map((amt) => (
+            {QUICK_AMOUNTS.map((amt) => (
               <button
                 key={amt}
+                type="button"
                 className={`quick-btn ${Number(amount) === amt ? "active" : ""}`}
-                onClick={() => {
-                  setAmount(amt);
-                  setError("");
-                }}
+                onClick={() => setAmount(String(amt))}
+                disabled={loading}
               >
                 ₦{amt.toLocaleString()}
               </button>
@@ -261,7 +405,7 @@ const PaystackFund = () => {
           {error && <p className="error-text">{error}</p>}
 
           <button
-            className="fund-btn"
+            className={`fund-btn ${isPayDisabled ? "disabled" : ""}`}
             onClick={handlePay}
             disabled={isPayDisabled}
           >
