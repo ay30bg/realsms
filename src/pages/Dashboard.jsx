@@ -86,11 +86,12 @@ import { useBalance } from "../context/BalanceContext";
 
 const Dashboard = ({ darkMode }) => {
   const navigate = useNavigate();
-  const { balance, loading } = useBalance(); // ✅ get wallet balance
+  const { balance, loading } = useBalance(); // Wallet balance
   const [transactionStats, setTransactionStats] = useState({
     totalAmount: 0,
     totalTransactions: 0,
   });
+  const [loadingStats, setLoadingStats] = useState(true);
 
   useEffect(() => {
     document.title = "Dashboard - RealSMS";
@@ -99,9 +100,16 @@ const Dashboard = ({ darkMode }) => {
       try {
         const userId = "USER_ID_HERE"; // Replace with actual logged-in user ID
         const { data } = await axios.get(`/api/transactions/stats/${userId}`);
-        setTransactionStats(data);
+
+        setTransactionStats({
+          totalAmount: data.totalAmount ?? 0,
+          totalTransactions: data.totalTransactions ?? 0,
+        });
       } catch (err) {
         console.error("Failed to fetch transaction stats:", err);
+        setTransactionStats({ totalAmount: 0, totalTransactions: 0 });
+      } finally {
+        setLoadingStats(false);
       }
     };
 
@@ -114,9 +122,10 @@ const Dashboard = ({ darkMode }) => {
 
   // Safe formatting
   const formattedBalance = balance !== undefined ? balance.toLocaleString() : "0";
-  const formattedDeposits = transactionStats.totalAmount.toLocaleString();
-  const formattedTransactions = transactionStats.totalTransactions;
+  const formattedDeposits = (transactionStats.totalAmount ?? 0).toLocaleString();
+  const formattedTransactions = transactionStats.totalTransactions ?? 0;
 
+  // Stats array for mapping
   const stats = [
     {
       title: "Wallet Balance",
@@ -138,10 +147,11 @@ const Dashboard = ({ darkMode }) => {
     },
   ];
 
-  if (loading) {
+  // Show loading state if wallet or stats are loading
+  if (loading || loadingStats) {
     return (
       <div className={`dashboard ${darkMode ? "dark" : ""}`}>
-        <p>Loading wallet...</p>
+        <p>Loading dashboard...</p>
       </div>
     );
   }
@@ -173,6 +183,3 @@ const Dashboard = ({ darkMode }) => {
 };
 
 export default Dashboard;
-
-
-
