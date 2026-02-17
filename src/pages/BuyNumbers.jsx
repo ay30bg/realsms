@@ -260,29 +260,39 @@ const BuyNumbers = ({ darkMode }) => {
 
   const { balance } = useBalance();
 
+  const token = localStorage.getItem("token");
+
   const handleServerChange = (e) => {
     const serverId = Number(e.target.value);
     const server = servers.find((s) => s.id === serverId);
 
     setSelectedServer(server || null);
+    resetOrderState();
+  };
+
+  const resetOrderState = () => {
     setActiveOrder(null);
     setOrderStatus("idle");
     setOtp(null);
     setTimeLeft(300);
     setSearch("");
+    setCopied(false);
   };
 
   // ===========================
-  // BUY NUMBER FROM BACKEND
+  // BUY NUMBER
   // ===========================
   const handleBuy = async (service, stopSpinner) => {
+    if (!selectedServer) {
+      alert("Please select a country");
+      return;
+    }
+
     if (balance < service.price) {
       alert("Insufficient balance");
       if (stopSpinner) stopSpinner();
       return;
     }
-
-    const token = localStorage.getItem("token");
 
     try {
       setLoading(true);
@@ -294,8 +304,9 @@ const BuyNumbers = ({ darkMode }) => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          country: "nigeria", // adjust to your 5sim country code
-          service: service.slug, // ensure your service has slug for 5sim
+          country: selectedServer.slug, // ✅ dynamic country
+          service: service.slug,        // ✅ correct slug
+          price: service.price,         // send price for backend validation
         }),
       });
 
@@ -306,7 +317,7 @@ const BuyNumbers = ({ darkMode }) => {
       setActiveOrder({
         id: data.numberData.id,
         number: data.numberData.phone,
-        service,
+        price: service.price,
       });
 
       setOrderStatus("waiting");
@@ -320,12 +331,10 @@ const BuyNumbers = ({ darkMode }) => {
   };
 
   // ===========================
-  // POLL FOR OTP
+  // POLL OTP
   // ===========================
   useEffect(() => {
     if (orderStatus !== "waiting" || !activeOrder) return;
-
-    const token = localStorage.getItem("token");
 
     const interval = setInterval(async () => {
       try {
@@ -348,13 +357,13 @@ const BuyNumbers = ({ darkMode }) => {
       } catch (err) {
         console.error("OTP check failed");
       }
-    }, 5000); // check every 5 seconds
+    }, 5000);
 
     return () => clearInterval(interval);
-  }, [orderStatus, activeOrder]);
+  }, [orderStatus, activeOrder, token]);
 
   // ===========================
-  // COUNTDOWN TIMER
+  // TIMER
   // ===========================
   useEffect(() => {
     if (orderStatus !== "waiting") return;
@@ -372,6 +381,29 @@ const BuyNumbers = ({ darkMode }) => {
 
     return () => clearInterval(timer);
   }, [orderStatus]);
+
+  // ===========================
+  // CANCEL ORDER
+  // ===========================
+  const handleCancel = async () => {
+    try {
+      await fetch(`${API_URL}/api/5sim/cancel`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          orderId: activeOrder.id,
+          price: activeOrder.price,
+        }),
+      });
+
+      resetOrderState();
+    } catch (err) {
+      alert("Cancel failed");
+    }
+  };
 
   const filteredServices = selectedServer
     ? services
@@ -429,13 +461,8 @@ const BuyNumbers = ({ darkMode }) => {
         {activeOrder && (
           <div className="otp-box">
             <div className="otp-header">
-              <p>
-                <strong>Number:</strong> {activeOrder.number}
-              </p>
-              <button
-                className="close-btn"
-                onClick={() => setActiveOrder(null)}
-              >
+              <p><strong>Number:</strong> {activeOrder.number}</p>
+              <button className="close-btn" onClick={handleCancel}>
                 ×
               </button>
             </div>
@@ -466,7 +493,10 @@ const BuyNumbers = ({ darkMode }) => {
             )}
 
             {orderStatus === "expired" && (
-              <p className="error">OTP expired</p>
+              <>
+                <p className="error">OTP expired</p>
+                <button onClick={handleCancel}>Refund</button>
+              </>
             )}
           </div>
         )}
