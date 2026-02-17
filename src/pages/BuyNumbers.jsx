@@ -534,10 +534,9 @@ const BuyNumbers = ({ darkMode }) => {
   const [copied, setCopied] = useState(false);
 
   const { balance, debitWallet } = useBalance();
-
   const BACKEND_URL = process.env.REACT_APP_API_URL;
 
-  // ================= SERVER CHANGE =================
+  // ======== SERVER SELECT ========
   const handleServerChange = (e) => {
     const serverId = Number(e.target.value);
     const server = servers.find((s) => s.id === serverId);
@@ -557,7 +556,7 @@ const BuyNumbers = ({ darkMode }) => {
     }, 500);
   };
 
-  // ================= BUY NUMBER =================
+  // ======== BUY NUMBER ========
   const handleBuy = async (service, stopButtonSpinner) => {
     if (balance < service.price) {
       alert("Insufficient balance to buy this service");
@@ -566,6 +565,7 @@ const BuyNumbers = ({ darkMode }) => {
     }
 
     try {
+      // Deduct balance in backend
       await debitWallet(service.price);
 
       setActiveOrder(null);
@@ -575,33 +575,33 @@ const BuyNumbers = ({ darkMode }) => {
       setCopied(false);
       setLoading(true);
 
+      // ✅ Call your backend (never call 5sim directly)
       const res = await fetch(`${BACKEND_URL}/api/5sim/buy-number`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify({ country: service.country, service: service.operator }),
+        body: JSON.stringify({
+          country: selectedServer?.slug, // 5sim country slug
+          service: service.slug,         // 5sim service slug
+        }),
       });
 
-      const text = await res.text();
-      let data;
-      try {
-        data = JSON.parse(text);
-      } catch {
-        console.error("Invalid JSON response:", text);
-        throw new Error("Backend returned invalid response");
-      }
-
+      const data = await res.json();
       setLoading(false);
 
       if (!data.success) throw new Error(data.message || "Failed to buy number");
 
       const numberData = data.numberData;
-      setActiveOrder({ ...service, generatedNumber: numberData.number, orderId: numberData.id });
+      setActiveOrder({
+        ...service,
+        generatedNumber: numberData.number,
+        orderId: numberData.id,
+      });
       setOrderStatus("waiting");
 
-      // Poll OTP
+      // Start polling for OTP
       pollOtp(numberData.id);
 
       if (stopButtonSpinner) stopButtonSpinner();
@@ -613,7 +613,7 @@ const BuyNumbers = ({ darkMode }) => {
     }
   };
 
-  // ================= POLL OTP =================
+  // ======== POLL OTP ========
   const pollOtp = (orderId) => {
     const interval = setInterval(async () => {
       try {
@@ -626,14 +626,7 @@ const BuyNumbers = ({ darkMode }) => {
           body: JSON.stringify({ orderId }),
         });
 
-        const text = await res.text();
-        let data;
-        try {
-          data = JSON.parse(text);
-        } catch {
-          console.error("Invalid OTP response:", text);
-          return;
-        }
+        const data = await res.json();
 
         if (data.otp) {
           setOtp(data.otp);
@@ -646,7 +639,7 @@ const BuyNumbers = ({ darkMode }) => {
     }, 5000);
   };
 
-  // ================= OTP TIMER =================
+  // ======== OTP TIMER ========
   useEffect(() => {
     if (orderStatus !== "waiting") return;
 
@@ -664,7 +657,7 @@ const BuyNumbers = ({ darkMode }) => {
     return () => clearInterval(timer);
   }, [orderStatus]);
 
-  // ================= COPY OTP =================
+  // ======== COPY OTP ========
   useEffect(() => {
     if (!copied) return;
 
