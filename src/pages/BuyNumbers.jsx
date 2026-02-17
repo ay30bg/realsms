@@ -239,7 +239,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FiSearch } from "react-icons/fi";
 import ServiceCard from "../components/ServiceCard";
-import { useBalance } from "../context/BalanceContext"; 
+import { useBalance } from "../context/BalanceContext";
 import "../styles/buy-number.css";
 
 const BuyNumbers = ({ darkMode }) => {
@@ -255,7 +255,8 @@ const BuyNumbers = ({ darkMode }) => {
   const [otp, setOtp] = useState(null);
   const [timeLeft, setTimeLeft] = useState(300);
   const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loadingServers, setLoadingServers] = useState(true);
+  const [loadingServices, setLoadingServices] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const { balance, debitWallet } = useBalance();
@@ -264,6 +265,7 @@ const BuyNumbers = ({ darkMode }) => {
   // ---------------- FETCH SERVERS ----------------
   useEffect(() => {
     const fetchServers = async () => {
+      setLoadingServers(true);
       try {
         const res = await axios.get("/api/smspool/servers", {
           headers: { Authorization: `Bearer ${token}` },
@@ -272,6 +274,8 @@ const BuyNumbers = ({ darkMode }) => {
       } catch (err) {
         console.error("Failed to load servers:", err);
         setServers([]);
+      } finally {
+        setLoadingServers(false);
       }
     };
     fetchServers();
@@ -287,14 +291,15 @@ const BuyNumbers = ({ darkMode }) => {
     setTimeLeft(300);
     setSearch("");
     setCopied(false);
-    setLoading(true);
+    setServices([]);
+    if (!serverId) return;
 
+    setLoadingServices(true);
     try {
       const res = await axios.get(`/api/smspool/services/${serverId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const data = Array.isArray(res.data) ? res.data : [];
-      setServices(data);
+      setServices(Array.isArray(res.data) ? res.data : []);
       const server = (Array.isArray(servers) ? servers : []).find(
         (s) => s.id.toString() === serverId
       );
@@ -303,7 +308,7 @@ const BuyNumbers = ({ darkMode }) => {
       console.error("Failed to fetch services:", err);
       setServices([]);
     } finally {
-      setLoading(false);
+      setLoadingServices(false);
     }
   };
 
@@ -333,7 +338,7 @@ const BuyNumbers = ({ darkMode }) => {
       const number = res.data.number;
       setActiveOrder({ ...service, generatedNumber: number });
 
-      // Poll OTP every 2s
+      // Poll OTP every 2 seconds
       const pollOtp = setInterval(async () => {
         try {
           const otpRes = await axios.get(`/api/smspool/otp/${number}`, {
@@ -345,7 +350,7 @@ const BuyNumbers = ({ darkMode }) => {
             clearInterval(pollOtp);
           }
         } catch {
-          // OTP not yet available
+          // Ignore errors while polling
         }
       }, 2000);
     } catch (err) {
@@ -380,8 +385,8 @@ const BuyNumbers = ({ darkMode }) => {
     return () => clearTimeout(timer);
   }, [copied]);
 
-  const filteredServices = (Array.isArray(services) ? services : []).filter(
-    (s) => s.name.toLowerCase().includes(search.toLowerCase())
+  const filteredServices = (Array.isArray(services) ? services : []).filter((s) =>
+    s.name.toLowerCase().includes(search.toLowerCase())
   );
 
   // ---------------- RENDER ----------------
@@ -391,18 +396,22 @@ const BuyNumbers = ({ darkMode }) => {
         <h2>Buy Numbers</h2>
 
         {/* SERVER SELECT */}
-        <select
-          className="server-select"
-          value={selectedServer?.id || ""}
-          onChange={handleServerChange}
-        >
-          <option value="">Select Server</option>
-          {(Array.isArray(servers) ? servers : []).map((server) => (
-            <option key={server.id} value={server.id}>
-              {server.name}
-            </option>
-          ))}
-        </select>
+        {loadingServers ? (
+          <p>Loading servers...</p>
+        ) : (
+          <select
+            className="server-select"
+            value={selectedServer?.id || ""}
+            onChange={handleServerChange}
+          >
+            <option value="">Select Server</option>
+            {servers.map((server) => (
+              <option key={server.id} value={server.id}>
+                {server.name}
+              </option>
+            ))}
+          </select>
+        )}
 
         {/* SEARCH */}
         <div className="search-container">
@@ -412,15 +421,15 @@ const BuyNumbers = ({ darkMode }) => {
             className="search-input"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            disabled={!selectedServer || loading}
+            disabled={!selectedServer || loadingServices}
           />
           <FiSearch className="search-icon" />
         </div>
 
         {/* SERVICES */}
-        {(selectedServer || loading) && (
+        {(selectedServer || loadingServices) && (
           <div className="services-container">
-            {loading ? (
+            {loadingServices ? (
               <div className="loading-spinner">
                 <div className={`spinner ${darkMode ? "dark" : ""}`}></div>
                 <p>Loading services...</p>
@@ -486,9 +495,7 @@ const BuyNumbers = ({ darkMode }) => {
               </>
             )}
 
-            {orderStatus === "expired" && (
-              <p className="error">OTP expired</p>
-            )}
+            {orderStatus === "expired" && <p className="error">OTP expired</p>}
           </div>
         )}
       </div>
