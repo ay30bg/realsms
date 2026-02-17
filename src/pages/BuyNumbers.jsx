@@ -258,7 +258,9 @@ const BuyNumbers = ({ darkMode }) => {
 
   const { balance, debitWallet } = useBalance();
 
-  // SERVER CHANGE
+  const BACKEND_URL = process.env.REACT_APP_API_URL; // ✅ Use .env backend URL
+
+  // ================= SERVER CHANGE =================
   const handleServerChange = (e) => {
     const serverId = Number(e.target.value);
     const server = servers.find((s) => s.id === serverId);
@@ -275,10 +277,10 @@ const BuyNumbers = ({ darkMode }) => {
     setTimeout(() => {
       setSelectedServer(server || null);
       setLoading(false);
-    }, 500); // small delay
+    }, 500);
   };
 
-  // HANDLE BUY - INTEGRATED WITH BACKEND
+  // ================= BUY NUMBER =================
   const handleBuy = async (service, stopButtonSpinner) => {
     if (balance < service.price) {
       alert("Insufficient balance to buy this service");
@@ -287,7 +289,7 @@ const BuyNumbers = ({ darkMode }) => {
     }
 
     try {
-      // ✅ Deduct wallet first
+      // Deduct wallet first
       await debitWallet(service.price);
 
       setActiveOrder(null);
@@ -295,11 +297,9 @@ const BuyNumbers = ({ darkMode }) => {
       setTimeLeft(300);
       setOrderStatus("idle");
       setCopied(false);
-
       setLoading(true);
 
-      // POST to backend to buy number
-      const res = await fetch("/api/5sim/buy-number", {
+      const res = await fetch(`${BACKEND_URL}/api/5sim/buy-number`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -307,12 +307,21 @@ const BuyNumbers = ({ darkMode }) => {
         },
         body: JSON.stringify({ country: service.country, service: service.operator }),
       });
-      const data = await res.json();
+
+      const text = await res.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        console.error("Invalid JSON response:", text);
+        throw new Error("Backend returned invalid response");
+      }
+
       setLoading(false);
 
       if (!data.success) throw new Error(data.message || "Failed to buy number");
 
-      const numberData = data.numberData; // number info from backend
+      const numberData = data.numberData;
       setActiveOrder({ ...service, generatedNumber: numberData.number, orderId: numberData.id });
       setOrderStatus("waiting");
 
@@ -328,11 +337,11 @@ const BuyNumbers = ({ darkMode }) => {
     }
   };
 
-  // POLL OTP FROM BACKEND
+  // ================= POLL OTP =================
   const pollOtp = (orderId) => {
     const interval = setInterval(async () => {
       try {
-        const res = await fetch("/api/5sim/check-otp", {
+        const res = await fetch(`${BACKEND_URL}/api/5sim/check-otp`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -340,7 +349,15 @@ const BuyNumbers = ({ darkMode }) => {
           },
           body: JSON.stringify({ orderId }),
         });
-        const data = await res.json();
+
+        const text = await res.text();
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch {
+          console.error("Invalid OTP response:", text);
+          return;
+        }
 
         if (data.otp) {
           setOtp(data.otp);
@@ -350,10 +367,10 @@ const BuyNumbers = ({ darkMode }) => {
       } catch (err) {
         console.error("Error fetching OTP:", err);
       }
-    }, 5000); // every 5 seconds
+    }, 5000); // poll every 5 seconds
   };
 
-  // OTP COUNTDOWN TIMER
+  // ================= OTP TIMER =================
   useEffect(() => {
     if (orderStatus !== "waiting") return;
 
@@ -371,7 +388,7 @@ const BuyNumbers = ({ darkMode }) => {
     return () => clearInterval(timer);
   }, [orderStatus]);
 
-  // COPY OTP → RESET AFTER 2 SECONDS
+  // ================= COPY OTP =================
   useEffect(() => {
     if (!copied) return;
 
@@ -410,87 +427,4 @@ const BuyNumbers = ({ darkMode }) => {
             type="text"
             placeholder="Search service"
             className="search-input"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            disabled={!selectedServer || loading}
-          />
-          <FiSearch className="search-icon" />
-        </div>
-
-        {/* SERVICES */}
-        {(selectedServer || loading) && (
-          <div className="services-container">
-            {loading ? (
-              <div className="loading-spinner">
-                <div className={`spinner ${darkMode ? "dark" : ""}`}></div>
-                <p>Processing purchase...</p>
-              </div>
-            ) : filteredServices.length === 0 ? (
-              <p className="empty">No services available</p>
-            ) : (
-              <div className="services-grid">
-                {filteredServices.map((service) => (
-                  <ServiceCard
-                    key={service.id}
-                    service={service}
-                    onBuy={handleBuy}
-                    darkMode={darkMode}
-                    disabled={balance < service.price}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* OTP BOX */}
-        {activeOrder && (
-          <div className="otp-box">
-            <div className="otp-header">
-              <p>
-                <strong>Number:</strong> {activeOrder.generatedNumber}
-              </p>
-              <button
-                className="close-btn"
-                onClick={() => {
-                  setActiveOrder(null);
-                  setCopied(false);
-                }}
-              >
-                ×
-              </button>
-            </div>
-
-            {orderStatus === "waiting" && (
-              <>
-                <p>Waiting for OTP...</p>
-                <p className="timer">
-                  {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, "0")}
-                </p>
-              </>
-            )}
-
-            {orderStatus === "received" && (
-              <>
-                <h2>{otp}</h2>
-                <button
-                  className={`copy-btn ${copied ? "copied" : ""}`}
-                  onClick={() => {
-                    navigator.clipboard.writeText(otp);
-                    setCopied(true);
-                  }}
-                >
-                  {copied ? "Copied ✓" : "Copy OTP"}
-                </button>
-              </>
-            )}
-
-            {orderStatus === "expired" && <p className="error">OTP expired</p>}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-export default BuyNumbers;
+            value={
