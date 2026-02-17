@@ -520,23 +520,24 @@ import "../styles/buy-number.css";
 import { useBalance } from "../context/BalanceContext";
 
 const BuyNumbers = ({ darkMode }) => {
-  useEffect(() => {
-    document.title = "Buy Numbers - RealSMS";
-  }, []);
+  const { balance, debitWallet } = useBalance();
+  const BACKEND_URL = process.env.REACT_APP_API_URL;
 
   const [selectedServer, setSelectedServer] = useState(null);
   const [activeOrder, setActiveOrder] = useState(null);
-  const [orderStatus, setOrderStatus] = useState("idle");
+  const [orderStatus, setOrderStatus] = useState("idle"); // idle, waiting, received, expired
   const [otp, setOtp] = useState(null);
   const [timeLeft, setTimeLeft] = useState(300);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [pollError, setPollError] = useState(null);
 
-  const { balance, debitWallet } = useBalance();
-  const BACKEND_URL = process.env.REACT_APP_API_URL;
+  useEffect(() => {
+    document.title = "Buy Numbers - RealSMS";
+  }, []);
 
-  // ======== SERVER SELECT ========
+  // ================= SERVER SELECT =================
   const handleServerChange = (e) => {
     const serverId = Number(e.target.value);
     const server = servers.find((s) => s.id === serverId);
@@ -548,6 +549,7 @@ const BuyNumbers = ({ darkMode }) => {
     setTimeLeft(300);
     setSearch("");
     setCopied(false);
+    setPollError(null);
     setLoading(true);
 
     setTimeout(() => {
@@ -556,7 +558,7 @@ const BuyNumbers = ({ darkMode }) => {
     }, 500);
   };
 
-  // ======== BUY NUMBER ========
+  // ================= BUY NUMBER =================
   const handleBuy = async (service, stopButtonSpinner) => {
     if (balance < service.price) {
       alert("Insufficient balance to buy this service");
@@ -565,7 +567,6 @@ const BuyNumbers = ({ darkMode }) => {
     }
 
     try {
-      // Deduct balance in backend
       await debitWallet(service.price);
 
       setActiveOrder(null);
@@ -573,18 +574,18 @@ const BuyNumbers = ({ darkMode }) => {
       setTimeLeft(300);
       setOrderStatus("idle");
       setCopied(false);
+      setPollError(null);
       setLoading(true);
 
-      // ✅ Call your backend (never call 5sim directly)
       const res = await fetch(`${BACKEND_URL}/api/5sim/buy-number`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
-          country: selectedServer?.slug, // 5sim country slug
-          service: service.slug,         // 5sim service slug
+          country: selectedServer?.slug,
+          service: service.slug,
         }),
       });
 
@@ -613,7 +614,7 @@ const BuyNumbers = ({ darkMode }) => {
     }
   };
 
-  // ======== POLL OTP ========
+  // ================= POLL OTP =================
   const pollOtp = (orderId) => {
     const interval = setInterval(async () => {
       try {
@@ -621,7 +622,7 @@ const BuyNumbers = ({ darkMode }) => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           body: JSON.stringify({ orderId }),
         });
@@ -632,14 +633,18 @@ const BuyNumbers = ({ darkMode }) => {
           setOtp(data.otp);
           setOrderStatus("received");
           clearInterval(interval);
+        } else if (data.expired) {
+          setOrderStatus("expired");
+          clearInterval(interval);
         }
       } catch (err) {
-        console.error("Error fetching OTP:", err);
+        console.error("OTP Polling error:", err);
+        setPollError("Failed to fetch OTP. Retrying...");
       }
     }, 5000);
   };
 
-  // ======== OTP TIMER ========
+  // ================= OTP TIMER =================
   useEffect(() => {
     if (orderStatus !== "waiting") return;
 
@@ -657,7 +662,7 @@ const BuyNumbers = ({ darkMode }) => {
     return () => clearInterval(timer);
   }, [orderStatus]);
 
-  // ======== COPY OTP ========
+  // ================= COPY OTP =================
   useEffect(() => {
     if (!copied) return;
 
@@ -741,6 +746,7 @@ const BuyNumbers = ({ darkMode }) => {
                 onClick={() => {
                   setActiveOrder(null);
                   setCopied(false);
+                  setPollError(null);
                 }}
               >
                 ×
@@ -753,6 +759,7 @@ const BuyNumbers = ({ darkMode }) => {
                 <p className="timer">
                   {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, "0")}
                 </p>
+                {pollError && <p className="error">{pollError}</p>}
               </>
             )}
 
@@ -771,7 +778,7 @@ const BuyNumbers = ({ darkMode }) => {
               </>
             )}
 
-            {orderStatus === "expired" && <p className="error">OTP expired</p>}
+            {orderStatus === "expired" && <p className="error">OTP expired or order cancelled</p>}
           </div>
         )}
       </div>
