@@ -83,18 +83,27 @@ import axios from "axios";
 import StatCard from "../components/StatCard";
 import { FiCreditCard, FiArrowDownCircle, FiShoppingBag } from "react-icons/fi";
 import { useBalance } from "../context/BalanceContext";
+import "../styles/dashboard.css";
 
 const Dashboard = ({ darkMode }) => {
   const navigate = useNavigate();
-  const { balance, loading } = useBalance(); // Wallet balance
+  const { balance, loading } = useBalance();
+
   const [transactionStats, setTransactionStats] = useState({
     totalAmount: 0,
     totalTransactions: 0,
   });
+
   const [loadingStats, setLoadingStats] = useState(true);
+
+  // ✅ Notification State (ADDED)
+  const [showNotice, setShowNotice] = useState(false);
 
   useEffect(() => {
     document.title = "Dashboard - RealSMS";
+
+    // Show notification on mount
+    setShowNotice(true);
 
     const fetchTransactionStats = async () => {
       try {
@@ -121,11 +130,15 @@ const Dashboard = ({ darkMode }) => {
   };
 
   // Safe formatting
-  const formattedBalance = balance !== undefined ? balance.toLocaleString() : "0";
-  const formattedDeposits = (transactionStats.totalAmount ?? 0).toLocaleString();
-  const formattedTransactions = transactionStats.totalTransactions ?? 0;
+  const formattedBalance =
+    balance !== undefined ? balance.toLocaleString() : "0";
 
-  // Stats array for mapping
+  const formattedDeposits =
+    (transactionStats.totalAmount ?? 0).toLocaleString();
+
+  const formattedTransactions =
+    transactionStats.totalTransactions ?? 0;
+
   const stats = [
     {
       title: "Wallet Balance",
@@ -147,7 +160,7 @@ const Dashboard = ({ darkMode }) => {
     },
   ];
 
-  // Show loading state if wallet or stats are loading
+  // Keep your original loading return (UNCHANGED STRUCTURE)
   if (loading || loadingStats) {
     return (
       <div className={`dashboard ${darkMode ? "dark" : ""}`}>
@@ -158,6 +171,45 @@ const Dashboard = ({ darkMode }) => {
 
   return (
     <div className={`dashboard ${darkMode ? "dark" : ""}`}>
+
+      {/* ===== Notification Modal (ONLY ADDITION) ===== */}
+      {showNotice && (
+        <div className="notice-overlay">
+          <div className="notice-modal">
+            <button
+              className="notice-close"
+              onClick={() => setShowNotice(false)}
+            >
+              ×
+            </button>
+
+            <h2>Welcome to RealSMS</h2>
+
+            <p>
+              <strong>Notice!</strong> There is a price update going on because
+              we are changing providers to help orders go smoothly. Thank you.
+            </p>
+
+            <p className="notice-highlight">
+              Please wait for the timer to run out. If you don’t receive your
+              code, your money will be refunded.
+            </p>
+
+            <p>
+              Crypto funding is temporarily disabled while we update our
+              system.
+            </p>
+
+            <p>
+              We apologize for the inconvenience. Please use alternative
+              payment methods. Thank you for your understanding.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* ===== ORIGINAL STRUCTURE BELOW (UNCHANGED) ===== */}
+
       <div className="welcome-card">
         <div>
           <h2>Welcome Back, User!</h2>
