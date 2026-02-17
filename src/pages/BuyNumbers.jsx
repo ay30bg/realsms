@@ -235,7 +235,6 @@
 
 // export default BuyNumbers;
 
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FiSearch } from "react-icons/fi";
@@ -244,12 +243,11 @@ import { useBalance } from "../context/BalanceContext";
 import "../styles/buy-number.css";
 
 const BuyNumbers = ({ darkMode }) => {
-  // PAGE TITLE
   useEffect(() => {
     document.title = "Buy Numbers - RealSMS";
   }, []);
 
-  const [servers, setServers] = useState([]); // Load from backend
+  const [servers, setServers] = useState([]);
   const [services, setServices] = useState([]);
   const [selectedServer, setSelectedServer] = useState(null);
   const [activeOrder, setActiveOrder] = useState(null);
@@ -261,24 +259,25 @@ const BuyNumbers = ({ darkMode }) => {
   const [copied, setCopied] = useState(false);
 
   const { balance, debitWallet } = useBalance();
-  const token = localStorage.getItem("token"); // JWT token
+  const token = localStorage.getItem("token");
 
-  // Fetch servers on mount
+  // ---------------- FETCH SERVERS ----------------
   useEffect(() => {
     const fetchServers = async () => {
       try {
         const res = await axios.get("/api/smspool/servers", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setServers(res.data);
+        setServers(Array.isArray(res.data) ? res.data : []);
       } catch (err) {
         console.error("Failed to load servers:", err);
+        setServers([]);
       }
     };
     fetchServers();
   }, [token]);
 
-  // Handle server change
+  // ---------------- HANDLE SERVER CHANGE ----------------
   const handleServerChange = async (e) => {
     const serverId = e.target.value;
     setSelectedServer(null);
@@ -294,17 +293,21 @@ const BuyNumbers = ({ darkMode }) => {
       const res = await axios.get(`/api/smspool/services/${serverId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setServices(res.data);
-      const server = servers.find((s) => s.id.toString() === serverId);
+      const data = Array.isArray(res.data) ? res.data : [];
+      setServices(data);
+      const server = (Array.isArray(servers) ? servers : []).find(
+        (s) => s.id.toString() === serverId
+      );
       setSelectedServer(server || null);
     } catch (err) {
       console.error("Failed to fetch services:", err);
+      setServices([]);
     } finally {
       setLoading(false);
     }
   };
 
-  // Handle buying a number
+  // ---------------- HANDLE BUY ----------------
   const handleBuy = async (service, stopButtonSpinner) => {
     if (balance < service.price) {
       alert("Insufficient balance to buy this service");
@@ -313,7 +316,6 @@ const BuyNumbers = ({ darkMode }) => {
     }
 
     try {
-      // Deduct wallet in backend
       await debitWallet(service.price);
 
       setActiveOrder(null);
@@ -322,14 +324,13 @@ const BuyNumbers = ({ darkMode }) => {
       setOrderStatus("waiting");
       setCopied(false);
 
-      // Call backend to buy number
       const res = await axios.post(
         "/api/smspool/buy",
         { serviceId: service.id },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      const { number } = res.data;
+      const number = res.data.number;
       setActiveOrder({ ...service, generatedNumber: number });
 
       // Poll OTP every 2s
@@ -344,7 +345,7 @@ const BuyNumbers = ({ darkMode }) => {
             clearInterval(pollOtp);
           }
         } catch {
-          // OTP not yet received
+          // OTP not yet available
         }
       }, 2000);
     } catch (err) {
@@ -356,7 +357,7 @@ const BuyNumbers = ({ darkMode }) => {
     }
   };
 
-  // OTP countdown
+  // ---------------- OTP COUNTDOWN ----------------
   useEffect(() => {
     if (orderStatus !== "waiting") return;
     const timer = setInterval(() => {
@@ -372,19 +373,18 @@ const BuyNumbers = ({ darkMode }) => {
     return () => clearInterval(timer);
   }, [orderStatus]);
 
-  // Reset copied state after 2s
+  // ---------------- RESET COPIED ----------------
   useEffect(() => {
     if (!copied) return;
     const timer = setTimeout(() => setCopied(false), 2000);
     return () => clearTimeout(timer);
   }, [copied]);
 
-  const filteredServices = selectedServer
-    ? services.filter((s) =>
-        s.name.toLowerCase().includes(search.toLowerCase())
-      )
-    : [];
+  const filteredServices = (Array.isArray(services) ? services : []).filter(
+    (s) => s.name.toLowerCase().includes(search.toLowerCase())
+  );
 
+  // ---------------- RENDER ----------------
   return (
     <div className={`marketplace ${darkMode ? "dark" : ""}`}>
       <div className="buy-number-card">
@@ -397,7 +397,7 @@ const BuyNumbers = ({ darkMode }) => {
           onChange={handleServerChange}
         >
           <option value="">Select Server</option>
-          {servers.map((server) => (
+          {(Array.isArray(servers) ? servers : []).map((server) => (
             <option key={server.id} value={server.id}>
               {server.name}
             </option>
@@ -497,4 +497,3 @@ const BuyNumbers = ({ darkMode }) => {
 };
 
 export default BuyNumbers;
-
