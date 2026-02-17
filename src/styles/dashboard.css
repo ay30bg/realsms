@@ -230,6 +230,17 @@
   transform: scale(1.05);
 }
 
+.notice-link {
+  color: #2563eb;
+  font-weight: 500;
+  text-decoration: none;
+  word-break: break-word;
+}
+
+.notice-link:hover {
+  text-decoration: underline;
+}
+
 /* Smooth fade animation */
 @keyframes noticeFadeIn {
   from {
@@ -241,3 +252,4 @@
     transform: scale(1);
   }
 }
+
