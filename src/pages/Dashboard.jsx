@@ -76,7 +76,6 @@
 
 // export default Dashboard;
 
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -100,11 +99,17 @@ const Dashboard = ({ darkMode }) => {
   useEffect(() => {
     document.title = "Dashboard - RealSMS";
 
-    setShowNotice(true);
+    // ✅ Show notice only once per login session
+    const noticeShown = sessionStorage.getItem("noticeShown");
+
+    if (!noticeShown) {
+      setShowNotice(true);
+      sessionStorage.setItem("noticeShown", "true");
+    }
 
     const fetchTransactionStats = async () => {
       try {
-        const userId = "USER_ID_HERE"; // Replace with actual logged-in user ID
+        const userId = "USER_ID_HERE"; // Replace with real logged-in user ID
         const { data } = await axios.get(`/api/transactions/stats/${userId}`);
 
         setTransactionStats({
@@ -189,7 +194,7 @@ const Dashboard = ({ darkMode }) => {
             </p>
 
             <p>
-              Our only response channel is Telegram.
+              Our only response is via Telegram.
             </p>
 
             <p>
@@ -224,7 +229,7 @@ const Dashboard = ({ darkMode }) => {
         </div>
       )}
 
-      {/* ===== ORIGINAL STRUCTURE BELOW (UNCHANGED) ===== */}
+      {/* ===== ORIGINAL STRUCTURE (UNCHANGED) ===== */}
 
       <div className="welcome-card">
         <div>
