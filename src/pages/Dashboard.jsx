@@ -16,23 +16,16 @@ const Dashboard = ({ darkMode }) => {
   });
 
   const [loadingStats, setLoadingStats] = useState(true);
-
-  // ✅ Notice modal state
   const [showNotice, setShowNotice] = useState(false);
 
   useEffect(() => {
     document.title = "Dashboard - RealSMS";
 
-    // ✅ Show notice only once per login session
-    const noticeShown = sessionStorage.getItem("noticeShown");
-    if (!noticeShown) {
-      setShowNotice(true);
-      sessionStorage.setItem("noticeShown", "true");
-    }
+    setShowNotice(true);
 
     const fetchTransactionStats = async () => {
       try {
-        const userId = "USER_ID_HERE"; // Replace with real logged-in user ID
+        const userId = "USER_ID_HERE"; // Replace with actual logged-in user ID
         const { data } = await axios.get(`/api/transactions/stats/${userId}`);
 
         setTransactionStats({
@@ -54,14 +47,34 @@ const Dashboard = ({ darkMode }) => {
     navigate("/fund-wallet");
   };
 
-  const formattedBalance = balance !== undefined ? balance.toLocaleString() : "0";
-  const formattedDeposits = (transactionStats.totalAmount ?? 0).toLocaleString();
-  const formattedTransactions = transactionStats.totalTransactions ?? 0;
+  const formattedBalance =
+    balance !== undefined ? balance.toLocaleString() : "0";
+
+  const formattedDeposits =
+    (transactionStats.totalAmount ?? 0).toLocaleString();
+
+  const formattedTransactions =
+    transactionStats.totalTransactions ?? 0;
 
   const stats = [
-    { title: "Wallet Balance", value: `₦${formattedBalance}`, icon: <FiCreditCard />, color: "#10b981" },
-    { title: "Total Deposits", value: `₦${formattedDeposits}`, icon: <FiArrowDownCircle />, color: "#f59e0b" },
-    { title: "Total Transactions", value: formattedTransactions, icon: <FiShoppingBag />, color: "#3b82f6" },
+    {
+      title: "Wallet Balance",
+      value: `₦${formattedBalance}`,
+      icon: <FiCreditCard />,
+      color: "#10b981",
+    },
+    {
+      title: "Total Deposits",
+      value: `₦${formattedDeposits}`,
+      icon: <FiArrowDownCircle />,
+      color: "#f59e0b",
+    },
+    {
+      title: "Total Transactions",
+      value: formattedTransactions,
+      icon: <FiShoppingBag />,
+      color: "#3b82f6",
+    },
   ];
 
   if (loading || loadingStats) {
@@ -74,8 +87,8 @@ const Dashboard = ({ darkMode }) => {
 
   return (
     <div className={`dashboard ${darkMode ? "dark" : ""}`}>
-      
-      {/* ===== Notice Modal (only on Dashboard) ===== */}
+
+      {/* ===== Notification Modal ===== */}
       {showNotice && (
         <div className="notice-overlay">
           <div className="notice-modal">
@@ -88,10 +101,18 @@ const Dashboard = ({ darkMode }) => {
 
             <h2>Welcome to Real SMS Store</h2>
 
-            <p>Message us for any complaint via Telegram:</p>
-            <p className="notice-highlight">@real6ixsms</p>
+            <p>
+              Message us for any complaint via Telegram:
+            </p>
 
-            <p>Our only response is via Telegram.</p>
+            <p className="notice-highlight">
+              @real6ixsms
+            </p>
+
+            <p>
+              Our only response channel is Telegram.
+            </p>
+
             <p>
               Our only official channel:
               <br />
@@ -105,19 +126,27 @@ const Dashboard = ({ darkMode }) => {
               </a>
             </p>
 
-            <p>You will be notified if there will be any change of price on the website.</p>
+            <p>
+              You will be notified if there will be any change of price on the website.
+            </p>
 
             <p className="notice-highlight">
               Crypto funding is temporarily not working for now.
             </p>
 
-            <p>You can fund your wallet using Paystack.</p>
-            <p>Thank you — <strong>realsms.store</strong></p>
+            <p>
+              You can fund your wallet using Paystack.
+            </p>
+
+            <p>
+              Thank you — <strong>realsms.store</strong>
+            </p>
           </div>
         </div>
       )}
 
-      {/* ===== Welcome Card ===== */}
+      {/* ===== ORIGINAL STRUCTURE BELOW (UNCHANGED) ===== */}
+
       <div className="welcome-card">
         <div>
           <h2>Welcome Back, User!</h2>
@@ -126,7 +155,6 @@ const Dashboard = ({ darkMode }) => {
         <button onClick={handleFundWallet}>Fund Wallet</button>
       </div>
 
-      {/* ===== Stats ===== */}
       <div className="stats-container">
         {stats.map((stat, idx) => (
           <StatCard
