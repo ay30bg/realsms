@@ -240,12 +240,9 @@ import { FiSearch } from "react-icons/fi";
 import ServiceCard from "../components/ServiceCard";
 import { servers, services } from "../data/services";
 import "../styles/buy-number.css";
-import { useBalance } from "../context/BalanceContext"; // Wallet context
+import { useBalance } from "../context/BalanceContext";
 
-// ✅ Use environment variable for backend
-const API_URL = process.env.REACT_APP_API_URL; 
-
-const BuyNumbers = ({ darkMode, user }) => {
+const BuyNumbers = ({ darkMode }) => {
   useEffect(() => {
     document.title = "Buy Numbers - RealSMS";
   }, []);
@@ -278,65 +275,85 @@ const BuyNumbers = ({ darkMode, user }) => {
     setTimeout(() => {
       setSelectedServer(server || null);
       setLoading(false);
-    }, 500);
+    }, 500); // small delay
   };
 
-  // BUY NUMBER → Call backend
+  // HANDLE BUY - INTEGRATED WITH BACKEND
   const handleBuy = async (service, stopButtonSpinner) => {
     if (balance < service.price) {
-      alert("Insufficient balance");
+      alert("Insufficient balance to buy this service");
       if (stopButtonSpinner) stopButtonSpinner();
       return;
     }
 
     try {
+      // ✅ Deduct wallet first
+      await debitWallet(service.price);
+
+      setActiveOrder(null);
+      setOtp(null);
+      setTimeLeft(300);
+      setOrderStatus("idle");
+      setCopied(false);
+
       setLoading(true);
 
-      // 1️⃣ Buy number
-      const res = await fetch(`${API_URL}/orders/buy`, {
+      // POST to backend to buy number
+      const res = await fetch("/api/5sim/buy-number", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: user._id, service }),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ country: service.country, service: service.operator }),
       });
-
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to buy number");
+      setLoading(false);
 
-      // Deduct locally
-      debitWallet(service.price);
+      if (!data.success) throw new Error(data.message || "Failed to buy number");
 
-      setActiveOrder({ ...service, generatedNumber: data.number, fiveSimId: data.fiveSimId });
+      const numberData = data.numberData; // number info from backend
+      setActiveOrder({ ...service, generatedNumber: numberData.number, orderId: numberData.id });
       setOrderStatus("waiting");
-      setTimeLeft(300);
-      setOtp(null);
+
+      // Start polling for OTP
+      pollOtp(numberData.id);
 
       if (stopButtonSpinner) stopButtonSpinner();
-
-      // 2️⃣ Poll OTP every 5s
-      const interval = setInterval(async () => {
-        const otpRes = await fetch(`${API_URL}/orders/otp`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ orderId: data.orderId, fiveSimId: data.fiveSimId }),
-        });
-
-        const otpData = await otpRes.json();
-        if (otpData.otp) {
-          setOtp(otpData.otp);
-          setOrderStatus("received");
-          clearInterval(interval);
-        }
-      }, 5000);
     } catch (err) {
       console.error(err);
-      alert(err.message);
-      if (stopButtonSpinner) stopButtonSpinner();
-    } finally {
+      alert(err.message || "Purchase failed. Try again.");
       setLoading(false);
+      if (stopButtonSpinner) stopButtonSpinner();
     }
   };
 
-  // OTP COUNTDOWN
+  // POLL OTP FROM BACKEND
+  const pollOtp = (orderId) => {
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch("/api/5sim/check-otp", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({ orderId }),
+        });
+        const data = await res.json();
+
+        if (data.otp) {
+          setOtp(data.otp);
+          setOrderStatus("received");
+          clearInterval(interval);
+        }
+      } catch (err) {
+        console.error("Error fetching OTP:", err);
+      }
+    }, 5000); // every 5 seconds
+  };
+
+  // OTP COUNTDOWN TIMER
   useEffect(() => {
     if (orderStatus !== "waiting") return;
 
@@ -354,7 +371,7 @@ const BuyNumbers = ({ darkMode, user }) => {
     return () => clearInterval(timer);
   }, [orderStatus]);
 
-  // COPY OTP → RESET
+  // COPY OTP → RESET AFTER 2 SECONDS
   useEffect(() => {
     if (!copied) return;
 
@@ -381,7 +398,9 @@ const BuyNumbers = ({ darkMode, user }) => {
         >
           <option value="">Select Server</option>
           {servers.map((server) => (
-            <option key={server.id} value={server.id}>{server.name}</option>
+            <option key={server.id} value={server.id}>
+              {server.name}
+            </option>
           ))}
         </select>
 
@@ -404,7 +423,7 @@ const BuyNumbers = ({ darkMode, user }) => {
             {loading ? (
               <div className="loading-spinner">
                 <div className={`spinner ${darkMode ? "dark" : ""}`}></div>
-                <p>Loading services...</p>
+                <p>Processing purchase...</p>
               </div>
             ) : filteredServices.length === 0 ? (
               <p className="empty">No services available</p>
@@ -428,13 +447,14 @@ const BuyNumbers = ({ darkMode, user }) => {
         {activeOrder && (
           <div className="otp-box">
             <div className="otp-header">
-              <p><strong>Number:</strong> {activeOrder.generatedNumber}</p>
+              <p>
+                <strong>Number:</strong> {activeOrder.generatedNumber}
+              </p>
               <button
                 className="close-btn"
                 onClick={() => {
                   setActiveOrder(null);
                   setCopied(false);
-                  setOtp(null);
                 }}
               >
                 ×
@@ -450,7 +470,7 @@ const BuyNumbers = ({ darkMode, user }) => {
               </>
             )}
 
-            {orderStatus === "received" && otp && (
+            {orderStatus === "received" && (
               <>
                 <h2>{otp}</h2>
                 <button
@@ -465,9 +485,7 @@ const BuyNumbers = ({ darkMode, user }) => {
               </>
             )}
 
-            {orderStatus === "expired" && (
-              <p className="error">OTP expired</p>
-            )}
+            {orderStatus === "expired" && <p className="error">OTP expired</p>}
           </div>
         )}
       </div>
@@ -476,4 +494,3 @@ const BuyNumbers = ({ darkMode, user }) => {
 };
 
 export default BuyNumbers;
-
