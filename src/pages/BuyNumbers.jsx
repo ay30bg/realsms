@@ -1,248 +1,12 @@
-// // import React, { useState, useEffect } from "react";
-// // import { FiSearch } from "react-icons/fi";
-// // import ServiceCard from "../components/ServiceCard";
-// // import { servers, services } from "../data/services";
-// // import "../styles/buy-number.css";
-// // import { useBalance } from "../context/BalanceContext"; // ✅ Import balance context
-
-// // const BuyNumbers = ({ darkMode }) => {
-// //   // PAGE TITLE
-// //   useEffect(() => {
-// //     document.title = "Buy Numbers - RealSMS";
-// //   }, []);
-
-// //   const [selectedServer, setSelectedServer] = useState(null);
-// //   const [activeOrder, setActiveOrder] = useState(null);
-// //   const [orderStatus, setOrderStatus] = useState("idle");
-// //   const [otp, setOtp] = useState(null);
-// //   const [timeLeft, setTimeLeft] = useState(300);
-// //   const [search, setSearch] = useState("");
-// //   const [loading, setLoading] = useState(false);
-// //   const [copied, setCopied] = useState(false);
-
-// //   // ✅ Get real balance & wallet functions
-// //   const { balance, debitWallet } = useBalance();
-
-// //   // SERVER CHANGE
-// //   const handleServerChange = (e) => {
-// //     const serverId = Number(e.target.value);
-// //     const server = servers.find((s) => s.id === serverId);
-
-// //     setSelectedServer(null);
-// //     setActiveOrder(null);
-// //     setOrderStatus("idle");
-// //     setOtp(null);
-// //     setTimeLeft(300);
-// //     setSearch("");
-// //     setCopied(false);
-// //     setLoading(true);
-
-// //     setTimeout(() => {
-// //       setSelectedServer(server || null);
-// //       setLoading(false);
-// //     }, 1000);
-// //   };
-
-// //   // HANDLE BUY
-// //   const handleBuy = async (service, stopButtonSpinner) => {
-// //     // ✅ Check balance first
-// //     if (balance < service.price) {
-// //       alert("Insufficient balance to buy this service");
-// //       if (stopButtonSpinner) stopButtonSpinner();
-// //       return;
-// //     }
-
-// //     try {
-// //       // ✅ Deduct balance in backend
-// //       await debitWallet(service.price);
-
-// //       const localNumber = Math.floor(7000000000 + Math.random() * 99999999);
-// //       const countryCode = "+234";
-// //       const generatedNumber = `${countryCode}${localNumber}`;
-
-// //       setOtp(null);
-// //       setTimeLeft(300);
-// //       setOrderStatus("idle");
-// //       setActiveOrder(null);
-// //       setCopied(false);
-
-// //       setTimeout(() => {
-// //         if (stopButtonSpinner) stopButtonSpinner();
-
-// //         setActiveOrder({ ...service, generatedNumber });
-// //         setOrderStatus("waiting");
-
-// //         setTimeout(() => {
-// //           const simulatedOtp = Math.floor(100000 + Math.random() * 900000);
-// //           setOtp(simulatedOtp);
-// //           setOrderStatus("received");
-// //         }, 2000);
-// //       }, 3000);
-// //     } catch (err) {
-// //       console.error("Failed to debit wallet", err);
-// //       alert("Failed to complete purchase. Please try again.");
-// //       if (stopButtonSpinner) stopButtonSpinner();
-// //     }
-// //   };
-
-// //   // OTP COUNTDOWN TIMER
-// //   useEffect(() => {
-// //     if (orderStatus !== "waiting") return;
-
-// //     const timer = setInterval(() => {
-// //       setTimeLeft((t) => {
-// //         if (t <= 1) {
-// //           clearInterval(timer);
-// //           setOrderStatus("expired");
-// //           return 0;
-// //         }
-// //         return t - 1;
-// //       });
-// //     }, 1000);
-
-// //     return () => clearInterval(timer);
-// //   }, [orderStatus]);
-
-// //   // COPY OTP → RESET AFTER 2 SECONDS
-// //   useEffect(() => {
-// //     if (!copied) return;
-
-// //     const timer = setTimeout(() => {
-// //       setCopied(false);
-// //     }, 2000);
-
-// //     return () => clearTimeout(timer);
-// //   }, [copied]);
-
-// //   const filteredServices = selectedServer
-// //     ? services
-// //         .filter((s) => s.serverId === selectedServer.id)
-// //         .filter((s) =>
-// //           s.name.toLowerCase().includes(search.toLowerCase())
-// //         )
-// //     : [];
-
-// //   return (
-// //     <div className={`marketplace ${darkMode ? "dark" : ""}`}>
-// //       <div className="buy-number-card">
-// //         <h2>Buy Numbers</h2>
-
-// //         {/* SERVER SELECT */}
-// //         <select
-// //           className="server-select"
-// //           value={selectedServer?.id || ""}
-// //           onChange={handleServerChange}
-// //         >
-// //           <option value="">Select Server</option>
-// //           {servers.map((server) => (
-// //             <option key={server.id} value={server.id}>
-// //               {server.name}
-// //             </option>
-// //           ))}
-// //         </select>
-
-// //         {/* SEARCH */}
-// //         <div className="search-container">
-// //           <input
-// //             type="text"
-// //             placeholder="Search service"
-// //             className="search-input"
-// //             value={search}
-// //             onChange={(e) => setSearch(e.target.value)}
-// //             disabled={!selectedServer || loading}
-// //           />
-// //           <FiSearch className="search-icon" />
-// //         </div>
-
-// //         {/* SERVICES */}
-// //         {(selectedServer || loading) && (
-// //           <div className="services-container">
-// //             {loading ? (
-// //               <div className="loading-spinner">
-// //                 <div className={`spinner ${darkMode ? "dark" : ""}`}></div>
-// //                 <p>Loading services...</p>
-// //               </div>
-// //             ) : filteredServices.length === 0 ? (
-// //               <p className="empty">No services available</p>
-// //             ) : (
-// //               <div className="services-grid">
-// //                 {filteredServices.map((service) => (
-// //                   <ServiceCard
-// //                     key={service.id}
-// //                     service={service}
-// //                     onBuy={handleBuy}
-// //                     darkMode={darkMode}
-// //                     disabled={balance < service.price} // ✅ disable if not enough balance
-// //                   />
-// //                 ))}
-// //               </div>
-// //             )}
-// //           </div>
-// //         )}
-
-// //         {/* OTP BOX */}
-// //         {activeOrder && (
-// //           <div className="otp-box">
-// //             <div className="otp-header">
-// //               <p>
-// //                 <strong>Number:</strong> {activeOrder.generatedNumber}
-// //               </p>
-// //               <button
-// //                 className="close-btn"
-// //                 onClick={() => {
-// //                   setActiveOrder(null);
-// //                   setCopied(false);
-// //                 }}
-// //               >
-// //                 ×
-// //               </button>
-// //             </div>
-
-// //             {orderStatus === "waiting" && (
-// //               <>
-// //                 <p>Waiting for OTP...</p>
-// //                 <p className="timer">
-// //                   {Math.floor(timeLeft / 60)}:
-// //                   {String(timeLeft % 60).padStart(2, "0")}
-// //                 </p>
-// //               </>
-// //             )}
-
-// //             {orderStatus === "received" && (
-// //               <>
-// //                 <h2>{otp}</h2>
-// //                 <button
-// //                   className={`copy-btn ${copied ? "copied" : ""}`}
-// //                   onClick={() => {
-// //                     navigator.clipboard.writeText(otp);
-// //                     setCopied(true);
-// //                   }}
-// //                 >
-// //                   {copied ? "Copied ✓" : "Copy OTP"}
-// //                 </button>
-// //               </>
-// //             )}
-
-// //             {orderStatus === "expired" && (
-// //               <p className="error">OTP expired</p>
-// //             )}
-// //           </div>
-// //         )}
-// //       </div>
-// //     </div>
-// //   );
-// // };
-
-// // export default BuyNumbers;
-
 // import React, { useState, useEffect } from "react";
 // import { FiSearch } from "react-icons/fi";
 // import ServiceCard from "../components/ServiceCard";
 // import { servers, services } from "../data/services";
 // import "../styles/buy-number.css";
-// import { useBalance } from "../context/BalanceContext";
+// import { useBalance } from "../context/BalanceContext"; // ✅ Import balance context
 
 // const BuyNumbers = ({ darkMode }) => {
+//   // PAGE TITLE
 //   useEffect(() => {
 //     document.title = "Buy Numbers - RealSMS";
 //   }, []);
@@ -256,11 +20,10 @@
 //   const [loading, setLoading] = useState(false);
 //   const [copied, setCopied] = useState(false);
 
+//   // ✅ Get real balance & wallet functions
 //   const { balance, debitWallet } = useBalance();
 
-//   const BACKEND_URL = process.env.REACT_APP_API_URL; // ✅ Use .env backend URL
-
-//   // ================= SERVER CHANGE =================
+//   // SERVER CHANGE
 //   const handleServerChange = (e) => {
 //     const serverId = Number(e.target.value);
 //     const server = servers.find((s) => s.id === serverId);
@@ -277,11 +40,12 @@
 //     setTimeout(() => {
 //       setSelectedServer(server || null);
 //       setLoading(false);
-//     }, 500);
+//     }, 1000);
 //   };
 
-//   // ================= BUY NUMBER =================
+//   // HANDLE BUY
 //   const handleBuy = async (service, stopButtonSpinner) => {
+//     // ✅ Check balance first
 //     if (balance < service.price) {
 //       alert("Insufficient balance to buy this service");
 //       if (stopButtonSpinner) stopButtonSpinner();
@@ -289,88 +53,39 @@
 //     }
 
 //     try {
-//       // Deduct wallet first
+//       // ✅ Deduct balance in backend
 //       await debitWallet(service.price);
 
-//       setActiveOrder(null);
+//       const localNumber = Math.floor(7000000000 + Math.random() * 99999999);
+//       const countryCode = "+234";
+//       const generatedNumber = `${countryCode}${localNumber}`;
+
 //       setOtp(null);
 //       setTimeLeft(300);
 //       setOrderStatus("idle");
+//       setActiveOrder(null);
 //       setCopied(false);
-//       setLoading(true);
 
-//       const res = await fetch(`${BACKEND_URL}/api/5sim/buy-number`, {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//           "Authorization": `Bearer ${localStorage.getItem("token")}`,
-//         },
-//         body: JSON.stringify({ country: service.country, service: service.operator }),
-//       });
+//       setTimeout(() => {
+//         if (stopButtonSpinner) stopButtonSpinner();
 
-//       const text = await res.text();
-//       let data;
-//       try {
-//         data = JSON.parse(text);
-//       } catch {
-//         console.error("Invalid JSON response:", text);
-//         throw new Error("Backend returned invalid response");
-//       }
+//         setActiveOrder({ ...service, generatedNumber });
+//         setOrderStatus("waiting");
 
-//       setLoading(false);
-
-//       if (!data.success) throw new Error(data.message || "Failed to buy number");
-
-//       const numberData = data.numberData;
-//       setActiveOrder({ ...service, generatedNumber: numberData.number, orderId: numberData.id });
-//       setOrderStatus("waiting");
-
-//       // Start polling for OTP
-//       pollOtp(numberData.id);
-
-//       if (stopButtonSpinner) stopButtonSpinner();
+//         setTimeout(() => {
+//           const simulatedOtp = Math.floor(100000 + Math.random() * 900000);
+//           setOtp(simulatedOtp);
+//           setOrderStatus("received");
+//         }, 2000);
+//       }, 3000);
 //     } catch (err) {
-//       console.error(err);
-//       alert(err.message || "Purchase failed. Try again.");
-//       setLoading(false);
+//       console.error("Failed to debit wallet", err);
+//       alert("Failed to complete purchase. Please try again.");
 //       if (stopButtonSpinner) stopButtonSpinner();
 //     }
 //   };
 
-//   // ================= POLL OTP =================
-//   const pollOtp = (orderId) => {
-//     const interval = setInterval(async () => {
-//       try {
-//         const res = await fetch(`${BACKEND_URL}/api/5sim/check-otp`, {
-//           method: "POST",
-//           headers: {
-//             "Content-Type": "application/json",
-//             "Authorization": `Bearer ${localStorage.getItem("token")}`,
-//           },
-//           body: JSON.stringify({ orderId }),
-//         });
-
-//         const text = await res.text();
-//         let data;
-//         try {
-//           data = JSON.parse(text);
-//         } catch {
-//           console.error("Invalid OTP response:", text);
-//           return;
-//         }
-
-//         if (data.otp) {
-//           setOtp(data.otp);
-//           setOrderStatus("received");
-//           clearInterval(interval);
-//         }
-//       } catch (err) {
-//         console.error("Error fetching OTP:", err);
-//       }
-//     }, 5000); // poll every 5 seconds
-//   };
-
-//   // ================= OTP TIMER =================
+//   // OTP COUNTDOWN TIMER
 //   useEffect(() => {
 //     if (orderStatus !== "waiting") return;
 
@@ -388,18 +103,23 @@
 //     return () => clearInterval(timer);
 //   }, [orderStatus]);
 
-//   // ================= COPY OTP =================
+//   // COPY OTP → RESET AFTER 2 SECONDS
 //   useEffect(() => {
 //     if (!copied) return;
 
-//     const timer = setTimeout(() => setCopied(false), 2000);
+//     const timer = setTimeout(() => {
+//       setCopied(false);
+//     }, 2000);
+
 //     return () => clearTimeout(timer);
 //   }, [copied]);
 
 //   const filteredServices = selectedServer
 //     ? services
 //         .filter((s) => s.serverId === selectedServer.id)
-//         .filter((s) => s.name.toLowerCase().includes(search.toLowerCase()))
+//         .filter((s) =>
+//           s.name.toLowerCase().includes(search.toLowerCase())
+//         )
 //     : [];
 
 //   return (
@@ -440,7 +160,7 @@
 //             {loading ? (
 //               <div className="loading-spinner">
 //                 <div className={`spinner ${darkMode ? "dark" : ""}`}></div>
-//                 <p>Processing purchase...</p>
+//                 <p>Loading services...</p>
 //               </div>
 //             ) : filteredServices.length === 0 ? (
 //               <p className="empty">No services available</p>
@@ -452,7 +172,7 @@
 //                     service={service}
 //                     onBuy={handleBuy}
 //                     darkMode={darkMode}
-//                     disabled={balance < service.price}
+//                     disabled={balance < service.price} // ✅ disable if not enough balance
 //                   />
 //                 ))}
 //               </div>
@@ -482,7 +202,8 @@
 //               <>
 //                 <p>Waiting for OTP...</p>
 //                 <p className="timer">
-//                   {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, "0")}
+//                   {Math.floor(timeLeft / 60)}:
+//                   {String(timeLeft % 60).padStart(2, "0")}
 //                 </p>
 //               </>
 //             )}
@@ -502,7 +223,9 @@
 //               </>
 //             )}
 
-//             {orderStatus === "expired" && <p className="error">OTP expired</p>}
+//             {orderStatus === "expired" && (
+//               <p className="error">OTP expired</p>
+//             )}
 //           </div>
 //         )}
 //       </div>
@@ -512,278 +235,3 @@
 
 // export default BuyNumbers;
 
-import React, { useState, useEffect } from "react";
-import { FiSearch } from "react-icons/fi";
-import ServiceCard from "../components/ServiceCard";
-import { servers, services } from "../data/services";
-import "../styles/buy-number.css";
-import { useBalance } from "../context/BalanceContext";
-
-const BuyNumbers = ({ darkMode }) => {
-  const { balance, debitWallet } = useBalance();
-  const BACKEND_URL = process.env.REACT_APP_API_URL;
-
-  const [selectedServer, setSelectedServer] = useState(null);
-  const [activeOrder, setActiveOrder] = useState(null);
-  const [orderStatus, setOrderStatus] = useState("idle"); // idle, waiting, received, expired
-  const [otp, setOtp] = useState(null);
-  const [timeLeft, setTimeLeft] = useState(300);
-  const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [copied, setCopied] = useState(false);
-  const [pollError, setPollError] = useState(null);
-
-  useEffect(() => {
-    document.title = "Buy Numbers - RealSMS";
-  }, []);
-
-  // ================= SERVER SELECT =================
-  const handleServerChange = (e) => {
-    const serverId = Number(e.target.value);
-    const server = servers.find((s) => s.id === serverId);
-
-    setSelectedServer(null);
-    setActiveOrder(null);
-    setOrderStatus("idle");
-    setOtp(null);
-    setTimeLeft(300);
-    setSearch("");
-    setCopied(false);
-    setPollError(null);
-    setLoading(true);
-
-    setTimeout(() => {
-      setSelectedServer(server || null);
-      setLoading(false);
-    }, 500);
-  };
-
-  // ================= BUY NUMBER =================
-  const handleBuy = async (service, stopButtonSpinner) => {
-    if (balance < service.price) {
-      alert("Insufficient balance to buy this service");
-      if (stopButtonSpinner) stopButtonSpinner();
-      return;
-    }
-
-    try {
-      await debitWallet(service.price);
-
-      setActiveOrder(null);
-      setOtp(null);
-      setTimeLeft(300);
-      setOrderStatus("idle");
-      setCopied(false);
-      setPollError(null);
-      setLoading(true);
-
-      const res = await fetch(`${BACKEND_URL}/api/5sim/buy-number`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
-          country: selectedServer?.slug,
-          service: service.slug,
-        }),
-      });
-
-      const data = await res.json();
-      setLoading(false);
-
-      if (!data.success) throw new Error(data.message || "Failed to buy number");
-
-      const numberData = data.numberData;
-      setActiveOrder({
-        ...service,
-        generatedNumber: numberData.number,
-        orderId: numberData.id,
-      });
-      setOrderStatus("waiting");
-
-      // Start polling for OTP
-      pollOtp(numberData.id);
-
-      if (stopButtonSpinner) stopButtonSpinner();
-    } catch (err) {
-      console.error(err);
-      alert(err.message || "Purchase failed. Try again.");
-      setLoading(false);
-      if (stopButtonSpinner) stopButtonSpinner();
-    }
-  };
-
-  // ================= POLL OTP =================
-  const pollOtp = (orderId) => {
-    const interval = setInterval(async () => {
-      try {
-        const res = await fetch(`${BACKEND_URL}/api/5sim/check-otp`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          body: JSON.stringify({ orderId }),
-        });
-
-        const data = await res.json();
-
-        if (data.otp) {
-          setOtp(data.otp);
-          setOrderStatus("received");
-          clearInterval(interval);
-        } else if (data.expired) {
-          setOrderStatus("expired");
-          clearInterval(interval);
-        }
-      } catch (err) {
-        console.error("OTP Polling error:", err);
-        setPollError("Failed to fetch OTP. Retrying...");
-      }
-    }, 5000);
-  };
-
-  // ================= OTP TIMER =================
-  useEffect(() => {
-    if (orderStatus !== "waiting") return;
-
-    const timer = setInterval(() => {
-      setTimeLeft((t) => {
-        if (t <= 1) {
-          clearInterval(timer);
-          setOrderStatus("expired");
-          return 0;
-        }
-        return t - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [orderStatus]);
-
-  // ================= COPY OTP =================
-  useEffect(() => {
-    if (!copied) return;
-
-    const timer = setTimeout(() => setCopied(false), 2000);
-    return () => clearTimeout(timer);
-  }, [copied]);
-
-  const filteredServices = selectedServer
-    ? services
-        .filter((s) => s.serverId === selectedServer.id)
-        .filter((s) => s.name.toLowerCase().includes(search.toLowerCase()))
-    : [];
-
-  return (
-    <div className={`marketplace ${darkMode ? "dark" : ""}`}>
-      <div className="buy-number-card">
-        <h2>Buy Numbers</h2>
-
-        {/* SERVER SELECT */}
-        <select
-          className="server-select"
-          value={selectedServer?.id || ""}
-          onChange={handleServerChange}
-        >
-          <option value="">Select Server</option>
-          {servers.map((server) => (
-            <option key={server.id} value={server.id}>
-              {server.name}
-            </option>
-          ))}
-        </select>
-
-        {/* SEARCH */}
-        <div className="search-container">
-          <input
-            type="text"
-            placeholder="Search service"
-            className="search-input"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            disabled={!selectedServer || loading}
-          />
-          <FiSearch className="search-icon" />
-        </div>
-
-        {/* SERVICES */}
-        {(selectedServer || loading) && (
-          <div className="services-container">
-            {loading ? (
-              <div className="loading-spinner">
-                <div className={`spinner ${darkMode ? "dark" : ""}`}></div>
-                <p>Processing purchase...</p>
-              </div>
-            ) : filteredServices.length === 0 ? (
-              <p className="empty">No services available</p>
-            ) : (
-              <div className="services-grid">
-                {filteredServices.map((service) => (
-                  <ServiceCard
-                    key={service.id}
-                    service={service}
-                    onBuy={handleBuy}
-                    darkMode={darkMode}
-                    disabled={balance < service.price}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* OTP BOX */}
-        {activeOrder && (
-          <div className="otp-box">
-            <div className="otp-header">
-              <p>
-                <strong>Number:</strong> {activeOrder.generatedNumber}
-              </p>
-              <button
-                className="close-btn"
-                onClick={() => {
-                  setActiveOrder(null);
-                  setCopied(false);
-                  setPollError(null);
-                }}
-              >
-                ×
-              </button>
-            </div>
-
-            {orderStatus === "waiting" && (
-              <>
-                <p>Waiting for OTP...</p>
-                <p className="timer">
-                  {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, "0")}
-                </p>
-                {pollError && <p className="error">{pollError}</p>}
-              </>
-            )}
-
-            {orderStatus === "received" && (
-              <>
-                <h2>{otp}</h2>
-                <button
-                  className={`copy-btn ${copied ? "copied" : ""}`}
-                  onClick={() => {
-                    navigator.clipboard.writeText(otp);
-                    setCopied(true);
-                  }}
-                >
-                  {copied ? "Copied ✓" : "Copy OTP"}
-                </button>
-              </>
-            )}
-
-            {orderStatus === "expired" && <p className="error">OTP expired or order cancelled</p>}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-export default BuyNumbers;
