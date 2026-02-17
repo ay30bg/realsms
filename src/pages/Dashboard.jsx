@@ -95,14 +95,11 @@ const Dashboard = ({ darkMode }) => {
   });
 
   const [loadingStats, setLoadingStats] = useState(true);
-
-  // ✅ Notification State (ADDED)
   const [showNotice, setShowNotice] = useState(false);
 
   useEffect(() => {
     document.title = "Dashboard - RealSMS";
 
-    // Show notification on mount
     setShowNotice(true);
 
     const fetchTransactionStats = async () => {
@@ -129,7 +126,6 @@ const Dashboard = ({ darkMode }) => {
     navigate("/fund-wallet");
   };
 
-  // Safe formatting
   const formattedBalance =
     balance !== undefined ? balance.toLocaleString() : "0";
 
@@ -160,7 +156,6 @@ const Dashboard = ({ darkMode }) => {
     },
   ];
 
-  // Keep your original loading return (UNCHANGED STRUCTURE)
   if (loading || loadingStats) {
     return (
       <div className={`dashboard ${darkMode ? "dark" : ""}`}>
@@ -172,7 +167,7 @@ const Dashboard = ({ darkMode }) => {
   return (
     <div className={`dashboard ${darkMode ? "dark" : ""}`}>
 
-      {/* ===== Notification Modal (ONLY ADDITION) ===== */}
+      {/* ===== Notification Modal ===== */}
       {showNotice && (
         <div className="notice-overlay">
           <div className="notice-modal">
@@ -183,26 +178,47 @@ const Dashboard = ({ darkMode }) => {
               ×
             </button>
 
-            <h2>Welcome to RealSMS</h2>
+            <h2>Welcome to Real SMS Store</h2>
 
             <p>
-              <strong>Notice!</strong> There is a price update going on because
-              we are changing providers to help orders go smoothly. Thank you.
+              Message us for any complaint via Telegram:
             </p>
 
             <p className="notice-highlight">
-              Please wait for the timer to run out. If you don’t receive your
-              code, your money will be refunded.
+              @real6ixsms
             </p>
 
             <p>
-              Crypto funding is temporarily disabled while we update our
-              system.
+              Our only response channel is Telegram.
             </p>
 
             <p>
-              We apologize for the inconvenience. Please use alternative
-              payment methods. Thank you for your understanding.
+              Our only official channel:
+              <br />
+              <a
+                href="https://t.me/real_6ixsms"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="notice-link"
+              >
+                https://t.me/real_6ixsms
+              </a>
+            </p>
+
+            <p>
+              You will be notified if there will be any change of price on the website.
+            </p>
+
+            <p className="notice-highlight">
+              Crypto funding is temporarily not working for now.
+            </p>
+
+            <p>
+              You can fund your wallet using Paystack.
+            </p>
+
+            <p>
+              Thank you — <strong>realsms.store</strong>
             </p>
           </div>
         </div>
