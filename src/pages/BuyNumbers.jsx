@@ -380,60 +380,121 @@ const BuyNumbers = ({ darkMode }) => {
     setServices([]);
   };
 
-  // ---------------- HANDLE BUY ----------------
-  const handleBuy = async (service, callback) => {
-    if (!selectedCountry) return alert("Please select a country first!");
-    if (balance < service.price) return alert("Insufficient balance");
+  // // ---------------- HANDLE BUY ----------------
+  // const handleBuy = async (service, callback) => {
+  //   if (!selectedCountry) return alert("Please select a country first!");
+  //   if (balance < service.price) return alert("Insufficient balance");
 
-    await debitWallet(service.price);
+  //   await debitWallet(service.price);
 
-    setActiveOrder(null);
-    setOtp(null);
-    setTimeLeft(300);
-    setOrderStatus("waiting");
-    setCopied(false);
+  //   setActiveOrder(null);
+  //   setOtp(null);
+  //   setTimeLeft(300);
+  //   setOrderStatus("waiting");
+  //   setCopied(false);
 
-    try {
-      const res = await axios.post(
-        `${API_URL}/api/smspool/buy`,
-        {
-          country: selectedCountry.short_name || selectedCountry.ID,
-          service: service.name,
-          pool: "default",
-          max_price: service.price,
-          quantity: 1,
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+  //   try {
+  //     const res = await axios.post(
+  //       `${API_URL}/api/smspool/buy`,
+  //       {
+  //         country: selectedCountry.short_name || selectedCountry.ID,
+  //         service: service.name,
+  //         pool: "default",
+  //         max_price: service.price,
+  //         quantity: 1,
+  //       },
+  //       { headers: { Authorization: `Bearer ${token}` } }
+  //     );
 
-      const orderid = res.data?.orderid || res.data?.number;
-      setActiveOrder({ ...service, generatedNumber: orderid });
+  //     const orderid = res.data?.orderid || res.data?.number;
+  //     setActiveOrder({ ...service, generatedNumber: orderid });
 
-      // Poll OTP every 2s
-      const pollOtp = setInterval(async () => {
-        try {
-          const otpRes = await axios.post(
-            `${API_URL}/api/smspool/otp`,
-            { orderid },
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
-          if (otpRes.data?.otp) {
-            setOtp(otpRes.data.otp);
-            setOrderStatus("received");
-            clearInterval(pollOtp);
-          }
-        } catch {
-          // ignore polling errors
+  //     // Poll OTP every 2s
+  //     const pollOtp = setInterval(async () => {
+  //       try {
+  //         const otpRes = await axios.post(
+  //           `${API_URL}/api/smspool/otp`,
+  //           { orderid },
+  //           { headers: { Authorization: `Bearer ${token}` } }
+  //         );
+  //         if (otpRes.data?.otp) {
+  //           setOtp(otpRes.data.otp);
+  //           setOrderStatus("received");
+  //           clearInterval(pollOtp);
+  //         }
+  //       } catch {
+  //         // ignore polling errors
+  //       }
+  //     }, 2000);
+  //   } catch {
+  //     alert("Failed to complete purchase");
+  //     setOrderStatus("idle");
+  //   } finally {
+  //     callback?.();
+  //   }
+  // };
+
+// ---------------- HANDLE BUY ----------------
+const handleBuy = async (service, callback) => {
+  if (!selectedCountry) return alert("Please select a country first!");
+  if (balance < service.price) return alert("Insufficient balance");
+
+  // Debit wallet first
+  await debitWallet(service.price);
+
+  // Reset previous order info
+  setActiveOrder(null);
+  setOtp(null);
+  setTimeLeft(300);
+  setOrderStatus("waiting");
+  setCopied(false);
+
+  try {
+    const res = await axios.post(
+      `${API_URL}/api/smspool/buy`,
+      {
+        country: selectedCountry.short_name,   // ✅ short country code
+        service: service.ID,                    // ✅ service ID
+        pool: "default",
+        max_price: service.price / 1000,        // ✅ convert NGN -> USD
+        quantity: 1,
+      },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    // Store active order info
+    const orderid = res.data?.orderid || res.data?.number;
+    setActiveOrder({ ...service, generatedNumber: orderid });
+
+    // Poll OTP every 2 seconds
+    const pollOtp = setInterval(async () => {
+      try {
+        const otpRes = await axios.post(
+          `${API_URL}/api/smspool/otp`,
+          { orderid },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        if (otpRes.data?.otp) {
+          setOtp(otpRes.data.otp);
+          setOrderStatus("received");
+          clearInterval(pollOtp);
         }
-      }, 2000);
-    } catch {
-      alert("Failed to complete purchase");
-      setOrderStatus("idle");
-    } finally {
-      callback?.();
-    }
-  };
+      } catch {
+        // ignore errors during polling
+      }
+    }, 2000);
 
+  } catch (err) {
+    console.error("Failed to buy number:", err.response?.data || err.message);
+    alert("Failed to complete purchase");
+    setOrderStatus("idle");
+  } finally {
+    callback?.();
+  }
+};
+
+  
   // ---------------- OTP COUNTDOWN ----------------
   useEffect(() => {
     if (orderStatus !== "waiting") return;
@@ -576,5 +637,6 @@ const BuyNumbers = ({ darkMode }) => {
 };
 
 export default BuyNumbers;
+
 
 
