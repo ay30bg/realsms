@@ -555,15 +555,15 @@ const BuyNumbers = ({ darkMode }) => {
   useEffect(() => {
     const fetchServices = async () => {
       if (!selectedCountry) return;
-
       setLoadingServices(true);
+
       try {
         const res = await axios.get("/api/smspool/services", {
           headers: { Authorization: `Bearer ${token}` },
         });
         let allServices = Array.isArray(res.data) ? res.data : [];
-        // Optional: filter by country if API supports country field
-        // allServices = allServices.filter(s => s.countryID === selectedCountry.ID);
+        // Filter by country ID if API provides countryID
+        allServices = allServices.filter((s) => !s.countryID || s.countryID === selectedCountry.ID);
         setServices(allServices);
       } catch (err) {
         console.error("Failed to fetch services:", err);
@@ -578,7 +578,8 @@ const BuyNumbers = ({ darkMode }) => {
   // ---------------- HANDLE COUNTRY CHANGE ----------------
   const handleCountryChange = (e) => {
     const countryId = e.target.value;
-    setSelectedCountry(countries.find((c) => c.ID.toString() === countryId) || null);
+    const country = countries.find((c) => c.ID.toString() === countryId) || null;
+    setSelectedCountry(country);
     setActiveOrder(null);
     setOrderStatus("idle");
     setOtp(null);
@@ -609,7 +610,7 @@ const BuyNumbers = ({ darkMode }) => {
         {
           country: selectedCountry?.short_name || selectedCountry?.ID,
           service: service.name,
-          pool: "default", // You can allow user to select pool if needed
+          pool: "default",
           max_price: service.price,
           quantity: 1,
         },
@@ -666,7 +667,7 @@ const BuyNumbers = ({ darkMode }) => {
     return () => clearTimeout(timer);
   }, [copied]);
 
-  const filteredServices = (Array.isArray(services) ? services : []).filter((s) =>
+  const filteredServices = services.filter((s) =>
     s.name.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -755,8 +756,7 @@ const BuyNumbers = ({ darkMode }) => {
               <>
                 <p>Waiting for OTP...</p>
                 <p className="timer">
-                  {Math.floor(timeLeft / 60)}:
-                  {String(timeLeft % 60).padStart(2, "0")}
+                  {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, "0")}
                 </p>
               </>
             )}
