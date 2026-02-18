@@ -305,37 +305,31 @@ const BuyNumbers = ({ darkMode }) => {
   }, []);
 
   const [countries, setCountries] = useState([]);
-  const [services, setServices] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [activeOrder, setActiveOrder] = useState(null);
   const [orderStatus, setOrderStatus] = useState("idle");
   const [otp, setOtp] = useState(null);
   const [timeLeft, setTimeLeft] = useState(300);
   const [search, setSearch] = useState("");
-  const [loadingCountries, setLoadingCountries] = useState(true);
-  const [loadingServices, setLoadingServices] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const { balance, debitWallet } = useBalance();
   const token = localStorage.getItem("token");
-  const API_URL = "https://realsms-backend.vercel.app";
 
   // ---------------- FETCH COUNTRIES ----------------
   useEffect(() => {
     const fetchCountries = async () => {
-      setLoadingCountries(true);
+      console.log("Fetching countries...");
       try {
-        console.log("Fetching countries...");
-        const res = await axios.get(`${API_URL}/api/smspool/servers`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await axios.get(
+          "https://realsms-backend.vercel.app/api/smspool/servers",
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
         console.log("Countries response:", res.data);
         setCountries(Array.isArray(res.data) ? res.data : []);
       } catch (err) {
         console.error("Failed to load countries:", err);
         setCountries([]);
-      } finally {
-        setLoadingCountries(false);
       }
     };
     fetchCountries();
@@ -346,14 +340,6 @@ const BuyNumbers = ({ darkMode }) => {
     const countryId = e.target.value;
     const country = countries.find((c) => c.ID.toString() === countryId) || null;
     setSelectedCountry(country);
-
-    // If your /servers endpoint includes prices/services:
-    if (country && country.services) {
-      setServices(country.services);
-    } else {
-      setServices([]); // empty if not available
-    }
-
     setActiveOrder(null);
     setOrderStatus("idle");
     setOtp(null);
@@ -379,7 +365,7 @@ const BuyNumbers = ({ darkMode }) => {
 
     try {
       const res = await axios.post(
-        `${API_URL}/api/smspool/buy`,
+        "https://realsms-backend.vercel.app/api/smspool/buy",
         {
           country: selectedCountry?.short_name || selectedCountry?.ID,
           service: service.name,
@@ -397,7 +383,7 @@ const BuyNumbers = ({ darkMode }) => {
       const pollOtp = setInterval(async () => {
         try {
           const otpRes = await axios.post(
-            `${API_URL}/api/smspool/otp`,
+            "https://realsms-backend.vercel.app/api/smspool/otp",
             { orderid },
             { headers: { Authorization: `Bearer ${token}` } }
           );
@@ -440,9 +426,12 @@ const BuyNumbers = ({ darkMode }) => {
     return () => clearTimeout(timer);
   }, [copied]);
 
-  const filteredServices = (Array.isArray(services) ? services : []).filter((s) =>
-    s.name.toLowerCase().includes(search.toLowerCase())
-  );
+  // ---------------- SERVICES ----------------
+  const filteredServices = selectedCountry
+    ? (selectedCountry.services || []).filter((s) =>
+        s.name.toLowerCase().includes(search.toLowerCase())
+      )
+    : [];
 
   // ---------------- RENDER ----------------
   return (
@@ -451,7 +440,7 @@ const BuyNumbers = ({ darkMode }) => {
         <h2>Buy Numbers</h2>
 
         {/* COUNTRY SELECT */}
-        {loadingCountries ? (
+        {countries.length === 0 ? (
           <p>Loading countries...</p>
         ) : (
           <select
@@ -476,7 +465,7 @@ const BuyNumbers = ({ darkMode }) => {
             className="search-input"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            disabled={!selectedCountry || loadingServices}
+            disabled={!selectedCountry}
           />
           <FiSearch className="search-icon" />
         </div>
@@ -484,12 +473,7 @@ const BuyNumbers = ({ darkMode }) => {
         {/* SERVICES */}
         {selectedCountry && (
           <div className="services-container">
-            {loadingServices ? (
-              <div className="loading-spinner">
-                <div className={`spinner ${darkMode ? "dark" : ""}`}></div>
-                <p>Loading services...</p>
-              </div>
-            ) : filteredServices.length === 0 ? (
+            {filteredServices.length === 0 ? (
               <p className="empty">No services available</p>
             ) : (
               <div className="services-grid">
