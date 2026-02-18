@@ -299,12 +299,6 @@ import ServiceCard from "../components/ServiceCard";
 import { useBalance } from "../context/BalanceContext";
 import "../styles/buy-number.css";
 
-// Helper to format price in Naira
-const formatNaira = (amount) => {
-  if (amount === null || amount === undefined) return "Price N/A";
-  return `₦${Number(amount).toLocaleString()}`;
-};
-
 const BuyNumbers = ({ darkMode }) => {
   const [countries, setCountries] = useState([]);
   const [services, setServices] = useState([]);
@@ -361,7 +355,7 @@ const BuyNumbers = ({ darkMode }) => {
         const res = await axios.get(`${API_URL}/api/smspool/services`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        let allServices = Array.isArray(res.data) ? res.data : [];
+        const allServices = Array.isArray(res.data) ? res.data : [];
         setServices(allServices);
       } catch {
         setServices([]);
@@ -520,7 +514,7 @@ const BuyNumbers = ({ darkMode }) => {
                 {filteredServices.map((service) => (
                   <ServiceCard
                     key={service.ID || service.id}
-                    service={{ ...service, price: service.price }} // keep raw price
+                    service={service} // price formatting handled inside ServiceCard
                     onBuy={handleBuy}
                     darkMode={darkMode}
                     disabled={balance < service.price}
@@ -582,4 +576,3 @@ const BuyNumbers = ({ darkMode }) => {
 };
 
 export default BuyNumbers;
-
