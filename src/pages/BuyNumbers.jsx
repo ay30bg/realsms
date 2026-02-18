@@ -513,10 +513,6 @@ import { useBalance } from "../context/BalanceContext";
 import "../styles/buy-number.css";
 
 const BuyNumbers = ({ darkMode }) => {
-  useEffect(() => {
-    document.title = "Buy Numbers - RealSMS";
-  }, []);
-
   const [countries, setCountries] = useState([]);
   const [services, setServices] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState(null);
@@ -530,16 +526,16 @@ const BuyNumbers = ({ darkMode }) => {
   const [copied, setCopied] = useState(false);
 
   const { balance, debitWallet } = useBalance();
+
   const token = localStorage.getItem("token");
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
   // ---------------- FETCH COUNTRIES ----------------
   useEffect(() => {
     const fetchCountries = async () => {
       setLoadingCountries(true);
       try {
-        const res = await axios.get("/api/smspool/servers", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await axios.get("/api/smspool/servers"); // backend returns your JSON
         setCountries(Array.isArray(res.data) ? res.data : []);
       } catch (err) {
         console.error("Failed to load countries:", err);
@@ -549,21 +545,17 @@ const BuyNumbers = ({ darkMode }) => {
       }
     };
     fetchCountries();
-  }, [token]);
+  }, []);
 
   // ---------------- FETCH SERVICES ----------------
   useEffect(() => {
-    const fetchServices = async () => {
-      if (!selectedCountry) return;
-      setLoadingServices(true);
+    if (!selectedCountry) return;
 
+    const fetchServices = async () => {
+      setLoadingServices(true);
       try {
-        const res = await axios.get("/api/smspool/services", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await axios.get("/api/smspool/services");
         let allServices = Array.isArray(res.data) ? res.data : [];
-        // Filter by country ID if API provides countryID
-        allServices = allServices.filter((s) => !s.countryID || s.countryID === selectedCountry.ID);
         setServices(allServices);
       } catch (err) {
         console.error("Failed to fetch services:", err);
@@ -572,14 +564,15 @@ const BuyNumbers = ({ darkMode }) => {
         setLoadingServices(false);
       }
     };
+
     fetchServices();
-  }, [selectedCountry, token]);
+  }, [selectedCountry]);
 
   // ---------------- HANDLE COUNTRY CHANGE ----------------
   const handleCountryChange = (e) => {
     const countryId = e.target.value;
-    const country = countries.find((c) => c.ID.toString() === countryId) || null;
-    setSelectedCountry(country);
+    const country = countries.find((c) => c.ID.toString() === countryId);
+    setSelectedCountry(country || null);
     setActiveOrder(null);
     setOrderStatus("idle");
     setOtp(null);
@@ -605,17 +598,13 @@ const BuyNumbers = ({ darkMode }) => {
     setCopied(false);
 
     try {
-      const res = await axios.post(
-        "/api/smspool/buy",
-        {
-          country: selectedCountry?.short_name || selectedCountry?.ID,
-          service: service.name,
-          pool: "default",
-          max_price: service.price,
-          quantity: 1,
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await axios.post("/api/smspool/buy", {
+        country: selectedCountry?.short_name || selectedCountry?.ID,
+        service: service.name,
+        pool: "default",
+        max_price: service.price,
+        quantity: 1,
+      });
 
       const orderid = res.data?.orderid || res.data?.number;
       setActiveOrder({ ...service, generatedNumber: orderid });
@@ -623,19 +612,13 @@ const BuyNumbers = ({ darkMode }) => {
       // Poll OTP every 2 seconds
       const pollOtp = setInterval(async () => {
         try {
-          const otpRes = await axios.post(
-            "/api/smspool/otp",
-            { orderid },
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
+          const otpRes = await axios.post("/api/smspool/otp", { orderid });
           if (otpRes.data?.otp) {
             setOtp(otpRes.data.otp);
             setOrderStatus("received");
             clearInterval(pollOtp);
           }
-        } catch {
-          // Ignore errors while polling
-        }
+        } catch {}
       }, 2000);
     } catch (err) {
       console.error("Failed to buy number:", err);
@@ -667,11 +650,10 @@ const BuyNumbers = ({ darkMode }) => {
     return () => clearTimeout(timer);
   }, [copied]);
 
-  const filteredServices = services.filter((s) =>
+  const filteredServices = (Array.isArray(services) ? services : []).filter((s) =>
     s.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  // ---------------- RENDER ----------------
   return (
     <div className={`marketplace ${darkMode ? "dark" : ""}`}>
       <div className="buy-number-card">
@@ -756,7 +738,8 @@ const BuyNumbers = ({ darkMode }) => {
               <>
                 <p>Waiting for OTP...</p>
                 <p className="timer">
-                  {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, "0")}
+                  {Math.floor(timeLeft / 60)}:
+                  {String(timeLeft % 60).padStart(2, "0")}
                 </p>
               </>
             )}
