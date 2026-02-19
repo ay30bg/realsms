@@ -640,25 +640,15 @@
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { FiSearch } from "react-icons/fi";
-import ServiceCard from "../components/ServiceCard";
 import { useBalance } from "../context/BalanceContext";
 import "../styles/buy-number.css";
 
 const BuyNumbers = ({ darkMode }) => {
-  const [countries, setCountries] = useState([]);
   const [services, setServices] = useState([]);
-  const [selectedCountry, setSelectedCountry] = useState(null);
-
   const [activeOrder, setActiveOrder] = useState(null);
-  const [orderStatus, setOrderStatus] = useState("idle");
   const [otp, setOtp] = useState(null);
+  const [orderStatus, setOrderStatus] = useState("idle");
   const [timeLeft, setTimeLeft] = useState(300);
-
-  const [search, setSearch] = useState("");
-  const [loadingCountries, setLoadingCountries] = useState(true);
-  const [loadingServices, setLoadingServices] = useState(false);
-  const [copied, setCopied] = useState(false);
 
   const { balance, debitWallet } = useBalance();
   const token = localStorage.getItem("token");
@@ -666,117 +656,57 @@ const BuyNumbers = ({ darkMode }) => {
   const API_URL =
     process.env.REACT_APP_API_URL || "https://realsms-backend.vercel.app";
 
+  /* ================= FETCH STOCK ================= */
   useEffect(() => {
-    document.title = "Buy Numbers - RealSMS";
-  }, []);
-
-  /* ==============================================
-     FETCH COUNTRIES
-  ============================================== */
-  useEffect(() => {
-    const fetchCountries = async () => {
-      if (!token) return setLoadingCountries(false);
-
-      try {
-        const res = await axios.get(`${API_URL}/api/smspool/servers`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        setCountries(Array.isArray(res.data) ? res.data : []);
-      } catch {
-        setCountries([]);
-      } finally {
-        setLoadingCountries(false);
-      }
-    };
-
-    fetchCountries();
-  }, [token, API_URL]);
-
-  /* ==============================================
-     FETCH SERVICES (FILTERED BY COUNTRY)
-  ============================================== */
-  useEffect(() => {
-    const fetchServices = async () => {
-      if (!selectedCountry || !token) return;
-
-      setLoadingServices(true);
-
+    const fetchStock = async () => {
       try {
         const res = await axios.get(
           `${API_URL}/api/smspool/services`,
           {
-            params: { country: selectedCountry.short_name },
             headers: { Authorization: `Bearer ${token}` },
           }
         );
 
-        setServices(Array.isArray(res.data) ? res.data : []);
-      } catch {
-        setServices([]);
-      } finally {
-        setLoadingServices(false);
+        setServices(res.data);
+      } catch (err) {
+        console.error("Stock error:", err);
       }
     };
 
-    fetchServices();
-  }, [selectedCountry, token, API_URL]);
+    fetchStock();
+  }, [API_URL, token]);
 
-  /* ==============================================
-     HANDLE COUNTRY CHANGE
-  ============================================== */
-  const handleCountryChange = (e) => {
-    const countryId = e.target.value;
-    const country =
-      countries.find((c) => c.ID.toString() === countryId) || null;
+  /* ================= HANDLE BUY ================= */
+  const handleBuy = async (service) => {
+    if (balance < service.price)
+      return alert("Insufficient balance");
 
-    setSelectedCountry(country);
-    setServices([]);
-    setActiveOrder(null);
-    setOtp(null);
-    setOrderStatus("idle");
-    setTimeLeft(300);
-    setSearch("");
-    setCopied(false);
-  };
-
-  /* ==============================================
-     HANDLE BUY
-  ============================================== */
-  const handleBuy = async (service, callback) => {
-    if (!selectedCountry) return alert("Select a country first!");
-    if (balance < service.price) return alert("Insufficient balance");
-    if (service.stock <= 0) return alert("Out of stock");
+    if (service.stock <= 0)
+      return alert("Out of stock");
 
     await debitWallet(service.price);
-
-    setActiveOrder(null);
-    setOtp(null);
-    setOrderStatus("waiting");
-    setTimeLeft(300);
-    setCopied(false);
 
     try {
       const res = await axios.post(
         `${API_URL}/api/smspool/buy`,
         {
-          country: selectedCountry.short_name,
+          country: service.country,
           service: service.ID,
-          serviceName: service.name,
           priceUSD: service.priceUSD,
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      const orderid = res.data?.orderid;
+      const orderid = res.data.orderid;
 
       setActiveOrder({
-        ...service,
-        generatedNumber: res.data?.number,
+        number: res.data.number,
         orderid,
       });
 
-      /* ========= POLL OTP ========= */
+      setOrderStatus("waiting");
+      setTimeLeft(300);
+
       const pollOtp = setInterval(async () => {
         try {
           const otpRes = await axios.post(
@@ -785,7 +715,7 @@ const BuyNumbers = ({ darkMode }) => {
             { headers: { Authorization: `Bearer ${token}` } }
           );
 
-          if (otpRes.data?.sms) {
+          if (otpRes.data.sms) {
             setOtp(otpRes.data.sms);
             setOrderStatus("received");
             clearInterval(pollOtp);
@@ -793,17 +723,12 @@ const BuyNumbers = ({ darkMode }) => {
         } catch {}
       }, 2000);
 
-    } catch (err) {
+    } catch {
       alert("Purchase failed");
-      setOrderStatus("idle");
-    } finally {
-      callback?.();
     }
   };
 
-  /* ==============================================
-     OTP COUNTDOWN TIMER
-  ============================================== */
+  /* ================= TIMER ================= */
   useEffect(() => {
     if (orderStatus !== "waiting") return;
 
@@ -821,122 +746,55 @@ const BuyNumbers = ({ darkMode }) => {
     return () => clearInterval(timer);
   }, [orderStatus]);
 
-  /* ==============================================
-     COPY RESET
-  ============================================== */
-  useEffect(() => {
-    if (!copied) return;
-    const t = setTimeout(() => setCopied(false), 2000);
-    return () => clearTimeout(t);
-  }, [copied]);
-
-  const filteredServices = services.filter((s) =>
-    s.name.toLowerCase().includes(search.toLowerCase())
-  );
-
-  /* ==============================================
-     RENDER
-  ============================================== */
   return (
     <div className={`marketplace ${darkMode ? "dark" : ""}`}>
-      <div className="buy-number-card">
-        <h2>Buy Numbers</h2>
+      <h2>Live SMSPool Stock</h2>
 
-        {loadingCountries ? (
-          <p>Loading countries...</p>
-        ) : (
-          <select
-            className="server-select"
-            value={selectedCountry?.ID || ""}
-            onChange={handleCountryChange}
-          >
-            <option value="">Select Country</option>
-            {countries.map((c) => (
-              <option key={c.ID} value={c.ID}>
-                {c.name}
-              </option>
-            ))}
-          </select>
-        )}
+      <div className="services-grid">
+        {services.map((service, index) => (
+          <div key={index} className="service-card">
+            <p><strong>Service ID:</strong> {service.ID}</p>
+            <p><strong>Country:</strong> {service.country}</p>
+            <p><strong>Stock:</strong> {service.stock}</p>
+            <p><strong>Price:</strong> ₦{service.price}</p>
 
-        <div className="search-container">
-          <input
-            type="text"
-            placeholder="Search service"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            disabled={!selectedCountry || loadingServices}
-          />
-          <FiSearch />
-        </div>
-
-        {selectedCountry && (
-          <div className="services-container">
-            {loadingServices ? (
-              <p>Loading services...</p>
-            ) : filteredServices.length === 0 ? (
-              <p>No services available</p>
-            ) : (
-              <div className="services-grid">
-                {filteredServices.map((service) => (
-                  <ServiceCard
-                    key={service.ID}
-                    service={service}
-                    onBuy={handleBuy}
-                    darkMode={darkMode}
-                    disabled={
-                      balance < service.price ||
-                      service.stock <= 0
-                    }
-                  />
-                ))}
-              </div>
-            )}
+            <button
+              disabled={
+                balance < service.price ||
+                service.stock <= 0
+              }
+              onClick={() => handleBuy(service)}
+            >
+              Buy
+            </button>
           </div>
-        )}
-
-        {activeOrder && (
-          <div className="otp-box">
-            <p>
-              <strong>Number:</strong>{" "}
-              {activeOrder.generatedNumber}
-            </p>
-
-            {orderStatus === "waiting" && (
-              <>
-                <p>Waiting for OTP...</p>
-                <p>
-                  {Math.floor(timeLeft / 60)}:
-                  {String(timeLeft % 60).padStart(2, "0")}
-                </p>
-              </>
-            )}
-
-            {orderStatus === "received" && (
-              <>
-                <h2>{otp}</h2>
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText(otp);
-                    setCopied(true);
-                  }}
-                >
-                  {copied ? "Copied ✓" : "Copy OTP"}
-                </button>
-              </>
-            )}
-
-            {orderStatus === "expired" && (
-              <p>OTP expired</p>
-            )}
-          </div>
-        )}
+        ))}
       </div>
+
+      {activeOrder && (
+        <div className="otp-box">
+          <p><strong>Number:</strong> {activeOrder.number}</p>
+
+          {orderStatus === "waiting" && (
+            <p>
+              Waiting for OTP...
+              <br />
+              {Math.floor(timeLeft / 60)}:
+              {String(timeLeft % 60).padStart(2, "0")}
+            </p>
+          )}
+
+          {orderStatus === "received" && (
+            <h2>{otp}</h2>
+          )}
+
+          {orderStatus === "expired" && (
+            <p>OTP expired</p>
+          )}
+        </div>
+      )}
     </div>
   );
 };
 
 export default BuyNumbers;
-
-
-
