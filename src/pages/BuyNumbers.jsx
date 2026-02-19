@@ -660,7 +660,6 @@ const BuyNumbers = ({ darkMode }) => {
 
   const { balance, debitWallet } = useBalance();
   const token = localStorage.getItem("token");
-
   const API_URL =
     process.env.REACT_APP_API_URL || "https://realsms-backend.vercel.app";
 
@@ -675,14 +674,14 @@ const BuyNumbers = ({ darkMode }) => {
         setLoadingCountries(false);
         return;
       }
-
       setLoadingCountries(true);
       try {
         const res = await axios.get(`${API_URL}/api/smspool/servers`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setCountries(Array.isArray(res.data) ? res.data : []);
-      } catch {
+      } catch (err) {
+        console.error("Error fetching countries:", err.message);
         setCountries([]);
       } finally {
         setLoadingCountries(false);
@@ -701,9 +700,9 @@ const BuyNumbers = ({ darkMode }) => {
         const res = await axios.get(`${API_URL}/api/smspool/services`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        const allServices = Array.isArray(res.data) ? res.data : [];
-        setServices(allServices);
-      } catch {
+        setServices(Array.isArray(res.data) ? res.data : []);
+      } catch (err) {
+        console.error("Error fetching services:", err.message);
         setServices([]);
       } finally {
         setLoadingServices(false);
@@ -730,20 +729,20 @@ const BuyNumbers = ({ darkMode }) => {
   const handleBuy = async (service, callback) => {
     if (!selectedCountry) return alert("Please select a country first!");
     if (balance < service.price) return alert("Insufficient balance");
+    if (orderStatus === "waiting") return alert("You already have an active order!");
 
-    // Debit wallet first
-    await debitWallet(service.price);
-
-    // Reset previous order info
+    setOrderStatus("waiting");
     setActiveOrder(null);
     setOtp(null);
     setTimeLeft(300);
-    setOrderStatus("waiting");
     setCopied(false);
 
     let pollOtp = null;
 
     try {
+      // Debit wallet
+      await debitWallet(service.price);
+
       const res = await axios.post(
         `${API_URL}/api/smspool/buy`,
         {
@@ -756,7 +755,10 @@ const BuyNumbers = ({ darkMode }) => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      // Store active order info
+      if (res.data?.success === 0) {
+        throw new Error(res.data.errors?.[0]?.message || "Failed to purchase number");
+      }
+
       const orderid = res.data?.orderid || res.data?.number;
       setActiveOrder({ ...service, generatedNumber: orderid });
 
@@ -768,24 +770,19 @@ const BuyNumbers = ({ darkMode }) => {
             { orderid },
             { headers: { Authorization: `Bearer ${token}` } }
           );
-
           if (otpRes.data?.otp) {
             setOtp(otpRes.data.otp);
             setOrderStatus("received");
             clearInterval(pollOtp);
           }
         } catch {
-          // ignore errors during polling
+          // ignore polling errors
         }
       }, 2000);
-
     } catch (err) {
       console.error("Failed to buy number:", err.response?.data || err.message);
-
-      // Refund wallet
-      await debitWallet(-service.price);
-
-      alert("Failed to complete purchase");
+      await debitWallet(-service.price); // Refund
+      alert(`Failed to complete purchase: ${err.message}`);
       setOrderStatus("idle");
     } finally {
       callback?.();
@@ -900,6 +897,7 @@ const BuyNumbers = ({ darkMode }) => {
                 onClick={() => {
                   setActiveOrder(null);
                   setCopied(false);
+                  setOrderStatus("idle");
                 }}
               >
                 ×
@@ -939,4 +937,3 @@ const BuyNumbers = ({ darkMode }) => {
 };
 
 export default BuyNumbers;
-
