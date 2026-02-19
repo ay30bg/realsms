@@ -663,6 +663,8 @@ const BuyNumbers = ({ darkMode }) => {
   const API_URL =
     process.env.REACT_APP_API_URL || "https://realsms-backend.vercel.app";
 
+  let pollOtp = null; // Keep a reference for cleanup
+
   useEffect(() => {
     document.title = "Buy Numbers - RealSMS";
   }, []);
@@ -694,7 +696,6 @@ const BuyNumbers = ({ darkMode }) => {
   useEffect(() => {
     const fetchServices = async () => {
       if (!selectedCountry || !token) return;
-
       setLoadingServices(true);
       try {
         const res = await axios.get(`${API_URL}/api/smspool/services`, {
@@ -723,6 +724,7 @@ const BuyNumbers = ({ darkMode }) => {
     setSearch("");
     setCopied(false);
     setServices([]);
+    if (pollOtp) clearInterval(pollOtp);
   };
 
   // ---------------- HANDLE BUY ----------------
@@ -737,12 +739,8 @@ const BuyNumbers = ({ darkMode }) => {
     setTimeLeft(300);
     setCopied(false);
 
-    let pollOtp = null;
-
     try {
-      // Debit wallet
-      await debitWallet(service.price);
-
+      // Step 1: Attempt purchase API call first
       const res = await axios.post(
         `${API_URL}/api/smspool/buy`,
         {
@@ -755,14 +753,20 @@ const BuyNumbers = ({ darkMode }) => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      if (res.data?.success === 0) {
-        throw new Error(res.data.errors?.[0]?.message || "Failed to purchase number");
+      // Step 2: Check for failure
+      if (res.data?.success === 0 || !res.data?.orderid) {
+        throw new Error(res.data?.errors?.[0]?.message || "Failed to purchase number");
       }
 
-      const orderid = res.data?.orderid || res.data?.number;
+      const orderid = res.data.orderid || res.data.number;
+
+      // Step 3: Debit wallet AFTER purchase success
+      await debitWallet(service.price);
+
+      // Step 4: Set active order
       setActiveOrder({ ...service, generatedNumber: orderid });
 
-      // Poll OTP every 2 seconds
+      // Step 5: Start OTP polling
       pollOtp = setInterval(async () => {
         try {
           const otpRes = await axios.post(
@@ -780,18 +784,12 @@ const BuyNumbers = ({ darkMode }) => {
         }
       }, 2000);
     } catch (err) {
-      console.error("Failed to buy number:", err.response?.data || err.message);
-      await debitWallet(-service.price); // Refund
-      alert(`Failed to complete purchase: ${err.message}`);
+      console.error("Purchase failed:", err.response?.data || err.message);
+      alert(`Purchase failed: ${err.message}`);
       setOrderStatus("idle");
     } finally {
       callback?.();
     }
-
-    // Cleanup on unmount
-    return () => {
-      if (pollOtp) clearInterval(pollOtp);
-    };
   };
 
   // ---------------- OTP COUNTDOWN ----------------
@@ -802,6 +800,7 @@ const BuyNumbers = ({ darkMode }) => {
         if (t <= 1) {
           clearInterval(timer);
           setOrderStatus("expired");
+          if (pollOtp) clearInterval(pollOtp);
           return 0;
         }
         return t - 1;
@@ -877,7 +876,7 @@ const BuyNumbers = ({ darkMode }) => {
                     service={service}
                     onBuy={handleBuy}
                     darkMode={darkMode}
-                    disabled={balance < service.price}
+                    disabled={balance < service.price || orderStatus === "waiting"}
                   />
                 ))}
               </div>
@@ -898,6 +897,7 @@ const BuyNumbers = ({ darkMode }) => {
                   setActiveOrder(null);
                   setCopied(false);
                   setOrderStatus("idle");
+                  if (pollOtp) clearInterval(pollOtp);
                 }}
               >
                 ×
