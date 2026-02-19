@@ -941,6 +941,7 @@ import { useBalance } from "../context/BalanceContext";
 import "../styles/buy-number.css";
 
 const BuyNumbers = ({ darkMode }) => {
+  const { balance } = useBalance(); // removed debitWallet
   const [countries, setCountries] = useState([]);
   const [services, setServices] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState(null);
@@ -953,7 +954,6 @@ const BuyNumbers = ({ darkMode }) => {
   const [loadingServices, setLoadingServices] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const { balance, debitWallet } = useBalance();
   const token = localStorage.getItem("token");
   const API_URL = process.env.REACT_APP_API_URL || "https://realsms-backend.vercel.app";
 
@@ -1043,10 +1043,13 @@ const BuyNumbers = ({ darkMode }) => {
         return alert(`Purchase failed: ${res.data.message}`);
       }
 
-      const { number, orderid } = res.data.data;
+      const { number, orderid, remainingBalance } = res.data.data;
 
-      // Set active order
+      // Update active order and optional remaining balance display
       setActiveOrder({ ...service, number, orderid });
+      if (remainingBalance !== undefined) {
+        localStorage.setItem("balance", remainingBalance); // optional, update UI if needed
+      }
 
       // Start OTP polling every 2s
       pollOtp.current = setInterval(async () => {
