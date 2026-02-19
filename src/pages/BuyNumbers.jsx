@@ -638,7 +638,7 @@
 
 // export default BuyNumbers;
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { FiSearch } from "react-icons/fi";
 import ServiceCard from "../components/ServiceCard";
@@ -662,7 +662,8 @@ const BuyNumbers = ({ darkMode }) => {
   const token = localStorage.getItem("token");
   const API_URL = process.env.REACT_APP_API_URL || "https://realsms-backend.vercel.app";
 
-  let pollOtp = null;
+  // Use useRef for OTP polling interval
+  const pollOtp = useRef(null);
 
   useEffect(() => {
     document.title = "Buy Numbers - RealSMS";
@@ -720,7 +721,7 @@ const BuyNumbers = ({ darkMode }) => {
     setSearch("");
     setCopied(false);
     setServices([]);
-    if (pollOtp) clearInterval(pollOtp);
+    if (pollOtp.current) clearInterval(pollOtp.current);
   };
 
   // ---------------- HANDLE BUY ----------------
@@ -760,7 +761,7 @@ const BuyNumbers = ({ darkMode }) => {
       setActiveOrder({ ...service, generatedNumber: orderid });
 
       // Start polling OTP every 2s
-      pollOtp = setInterval(async () => {
+      pollOtp.current = setInterval(async () => {
         try {
           const otpRes = await axios.post(
             `${API_URL}/api/smspool/otp`,
@@ -771,7 +772,7 @@ const BuyNumbers = ({ darkMode }) => {
           if (otpRes.data?.otp) {
             setOtp(otpRes.data.otp);
             setOrderStatus("received");
-            clearInterval(pollOtp);
+            clearInterval(pollOtp.current);
           }
         } catch {
           // ignore polling errors
@@ -787,17 +788,19 @@ const BuyNumbers = ({ darkMode }) => {
   // ---------------- OTP COUNTDOWN ----------------
   useEffect(() => {
     if (orderStatus !== "waiting") return;
+
     const timer = setInterval(() => {
       setTimeLeft((t) => {
         if (t <= 1) {
           clearInterval(timer);
           setOrderStatus("expired");
-          if (pollOtp) clearInterval(pollOtp);
+          if (pollOtp.current) clearInterval(pollOtp.current);
           return 0;
         }
         return t - 1;
       });
     }, 1000);
+
     return () => clearInterval(timer);
   }, [orderStatus]);
 
@@ -889,7 +892,7 @@ const BuyNumbers = ({ darkMode }) => {
                   setActiveOrder(null);
                   setCopied(false);
                   setOrderStatus("idle");
-                  if (pollOtp) clearInterval(pollOtp);
+                  if (pollOtp.current) clearInterval(pollOtp.current);
                 }}
               >
                 ×
