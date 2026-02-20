@@ -8,7 +8,7 @@ const OrderHistory = () => {
 
   // ✅ PAGE TITLE
   useEffect(() => {
-    document.title = "Order History - RealSMS";
+    document.title = "Number History - RealSMS";
   }, []);
 
   return (
@@ -57,3 +57,4 @@ const OrderHistory = () => {
 };
 
 export default OrderHistory;
+
