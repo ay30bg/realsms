@@ -1,72 +1,3 @@
-// import React, { useState, useEffect } from "react";
-// import { mockOrders } from "../data/mockOrders";
-// import "../styles/order-history.css";
-
-// const NumberHistory = () => {
-//   const [numbers] = useState(mockOrders || []);
-
-//   // ✅ PAGE TITLE
-//   useEffect(() => {
-//     document.title = "Number History - RealSMS";
-//   }, []);
-
-//   const handleResendOTP = (orderId) => {
-//     console.log("Resend OTP for:", orderId);
-
-//     // 🔥 Replace this with your backend API call
-//     // axios.post("/api/resend-otp", { orderId })
-//   };
-
-//   return (
-//     <div className="order-history-page">
-//       <div className="order-history-card">
-//         <h2 className="order-history-title">Number History</h2>
-
-//         {numbers.length === 0 ? (
-//           <p className="no-orders">No numbers yet.</p>
-//         ) : (
-//           <div className="order-table-scroll">
-//             <table className="order-history-table">
-//               <thead>
-//                 <tr>
-//                   <th>Number</th>
-//                   <th>Order ID</th>
-//                   <th>OTP</th>
-//                   <th>Country</th>
-//                   <th>Action</th>
-//                 </tr>
-//               </thead>
-
-//               <tbody>
-//                 {numbers.map((item) => (
-//                   <tr key={item.id}>
-//                     <td>{item.number || "+1234567890"}</td>
-//                     <td>{item.orderId || item.id}</td>
-//                     <td className="otp-cell">
-//                       {item.otp || "Waiting..."}
-//                     </td>
-//                     <td>{item.country || "N/A"}</td>
-//                     <td>
-//                       <button
-//                         className="resend-btn"
-//                         onClick={() => handleResendOTP(item.orderId || item.id)}
-//                       >
-//                         Resend OTP
-//                       </button>
-//                     </td>
-//                   </tr>
-//                 ))}
-//               </tbody>
-//             </table>
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default NumberHistory;
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../styles/order-history.css";
@@ -85,17 +16,20 @@ const NumberHistory = () => {
 
   const fetchOrders = async () => {
     try {
-      const res = await axios.get(`${API_URL}/api/orders`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const res = await axios.get(
+        `${API_URL}/api/smspool/orders`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
 
       if (res.data.success) {
         setOrders(res.data.data);
       }
     } catch (err) {
-      console.error("Failed to fetch orders:", err.response?.data);
+      console.error("Fetch Orders Error:", err.response?.data);
     } finally {
       setLoadingPage(false);
     }
@@ -106,7 +40,7 @@ const NumberHistory = () => {
       setLoadingId(orderid);
 
       const res = await axios.post(
-        `${API_URL}/api/otp`,
+        `${API_URL}/api/smspool/otp`,
         { orderid },
         {
           headers: {
@@ -116,7 +50,7 @@ const NumberHistory = () => {
       );
 
       if (res.data.success) {
-        fetchOrders(); // refresh table
+        fetchOrders(); // refresh list
       } else {
         alert(res.data.message);
       }
