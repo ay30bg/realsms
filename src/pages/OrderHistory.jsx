@@ -50,7 +50,7 @@
 //       );
 
 //       if (res.data.success) {
-//         fetchOrders(); // refresh list
+//         fetchOrders();
 //       } else {
 //         alert(res.data.message);
 //       }
@@ -86,10 +86,13 @@
 //               <tbody>
 //                 {orders.map((order) => (
 //                   <tr key={order._id}>
-//                     <td>{order.number}</td>
-//                     <td>{order.orderid}</td>
+//                     <td data-label="Number">{order.number}</td>
 
-//                     <td>
+//                     <td data-label="Order ID">
+//                       {order.orderid}
+//                     </td>
+
+//                     <td data-label="OTP">
 //                       {order.otp ? (
 //                         <span className="otp-success">
 //                           {order.otp}
@@ -101,13 +104,16 @@
 //                       )}
 //                     </td>
 
-//                     <td>{order.country}</td>
+//                     <td data-label="Country">
+//                       {order.country}
+//                     </td>
 
-//                     <td>
+//                     <td data-label="Action">
 //                       <button
 //                         className="resend-btn"
 //                         disabled={
-//                           order.otp || loadingId === order.orderid
+//                           order.otp ||
+//                           loadingId === order.orderid
 //                         }
 //                         onClick={() =>
 //                           handleCheckOTP(order.orderid)
@@ -151,18 +157,10 @@ const NumberHistory = () => {
 
   const fetchOrders = async () => {
     try {
-      const res = await axios.get(
-        `${API_URL}/api/smspool/orders`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-
-      if (res.data.success) {
-        setOrders(res.data.data);
-      }
+      const res = await axios.get(`${API_URL}/api/smspool/orders`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      if (res.data.success) setOrders(res.data.data);
     } catch (err) {
       console.error("Fetch Orders Error:", err.response?.data);
     } finally {
@@ -170,27 +168,25 @@ const NumberHistory = () => {
     }
   };
 
-  const handleCheckOTP = async (orderid) => {
+  const handleRefund = async (orderid) => {
     try {
       setLoadingId(orderid);
-
       const res = await axios.post(
-        `${API_URL}/api/smspool/otp`,
+        `${API_URL}/api/smspool/cancel`,
         { orderid },
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
 
       if (res.data.success) {
+        alert(`Refunded ₦${res.data.refundedAmount}`);
         fetchOrders();
       } else {
         alert(res.data.message);
       }
     } catch (err) {
-      alert("Failed to check OTP");
+      alert("Failed to refund order");
     } finally {
       setLoadingId(null);
     }
@@ -214,6 +210,7 @@ const NumberHistory = () => {
                   <th>Order ID</th>
                   <th>OTP</th>
                   <th>Country</th>
+                  <th>Status</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -222,44 +219,32 @@ const NumberHistory = () => {
                 {orders.map((order) => (
                   <tr key={order._id}>
                     <td data-label="Number">{order.number}</td>
-
-                    <td data-label="Order ID">
-                      {order.orderid}
-                    </td>
-
+                    <td data-label="Order ID">{order.orderid}</td>
                     <td data-label="OTP">
                       {order.otp ? (
-                        <span className="otp-success">
-                          {order.otp}
-                        </span>
+                        <span className="otp-success">{order.otp}</span>
                       ) : (
-                        <span className="otp-waiting">
-                          Waiting...
-                        </span>
+                        <span className="otp-waiting">Waiting...</span>
                       )}
                     </td>
-
-                    <td data-label="Country">
-                      {order.country}
-                    </td>
-
+                    <td data-label="Country">{order.country}</td>
+                    <td data-label="Status">{order.status}</td>
                     <td data-label="Action">
-                      <button
-                        className="resend-btn"
-                        disabled={
-                          order.otp ||
-                          loadingId === order.orderid
-                        }
-                        onClick={() =>
-                          handleCheckOTP(order.orderid)
-                        }
-                      >
-                        {loadingId === order.orderid
-                          ? "Checking..."
-                          : order.otp
-                          ? "Received"
-                          : "Check OTP"}
-                      </button>
+                      {order.status === "waiting" ? (
+                        <button
+                          className="refund-btn"
+                          disabled={loadingId === order.orderid}
+                          onClick={() => handleRefund(order.orderid)}
+                        >
+                          {loadingId === order.orderid
+                            ? "Refunding..."
+                            : "Refund"}
+                        </button>
+                      ) : order.status === "received" ? (
+                        <span className="status-success">Received</span>
+                      ) : (
+                        <span className="status-refunded">Refunded</span>
+                      )}
                     </td>
                   </tr>
                 ))}
