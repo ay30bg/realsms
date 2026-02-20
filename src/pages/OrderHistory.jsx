@@ -16,18 +16,10 @@
 
 //   const fetchOrders = async () => {
 //     try {
-//       const res = await axios.get(
-//         `${API_URL}/api/smspool/orders`,
-//         {
-//           headers: {
-//             Authorization: `Bearer ${localStorage.getItem("token")}`,
-//           },
-//         }
-//       );
-
-//       if (res.data.success) {
-//         setOrders(res.data.data);
-//       }
+//       const res = await axios.get(`${API_URL}/api/smspool/orders`, {
+//         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+//       });
+//       if (res.data.success) setOrders(res.data.data);
 //     } catch (err) {
 //       console.error("Fetch Orders Error:", err.response?.data);
 //     } finally {
@@ -35,27 +27,25 @@
 //     }
 //   };
 
-//   const handleCheckOTP = async (orderid) => {
+//   const handleRefund = async (orderid) => {
 //     try {
 //       setLoadingId(orderid);
-
 //       const res = await axios.post(
-//         `${API_URL}/api/smspool/otp`,
+//         `${API_URL}/api/smspool/cancel`,
 //         { orderid },
 //         {
-//           headers: {
-//             Authorization: `Bearer ${localStorage.getItem("token")}`,
-//           },
+//           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
 //         }
 //       );
 
 //       if (res.data.success) {
+//         alert(`Refunded ₦${res.data.refundedAmount}`);
 //         fetchOrders();
 //       } else {
 //         alert(res.data.message);
 //       }
 //     } catch (err) {
-//       alert("Failed to check OTP");
+//       alert("Failed to refund order");
 //     } finally {
 //       setLoadingId(null);
 //     }
@@ -79,6 +69,7 @@
 //                   <th>Order ID</th>
 //                   <th>OTP</th>
 //                   <th>Country</th>
+//                   <th>Status</th>
 //                   <th>Action</th>
 //                 </tr>
 //               </thead>
@@ -87,44 +78,32 @@
 //                 {orders.map((order) => (
 //                   <tr key={order._id}>
 //                     <td data-label="Number">{order.number}</td>
-
-//                     <td data-label="Order ID">
-//                       {order.orderid}
-//                     </td>
-
+//                     <td data-label="Order ID">{order.orderid}</td>
 //                     <td data-label="OTP">
 //                       {order.otp ? (
-//                         <span className="otp-success">
-//                           {order.otp}
-//                         </span>
+//                         <span className="otp-success">{order.otp}</span>
 //                       ) : (
-//                         <span className="otp-waiting">
-//                           Waiting...
-//                         </span>
+//                         <span className="otp-waiting">Waiting...</span>
 //                       )}
 //                     </td>
-
-//                     <td data-label="Country">
-//                       {order.country}
-//                     </td>
-
+//                     <td data-label="Country">{order.country}</td>
+//                     <td data-label="Status">{order.status}</td>
 //                     <td data-label="Action">
-//                       <button
-//                         className="resend-btn"
-//                         disabled={
-//                           order.otp ||
-//                           loadingId === order.orderid
-//                         }
-//                         onClick={() =>
-//                           handleCheckOTP(order.orderid)
-//                         }
-//                       >
-//                         {loadingId === order.orderid
-//                           ? "Checking..."
-//                           : order.otp
-//                           ? "Received"
-//                           : "Check OTP"}
-//                       </button>
+//                       {order.status === "waiting" ? (
+//                         <button
+//                           className="refund-btn"
+//                           disabled={loadingId === order.orderid}
+//                           onClick={() => handleRefund(order.orderid)}
+//                         >
+//                           {loadingId === order.orderid
+//                             ? "Refunding..."
+//                             : "Refund"}
+//                         </button>
+//                       ) : order.status === "received" ? (
+//                         <span className="status-success">Received</span>
+//                       ) : (
+//                         <span className="status-refunded">Refunded</span>
+//                       )}
 //                     </td>
 //                   </tr>
 //                 ))}
@@ -147,13 +126,26 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 const NumberHistory = () => {
   const [orders, setOrders] = useState([]);
+  const [countries, setCountries] = useState([]);
   const [loadingId, setLoadingId] = useState(null);
   const [loadingPage, setLoadingPage] = useState(true);
 
   useEffect(() => {
     document.title = "Number History - RealSMS";
     fetchOrders();
+    fetchCountries();
   }, []);
+
+  const fetchCountries = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/api/smspool/countries`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      setCountries(res.data || []);
+    } catch (err) {
+      console.error("Fetch Countries Error:", err.response?.data);
+    }
+  };
 
   const fetchOrders = async () => {
     try {
@@ -192,6 +184,12 @@ const NumberHistory = () => {
     }
   };
 
+  // Helper: get country name from ID
+  const getCountryName = (countryID) => {
+    const country = countries.find((c) => c.ID === countryID);
+    return country ? country.name : countryID;
+  };
+
   return (
     <div className="order-history-page">
       <div className="order-history-card">
@@ -227,7 +225,7 @@ const NumberHistory = () => {
                         <span className="otp-waiting">Waiting...</span>
                       )}
                     </td>
-                    <td data-label="Country">{order.country}</td>
+                    <td data-label="Country">{getCountryName(order.country)}</td>
                     <td data-label="Status">{order.status}</td>
                     <td data-label="Action">
                       {order.status === "waiting" ? (
