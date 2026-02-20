@@ -94,9 +94,51 @@
   cursor: not-allowed;
 }
 
-/* ============================= */
-/* 📱 MOBILE RESPONSIVE DESIGN */
-/* ============================= */
+/* ==========================
+   REFUND BUTTON STYLING
+=========================== */
+.refund-btn {
+  padding: 8px 16px; /* larger for mobile tap */
+  border-radius: 8px;
+  border: none;
+  background: linear-gradient(90deg, #ef4444, #dc2626); /* red gradient */
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+.refund-btn:hover {
+  background: linear-gradient(90deg, #f87171, #b91c1c); /* lighter hover */
+  transform: translateY(-1px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.refund-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.refund-btn:disabled {
+  background: #fca5a5; /* pale red for disabled */
+  cursor: not-allowed;
+  box-shadow: none;
+  color: #ffffff;
+}
+
+/* ==========================
+   MOBILE ADJUSTMENTS
+=========================== */
+@media (max-width: 640px) {
+  .refund-btn {
+    width: 100%;
+    margin-top: 8px;
+    font-size: 13px;
+    padding: 10px 0;
+  }
+}
 
 @media (max-width: 640px) {
 
@@ -153,3 +195,4 @@
     margin-top: 8px;
   }
 }
+
