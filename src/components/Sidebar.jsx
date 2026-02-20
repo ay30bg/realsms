@@ -31,7 +31,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           <FiShoppingCart className="sidebar-icon" /> <span>Buy Numbers</span>
         </NavLink>
         <NavLink to="/order-history" onClick={toggleSidebar}>
-          <FiClock className="sidebar-icon" /> <span>Order History</span>
+          <FiClock className="sidebar-icon" /> <span>Number History</span>
         </NavLink>
         <NavLink to="/fund-wallet" onClick={toggleSidebar}>
           <FiPlusCircle className="sidebar-icon" /> <span>Fund Wallet</span>
@@ -45,4 +45,5 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 };
 
 export default Sidebar;
+
 
