@@ -384,7 +384,16 @@ const Dashboard = ({ darkMode }) => {
             </button>
             <h2>Welcome to Real SMS Store</h2>
             <p>Message us for any complaint via Telegram:</p>
-            <p className="notice-highlight">@real6ixsms</p>
+            <p>
+  <a
+    href="https://t.me/real6ixsms"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="notice-highlight notice-link"
+  >
+    @real6ixsms
+  </a>
+</p>
             <p>Our only response channel is Telegram.</p>
             <p>
               Our only official channel:
@@ -438,3 +447,4 @@ const Dashboard = ({ darkMode }) => {
 };
 
 export default Dashboard;
+
