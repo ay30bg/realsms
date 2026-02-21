@@ -440,7 +440,12 @@ const BuyNumbers = ({ darkMode }) => {
 
       const { number, orderid, pricePaid } = res.data.data;
 
-      setActiveOrder({ ...service, number, orderid });
+      setActiveOrder({
+        ...service,
+        number,
+        orderid,
+        pricePaid,
+      });
 
       if (res.data.remainingBalance !== undefined) {
         setBalance(res.data.remainingBalance);
@@ -542,11 +547,14 @@ const BuyNumbers = ({ darkMode }) => {
           )}
         </div>
 
-        {/* OTP BOX remains unchanged */}
         {activeOrder && (
           <div className="otp-box">
             <p>
               <strong>Number:</strong> {activeOrder.number}
+            </p>
+
+            <p>
+              <strong>Amount Paid:</strong> ₦{activeOrder.pricePaid}
             </p>
 
             {orderStatus === "waiting" && (
@@ -560,10 +568,17 @@ const BuyNumbers = ({ darkMode }) => {
             {orderStatus === "received" && (
               <>
                 <h2>{otp}</h2>
+
                 <button
-                  onClick={() => navigator.clipboard.writeText(otp)}
+                  className={`copy-btn ${copied ? "copied" : ""}`}
+                  onClick={() => {
+                    navigator.clipboard.writeText(otp);
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                  }}
                 >
-                  Copy OTP
+                  <FiCopy />
+                  {copied ? "Copied!" : "Copy OTP"}
                 </button>
               </>
             )}
