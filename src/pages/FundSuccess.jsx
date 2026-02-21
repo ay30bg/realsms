@@ -22,7 +22,7 @@ const FundSuccess = () => {
       <div className="fund-status-card success">
         <FaCheckCircle className="status-icon success-icon" />
 
-        <h2>🎉 Payment Successful!</h2>
+        <h2>Payment Successful!</h2>
         <p>
           Your wallet has been funded successfully.
           <br />
