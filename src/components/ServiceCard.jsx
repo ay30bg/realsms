@@ -1,72 +1,3 @@
-// import React, { useState } from "react";
-
-// // Helper to format price in Naira
-// const formatNaira = (amount) => {
-//   if (amount === null || amount === undefined) return "Price N/A";
-//   return `₦${Number(amount).toLocaleString()}`;
-// };
-
-// const ServiceCard = ({ service, onBuy, disabled }) => {
-//   const [buying, setBuying] = useState(false);
-
-//   const handleBuyClick = () => {
-//     if (disabled || buying || service.price == null) return;
-
-//     setBuying(true);
-//     onBuy(service, () => setBuying(false));
-//   };
-
-//   // Disable button if:
-//   // 1️⃣ Explicit disabled prop
-//   // 2️⃣ Service has no price (N/A)
-//   // 3️⃣ Already buying
-//   const isDisabled = disabled || service.price == null || buying;
-
-//   return (
-//     <div className={`service-card ${isDisabled ? "disabled" : ""}`}>
-//       <div className="service-left">
-//         {service.icon && (
-//           <img
-//             src={service.icon}
-//             alt={service.name}
-//             style={{ width: "42px", height: "42px", objectFit: "contain" }}
-//           />
-//         )}
-//         <div>
-//           <h4>{service.name}</h4>
-//           {service.stock !== undefined && (
-//             <span className="stock">{service.stock} Stocks</span>
-//           )}
-//         </div>
-//       </div>
-
-//       <div className="service-right">
-//         {/* Formatted price */}
-//         <span className="price">{formatNaira(service.price)}</span>
-
-//         <button
-//           onClick={handleBuyClick}
-//           disabled={isDisabled}
-//           className={isDisabled ? "disabled-btn" : ""}
-//         >
-//           {buying ? (
-//             <div className="button-spinner"></div>
-//           ) : service.price == null ? (
-//             "Not Available"
-//           ) : isDisabled ? (
-//             "Insufficient Balance"
-//           ) : (
-//             "Buy Number"
-//           )}
-//         </button>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ServiceCard;
-
-
 import React, { useState } from "react";
 
 // Helper to format price in Naira
@@ -78,28 +9,18 @@ const formatNaira = (amount) => {
 const ServiceCard = ({ service, onBuy, disabled }) => {
   const [buying, setBuying] = useState(false);
 
-  const outOfStock = service.stock !== undefined && service.stock <= 0;
-  const lowStock =
-    service.stock !== undefined &&
-    service.stock > 0 &&
-    service.stock <= 5;
+  const handleBuyClick = () => {
+    if (disabled || buying || service.price == null) return;
 
-  const handleBuyClick = async () => {
-    if (disabled || buying || service.price == null || outOfStock) return;
-
-    try {
-      setBuying(true);
-      await onBuy(service);
-    } finally {
-      setBuying(false);
-    }
+    setBuying(true);
+    onBuy(service, () => setBuying(false));
   };
 
-  const isDisabled =
-    disabled ||
-    service.price == null ||
-    buying ||
-    outOfStock;
+  // Disable button if:
+  // 1️⃣ Explicit disabled prop
+  // 2️⃣ Service has no price (N/A)
+  // 3️⃣ Already buying
+  const isDisabled = disabled || service.price == null || buying;
 
   return (
     <div className={`service-card ${isDisabled ? "disabled" : ""}`}>
@@ -111,49 +32,29 @@ const ServiceCard = ({ service, onBuy, disabled }) => {
             style={{ width: "42px", height: "42px", objectFit: "contain" }}
           />
         )}
-
         <div>
           <h4>{service.name}</h4>
-
-          {/* STOCK DISPLAY */}
           {service.stock !== undefined && (
-            <span
-              className={`stock-badge ${
-                outOfStock
-                  ? "out"
-                  : lowStock
-                  ? "low"
-                  : "available"
-              }`}
-            >
-              {outOfStock
-                ? "Out of Stock"
-                : lowStock
-                ? `Low Stock (${service.stock})`
-                : `${service.stock} Available`}
-            </span>
+            <span className="stock">{service.stock} Stocks</span>
           )}
         </div>
       </div>
 
       <div className="service-right">
-        <span className="price">
-          {formatNaira(service.price)}
-        </span>
+        {/* Formatted price */}
+        <span className="price">{formatNaira(service.price)}</span>
 
         <button
           onClick={handleBuyClick}
           disabled={isDisabled}
-          className={`buy-btn ${
-            outOfStock ? "out-btn" : ""
-          }`}
+          className={isDisabled ? "disabled-btn" : ""}
         >
           {buying ? (
             <div className="button-spinner"></div>
           ) : service.price == null ? (
             "Not Available"
-          ) : outOfStock ? (
-            "Out of Stock"
+          ) : isDisabled ? (
+            "Insufficient Balance"
           ) : (
             "Buy Number"
           )}
@@ -164,3 +65,5 @@ const ServiceCard = ({ service, onBuy, disabled }) => {
 };
 
 export default ServiceCard;
+
+
