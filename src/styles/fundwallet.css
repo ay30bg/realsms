@@ -119,4 +119,49 @@
   }
 }
 
+.payment-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  transition: all 0.3s ease;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none; /* 🚫 disables click */
+}
+
+.payment-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.payment-icon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.payment-text h4 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.payment-text span {
+  font-size: 13px;
+  color: #777;
+}
 
