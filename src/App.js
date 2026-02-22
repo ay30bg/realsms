@@ -19,6 +19,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Support from "./pages/Support";
 import OpayFund from "./pages/OpayFund";
+import KorapayFund from "./pages/KorapayFund";
 import USDTFund from "./pages/FundWalletUSDT";
 
 
@@ -45,6 +46,7 @@ function App() {
                 <Route path="/fund-wallet" element={<FundWallet />} />
                 <Route path="/fund-wallet/opay" element={<OpayFund />} />
                 <Route path="/fund-wallet/usdt" element={<USDTFund />} />
+                <Route path="/fund-wallet/korapay" element={<KorapayFund />} />
                 <Route path="/fund-success" element={<FundSuccess />} />
                 <Route path="/fund-cancel" element={<FundCancel />} />
                 <Route path="/support" element={<Support />} />
