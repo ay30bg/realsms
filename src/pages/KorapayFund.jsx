@@ -13,7 +13,7 @@ const KorapayFund = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // ✅ Dynamically load Korapay script
+  // Dynamically load Korapay script
   useEffect(() => {
     const script = document.createElement("script");
     script.src =
@@ -21,16 +21,14 @@ const KorapayFund = () => {
     script.async = true;
     document.body.appendChild(script);
 
-    return () => {
-      document.body.removeChild(script);
-    };
+    return () => document.body.removeChild(script);
   }, []);
 
   const isPayDisabled =
     loading || !amount || Number(amount) < MIN_AMOUNT || Number(amount) > MAX_AMOUNT;
 
-  // ✅ Handle Korapay payment
-  const handlePay = () => {
+  // Handle Korapay payment via backend
+  const handlePay = async () => {
     setError("");
     const numericAmount = Number(amount);
 
@@ -50,27 +48,51 @@ const KorapayFund = () => {
 
     setLoading(true);
 
-    // ✅ Generate a unique reference to avoid 409 Conflict
-    const uniqueReference = `rsms-${Date.now()}-${Math.floor(Math.random() * 1000000)}`;
+    try {
+      const token = localStorage.getItem("token"); // if using auth
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/korapay/init`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token ? `Bearer ${token}` : "",
+        },
+        body: JSON.stringify({
+          amount: numericAmount,
+          email: "john@doe.com", // replace with logged-in user email
+          name: "John Doe",       // replace with logged-in user name
+        }),
+      });
 
-    window.Korapay.initialize({
-      key: process.env.REACT_APP_KORAPAY_PUBLIC_KEY, // public key from .env
-      reference: uniqueReference,
-      amount: numericAmount * 100, // kobo
-      currency: "NGN",
-      customer: {
-        name: "John Doe", // replace with logged-in user info
-        email: "john@doe.com",
-      },
-      notification_url: "https://example.com/webhook", // optional server-side verification
-      onClose: () => setLoading(false),
-      callback: (response) => {
-        console.log("Payment successful:", response);
-        setLoading(false);
-        alert("Payment successful!");
-        // Optional: update wallet balance or navigate user
-      },
-    });
+      const data = await response.json();
+
+      if (!response.ok) throw new Error(data.message || "Payment initialization failed");
+
+      // Initialize Korapay checkout with server-generated reference
+      window.Korapay.initialize({
+        key: process.env.REACT_APP_KORAPAY_PUBLIC_KEY,
+        reference: data.reference,
+        amount: data.amount,
+        currency: data.currency,
+        customer: {
+          name: "John Doe",
+          email: "john@doe.com",
+        },
+        notification_url: `${process.env.REACT_APP_API_URL}/api/korapay/webhook`, // optional
+        callback: (res) => {
+          console.log("Payment success:", res);
+          alert("Payment successful!");
+          setLoading(false);
+        },
+        onClose: () => {
+          console.log("Payment closed");
+          setLoading(false);
+        },
+      });
+    } catch (err) {
+      console.error(err);
+      setError(err.message);
+      setLoading(false);
+    }
   };
 
   return (
