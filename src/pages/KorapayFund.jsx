@@ -13,7 +13,7 @@ const KorapayFund = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // ✅ Load Korapay script dynamically
+  // ✅ Dynamically load Korapay script
   useEffect(() => {
     const script = document.createElement("script");
     script.src =
@@ -50,22 +50,27 @@ const KorapayFund = () => {
 
     setLoading(true);
 
-    try {
-      window.Korapay.initialize({
-        key: process.env.REACT_APP_KORAPAY_PUBLIC_KEY, // your public key
-        reference: `rsms-${Date.now()}`, // unique reference
-        amount: numericAmount * 100, // in kobo
-        currency: "NGN",
-        customer: {
-          name: "John Doe", // replace with logged-in user info
-          email: "john@doe.com",
-        },
-        notification_url: "https://example.com/webhook", // optional
-      });
-    } catch (err) {
-      setError(err.message || "Payment failed");
-      setLoading(false);
-    }
+    // ✅ Generate a unique reference to avoid 409 Conflict
+    const uniqueReference = `rsms-${Date.now()}-${Math.floor(Math.random() * 1000000)}`;
+
+    window.Korapay.initialize({
+      key: process.env.REACT_APP_KORAPAY_PUBLIC_KEY, // public key from .env
+      reference: uniqueReference,
+      amount: numericAmount * 100, // kobo
+      currency: "NGN",
+      customer: {
+        name: "John Doe", // replace with logged-in user info
+        email: "john@doe.com",
+      },
+      notification_url: "https://example.com/webhook", // optional server-side verification
+      onClose: () => setLoading(false),
+      callback: (response) => {
+        console.log("Payment successful:", response);
+        setLoading(false);
+        alert("Payment successful!");
+        // Optional: update wallet balance or navigate user
+      },
+    });
   };
 
   return (
