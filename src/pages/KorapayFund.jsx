@@ -26,7 +26,6 @@ const KorapayFund = () => {
     };
   }, []);
 
-  // ✅ Disable Pay button conditions
   const isPayDisabled =
     loading || !amount || Number(amount) < MIN_AMOUNT || Number(amount) > MAX_AMOUNT;
 
@@ -44,7 +43,7 @@ const KorapayFund = () => {
       return;
     }
 
-    if (!window.KorapayCollections) {
+    if (!window.Korapay || !window.Korapay.initialize) {
       setError("Korapay script not loaded yet");
       return;
     }
@@ -52,21 +51,17 @@ const KorapayFund = () => {
     setLoading(true);
 
     try {
-      // ✅ Initialize checkout using the correct API
-      const checkout = window.KorapayCollections.new({
-        key: process.env.REACT_APP_KORAPAY_PUBLIC_KEY, // from .env
-        amount: numericAmount * 100, // kobo
-        email: "user@example.com", // replace with logged-in user's email
-        callback: (response) => {
-          console.log("Payment successful:", response);
-          setLoading(false);
-          alert("Payment successful!");
-          // Optional: navigate or update wallet balance
+      window.Korapay.initialize({
+        key: process.env.REACT_APP_KORAPAY_PUBLIC_KEY, // your public key
+        reference: `rsms-${Date.now()}`, // unique reference
+        amount: numericAmount * 100, // in kobo
+        currency: "NGN",
+        customer: {
+          name: "John Doe", // replace with logged-in user info
+          email: "john@doe.com",
         },
-        onClose: () => setLoading(false),
+        notification_url: "https://example.com/webhook", // optional
       });
-
-      checkout.show(); // open checkout modal
     } catch (err) {
       setError(err.message || "Payment failed");
       setLoading(false);
