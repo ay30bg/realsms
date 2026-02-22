@@ -4,8 +4,8 @@ import "../styles/fundwallet.css";
 import korapayLogo from "../assets/korapay.png";
 
 const QUICK_AMOUNTS = [200, 500, 1000, 5000, 10000, 50000];
-const MIN_AMOUNT = 200;      // live minimum
-const MAX_AMOUNT = 500000;   // live maximum
+const MIN_AMOUNT = 200;      // Korapay live minimum
+const MAX_AMOUNT = 500000;   // Your max
 
 const KorapayFund = () => {
   const navigate = useNavigate();
@@ -13,6 +13,7 @@ const KorapayFund = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Load Korapay script once
   useEffect(() => {
     const script = document.createElement("script");
     script.src =
@@ -29,6 +30,7 @@ const KorapayFund = () => {
     setError("");
     const numericAmount = Number(amount);
 
+    // Validate amount
     if (numericAmount < MIN_AMOUNT) {
       setError(`Minimum amount is ₦${MIN_AMOUNT.toLocaleString()}`);
       return;
@@ -37,6 +39,7 @@ const KorapayFund = () => {
       setError(`Maximum amount is ₦${MAX_AMOUNT.toLocaleString()}`);
       return;
     }
+
     if (!window.Korapay || !window.Korapay.initialize) {
       setError("Korapay script not loaded yet");
       return;
@@ -51,27 +54,32 @@ const KorapayFund = () => {
           "Content-Type": "application/json",
           Authorization: token ? `Bearer ${token}` : "",
         },
-        body: JSON.stringify({
-          amount: numericAmount,
-          email: "john@doe.com", // replace with actual user data
-          name: "John Doe",
-        }),
+        body: JSON.stringify({ amount: numericAmount }),
       });
 
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || "Payment failed");
 
+      // ✅ Convert amount to kobo for Korapay
+      const amountInKobo = Number(data.amount) * 100;
+
       window.Korapay.initialize({
         key: process.env.REACT_APP_KORAPAY_PUBLIC_KEY,
         reference: data.reference,
-        amount: data.amount,
+        amount: amountInKobo,
         currency: data.currency,
-        customer: { name: "John Doe", email: "john@doe.com" },
+        customer: {
+          name: "John Doe", // replace with real user
+          email: "john@doe.com",
+        },
         callback: () => {
           alert("Payment successful!");
           setLoading(false);
+          navigate("/fund-success");
         },
-        onClose: () => setLoading(false),
+        onClose: () => {
+          setLoading(false);
+        },
       });
     } catch (err) {
       console.error(err);
@@ -101,7 +109,7 @@ const KorapayFund = () => {
               max={MAX_AMOUNT}
               value={amount}
               onChange={(e) => {
-                const val = e.target.value.replace(/\D/, "");
+                const val = e.target.value.replace(/\D/, ""); // remove non-numbers
                 setAmount(val);
                 setError("");
               }}
