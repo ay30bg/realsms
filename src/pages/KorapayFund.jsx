@@ -13,11 +13,8 @@ const KorapayFund = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // ✅ PAGE TITLE
+  // ✅ Load Korapay script dynamically
   useEffect(() => {
-    document.title = "Fund Wallet - Korapay";
-
-    // Dynamically load Korapay script
     const script = document.createElement("script");
     script.src =
       "https://korablobstorage.blob.core.windows.net/modal-bucket/korapay-collections.min.js";
@@ -29,7 +26,7 @@ const KorapayFund = () => {
     };
   }, []);
 
-  // ✅ Disable pay button conditions
+  // ✅ Disable Pay button conditions
   const isPayDisabled =
     loading || !amount || Number(amount) < MIN_AMOUNT || Number(amount) > MAX_AMOUNT;
 
@@ -39,7 +36,7 @@ const KorapayFund = () => {
     const numericAmount = Number(amount);
 
     if (!numericAmount || numericAmount < MIN_AMOUNT) {
-      setError(`Enter a valid amount (minimum ₦${MIN_AMOUNT.toLocaleString()})`);
+      setError(`Enter a valid amount ≥ ₦${MIN_AMOUNT.toLocaleString()}`);
       return;
     }
     if (numericAmount > MAX_AMOUNT) {
@@ -47,28 +44,29 @@ const KorapayFund = () => {
       return;
     }
 
-    if (!window.Korapay) {
-      setError("Korapay script not loaded yet. Please try again.");
+    if (!window.KorapayCollections) {
+      setError("Korapay script not loaded yet");
       return;
     }
 
     setLoading(true);
 
     try {
-      const korapay = new window.Korapay({
-        key: process.env.REACT_APP_KORAPAY_PUBLIC_KEY, // ✅ from .env
-        amount: numericAmount * 100, // amount in kobo
-        email: "user@example.com", // replace with actual logged-in user email
-        onClose: () => setLoading(false),
+      // ✅ Initialize checkout using the correct API
+      const checkout = window.KorapayCollections.new({
+        key: process.env.REACT_APP_KORAPAY_PUBLIC_KEY, // from .env
+        amount: numericAmount * 100, // kobo
+        email: "user@example.com", // replace with logged-in user's email
         callback: (response) => {
           console.log("Payment successful:", response);
           setLoading(false);
           alert("Payment successful!");
           // Optional: navigate or update wallet balance
         },
+        onClose: () => setLoading(false),
       });
 
-      korapay.show();
+      checkout.show(); // open checkout modal
     } catch (err) {
       setError(err.message || "Payment failed");
       setLoading(false);
@@ -99,7 +97,7 @@ const KorapayFund = () => {
               value={amount}
               placeholder="0"
               onChange={(e) => {
-                const value = e.target.value.replace(/\D/, ""); // remove non-numbers
+                const value = e.target.value.replace(/\D/, "");
                 setAmount(value);
                 setError("");
               }}
