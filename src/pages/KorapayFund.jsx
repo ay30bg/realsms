@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/paystack-fund.css"; // You can reuse the same styles
-import korapayLogo from "../assets/korapay.png"; // Add Korapay logo
+import "../styles/fundwallet.css";
+import korapayLogo from "../assets/korapay.png";
 
 const QUICK_AMOUNTS = [1000, 5000, 10000, 50000];
 const MIN_AMOUNT = 100;
@@ -13,25 +13,33 @@ const KorapayFund = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // ✅ PAGE TITLE
   useEffect(() => {
     document.title = "Fund Wallet - Korapay";
+
+    // Dynamically load Korapay script
+    const script = document.createElement("script");
+    script.src =
+      "https://korablobstorage.blob.core.windows.net/modal-bucket/korapay-collections.min.js";
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
   }, []);
 
+  // ✅ Disable pay button conditions
   const isPayDisabled =
     loading || !amount || Number(amount) < MIN_AMOUNT || Number(amount) > MAX_AMOUNT;
 
-  // Frontend-only Korapay integration
-  const handlePay = async () => {
+  // ✅ Handle Korapay payment
+  const handlePay = () => {
     setError("");
-
     const numericAmount = Number(amount);
 
-    if (!numericAmount) {
-      setError("Enter a valid amount");
-      return;
-    }
-    if (numericAmount < MIN_AMOUNT) {
-      setError(`Minimum amount is ₦${MIN_AMOUNT.toLocaleString()}`);
+    if (!numericAmount || numericAmount < MIN_AMOUNT) {
+      setError(`Enter a valid amount (minimum ₦${MIN_AMOUNT.toLocaleString()})`);
       return;
     }
     if (numericAmount > MAX_AMOUNT) {
@@ -39,29 +47,28 @@ const KorapayFund = () => {
       return;
     }
 
+    if (!window.Korapay) {
+      setError("Korapay script not loaded yet. Please try again.");
+      return;
+    }
+
     setLoading(true);
 
     try {
-      // Korapay checkout options
-      const options = {
-        key: process.env.REACT_APP_KORAPAY_PUBLIC_KEY, // your public key
-        amount: numericAmount * 100, // Korapay expects amount in kobo
-        email: "user@example.com", // Replace with actual user email if available
+      const korapay = new window.Korapay({
+        key: process.env.REACT_APP_KORAPAY_PUBLIC_KEY, // ✅ from .env
+        amount: numericAmount * 100, // amount in kobo
+        email: "user@example.com", // replace with actual logged-in user email
         onClose: () => setLoading(false),
         callback: (response) => {
-          // You can verify payment on your backend
           console.log("Payment successful:", response);
           setLoading(false);
           alert("Payment successful!");
+          // Optional: navigate or update wallet balance
         },
-      };
+      });
 
-      // Open Korapay checkout
-      if (window.Korapay) {
-        window.Korapay(options);
-      } else {
-        setError("Korapay script not loaded");
-      }
+      korapay.show();
     } catch (err) {
       setError(err.message || "Payment failed");
       setLoading(false);
@@ -69,19 +76,19 @@ const KorapayFund = () => {
   };
 
   return (
-    <div className="paystack-page">
-      <div className="paystack-card">
+    <div className="fund-wallet-page">
+      <div className="fund-wallet-card">
         <button className="back-btn" onClick={() => navigate(-1)}>
           ← Back
         </button>
 
-        <div className="paystack-header">
-          <img src={korapayLogo} alt="Korapay Logo" />
+        <div className="fund-header">
+          <img src={korapayLogo} alt="Korapay" className="fund-logo" />
           <h3>Fund Wallet</h3>
           <p>Secure payment via Korapay</p>
         </div>
 
-        <div className="paystack-body">
+        <div className="fund-body">
           <label>Amount</label>
           <div className={`amount-input ${error ? "error" : ""}`}>
             <span>₦</span>
@@ -92,7 +99,7 @@ const KorapayFund = () => {
               value={amount}
               placeholder="0"
               onChange={(e) => {
-                const value = e.target.value.replace(/\D/, ""); 
+                const value = e.target.value.replace(/\D/, ""); // remove non-numbers
                 setAmount(value);
                 setError("");
               }}
