@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import "../styles/fundwallet.css";
 import korapayLogo from "../assets/korapay.png";
 
-const QUICK_AMOUNTS = [1000, 5000, 10000, 50000];
-const MIN_AMOUNT = 100;
-const MAX_AMOUNT = 500000;
+const QUICK_AMOUNTS = [200, 500, 1000, 5000, 10000, 50000];
+const MIN_AMOUNT = 200;      // live minimum
+const MAX_AMOUNT = 500000;   // live maximum
 
 const KorapayFund = () => {
   const navigate = useNavigate();
@@ -13,43 +13,38 @@ const KorapayFund = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Dynamically load Korapay script
   useEffect(() => {
     const script = document.createElement("script");
     script.src =
       "https://korablobstorage.blob.core.windows.net/modal-bucket/korapay-collections.min.js";
     script.async = true;
     document.body.appendChild(script);
-
     return () => document.body.removeChild(script);
   }, []);
 
   const isPayDisabled =
     loading || !amount || Number(amount) < MIN_AMOUNT || Number(amount) > MAX_AMOUNT;
 
-  // Handle Korapay payment via backend
   const handlePay = async () => {
     setError("");
     const numericAmount = Number(amount);
 
-    if (!numericAmount || numericAmount < MIN_AMOUNT) {
-      setError(`Enter a valid amount ≥ ₦${MIN_AMOUNT.toLocaleString()}`);
+    if (numericAmount < MIN_AMOUNT) {
+      setError(`Minimum amount is ₦${MIN_AMOUNT.toLocaleString()}`);
       return;
     }
     if (numericAmount > MAX_AMOUNT) {
       setError(`Maximum amount is ₦${MAX_AMOUNT.toLocaleString()}`);
       return;
     }
-
     if (!window.Korapay || !window.Korapay.initialize) {
       setError("Korapay script not loaded yet");
       return;
     }
 
     setLoading(true);
-
     try {
-      const token = localStorage.getItem("token"); // if using auth
+      const token = localStorage.getItem("token");
       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/korapay/init`, {
         method: "POST",
         headers: {
@@ -58,35 +53,25 @@ const KorapayFund = () => {
         },
         body: JSON.stringify({
           amount: numericAmount,
-          email: "john@doe.com", // replace with logged-in user email
-          name: "John Doe",       // replace with logged-in user name
+          email: "john@doe.com", // replace with actual user data
+          name: "John Doe",
         }),
       });
 
       const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Payment failed");
 
-      if (!response.ok) throw new Error(data.message || "Payment initialization failed");
-
-      // Initialize Korapay checkout with server-generated reference
       window.Korapay.initialize({
         key: process.env.REACT_APP_KORAPAY_PUBLIC_KEY,
         reference: data.reference,
         amount: data.amount,
         currency: data.currency,
-        customer: {
-          name: "John Doe",
-          email: "john@doe.com",
-        },
-        notification_url: `${process.env.REACT_APP_API_URL}/api/korapay/webhook`, // optional
-        callback: (res) => {
-          console.log("Payment success:", res);
+        customer: { name: "John Doe", email: "john@doe.com" },
+        callback: () => {
           alert("Payment successful!");
           setLoading(false);
         },
-        onClose: () => {
-          console.log("Payment closed");
-          setLoading(false);
-        },
+        onClose: () => setLoading(false),
       });
     } catch (err) {
       console.error(err);
@@ -101,13 +86,11 @@ const KorapayFund = () => {
         <button className="back-btn" onClick={() => navigate(-1)}>
           ← Back
         </button>
-
         <div className="fund-header">
           <img src={korapayLogo} alt="Korapay" className="fund-logo" />
           <h3>Fund Wallet</h3>
           <p>Secure payment via Korapay</p>
         </div>
-
         <div className="fund-body">
           <label>Amount</label>
           <div className={`amount-input ${error ? "error" : ""}`}>
@@ -117,12 +100,12 @@ const KorapayFund = () => {
               min={MIN_AMOUNT}
               max={MAX_AMOUNT}
               value={amount}
-              placeholder="0"
               onChange={(e) => {
-                const value = e.target.value.replace(/\D/, "");
-                setAmount(value);
+                const val = e.target.value.replace(/\D/, "");
+                setAmount(val);
                 setError("");
               }}
+              placeholder="0"
             />
           </div>
 
@@ -135,7 +118,7 @@ const KorapayFund = () => {
               <button
                 key={amt}
                 type="button"
-                className={`quick-btn ${Number(amount) === amt ? "active" : ""}`}
+                className={Number(amount) === amt ? "active" : ""}
                 onClick={() => setAmount(String(amt))}
                 disabled={loading}
               >
