@@ -20,6 +20,7 @@ import ResetPassword from "./pages/ResetPassword";
 import Support from "./pages/Support";
 import OpayFund from "./pages/OpayFund";
 import KorapayFund from "./pages/KorapayFund";
+import FlutterwaveFund from "./pages/FlutterwaveFund";
 import USDTFund from "./pages/FundWalletUSDT";
 
 
@@ -47,6 +48,7 @@ function App() {
                 <Route path="/fund-wallet/opay" element={<OpayFund />} />
                 <Route path="/fund-wallet/usdt" element={<USDTFund />} />
                 <Route path="/fund-wallet/korapay" element={<KorapayFund />} />
+                <Route path="/fund-wallet/flutterwave" element={<FlutterwaveFund />} />
                 <Route path="/fund-success" element={<FundSuccess />} />
                 <Route path="/fund-cancel" element={<FundCancel />} />
                 <Route path="/support" element={<Support />} />
