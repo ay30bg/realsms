@@ -85,7 +85,8 @@ const ServiceCard = ({ service, onBuy, disabled }) => {
     onBuy(service, () => setBuying(false));
   };
 
-  const isDisabled = disabled || service.price == null || buying || service.stock === 0;
+  const isDisabled =
+    disabled || service.price == null || buying || service.stock === 0;
 
   return (
     <div className={`service-card ${isDisabled ? "disabled" : ""}`}>
