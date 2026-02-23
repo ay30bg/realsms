@@ -80,7 +80,6 @@ const ServiceCard = ({ service, onBuy, disabled }) => {
 
   const handleBuyClick = () => {
     if (disabled || buying || service.price == null || service.stock === 0) return;
-
     setBuying(true);
     onBuy(service, () => setBuying(false));
   };
@@ -101,11 +100,11 @@ const ServiceCard = ({ service, onBuy, disabled }) => {
         <div>
           <h4>{service.name}</h4>
           <span className="stock">
-            {service.stock === Infinity
-              ? "Available"
+            {service.stock === 0
+              ? "Out of Stock"
               : service.stock > 0
               ? `${service.stock} Stocks`
-              : "Out of Stock"}
+              : "Unknown"}
           </span>
         </div>
       </div>
@@ -135,3 +134,4 @@ const ServiceCard = ({ service, onBuy, disabled }) => {
 };
 
 export default ServiceCard;
+
