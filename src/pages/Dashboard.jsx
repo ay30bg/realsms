@@ -140,15 +140,14 @@ const Dashboard = ({ darkMode }) => {
             </p>
 
             <p>
-              You will be notified if there will be any change of price on the
-              website.
+              You will be notified once any upgrade is made on the website. 
             </p>
 
             <p className="notice-highlight">
-              Crypto funding is temporarily not working for now.
+              Crypto & Korapay funding is temporarily not working for now.
             </p>
 
-            <p>You can fund your wallet using Paystack.</p>
+            <p>You can fund your wallet using Paystack & Flutterwave.</p>
 
             <p>
               Thank you — <strong>realsms.store</strong>
@@ -182,5 +181,6 @@ const Dashboard = ({ darkMode }) => {
 };
 
 export default Dashboard;
+
 
 
