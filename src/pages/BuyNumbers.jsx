@@ -676,7 +676,7 @@ const BuyNumbers = ({ darkMode }) => {
             stock:
               priceObj?.stock !== undefined && priceObj?.stock !== null
                 ? priceObj.stock
-                : Infinity, // Treat missing stock as available
+                : null, // null = unknown stock
           };
         });
 
@@ -727,9 +727,12 @@ const BuyNumbers = ({ darkMode }) => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      if (res.data.success === 0) {
+      // Handle OUT_OF_STOCK from SMSPool
+      if (res.data.success === 0 || res.data.type === "OUT_OF_STOCK") {
         setOrderStatus("idle");
-        return alert(`Purchase failed: ${res.data.message}`);
+        return alert(
+          res.data.message || "No numbers available at the moment. Please try again later."
+        );
       }
 
       const { number, orderid, remainingBalance } = res.data.data;
