@@ -18,7 +18,7 @@ import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Support from "./pages/Support";
-import OpayFund from "./pages/OpayFund";
+import PaystackFund from "./pages/PaystackFund";
 import KorapayFund from "./pages/KorapayFund";
 import FlutterwaveFund from "./pages/FlutterwaveFund";
 import USDTFund from "./pages/FundWalletUSDT";
@@ -45,7 +45,7 @@ function App() {
                 <Route path="/active-orders" element={<ActiveOrder />} />
                 <Route path="/order-history" element={<OrderHistory />} />
                 <Route path="/fund-wallet" element={<FundWallet />} />
-                <Route path="/fund-wallet/opay" element={<OpayFund />} />
+                <Route path="/fund-wallet/paystack" element={<PaystackFund />} />
                 <Route path="/fund-wallet/usdt" element={<USDTFund />} />
                 <Route path="/fund-wallet/korapay" element={<KorapayFund />} />
                 <Route path="/fund-wallet/flutterwave" element={<FlutterwaveFund />} />
