@@ -103,9 +103,9 @@ const FundWallet = () => {
 
   // 🔥 Toggle payment methods here
   const usdtEnabled = true;
-  const paystackEnabled = false;     // ❌ Disabled
-  const korapayEnabled = true;
-  const flutterwaveEnabled = true;   // ✅ NEW
+  const paystackEnabled = true;     
+  const korapayEnabled = false;
+  const flutterwaveEnabled = true;  
 
   useEffect(() => {
     document.title = "Fund Wallet - RealSMS";
@@ -217,3 +217,4 @@ const FundWallet = () => {
 };
 
 export default FundWallet;
+
