@@ -1,17 +1,17 @@
-/* Prevent page scrolling */
-html, body {
-  height: 100%;
-  margin: 0;
-  overflow: hidden;
-}
+/* ================= MAIN CONTAINER ================= */
 
-/* Main Container */
-
+/* 
+   Adjust 80px to your navbar height.
+   Example:
+   - If navbar = 70px → use 70px
+   - If no navbar → use 0px
+*/
 .user-support-container {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 80px); /* subtract navbar height */
+  height: calc(100vh - 80px);
   max-width: 800px;
+  width: 100%;
   margin: 20px auto;
   background: #ffffff;
   border-radius: 14px;
@@ -41,15 +41,15 @@ html, body {
 /* ================= CHAT BODY ================= */
 
 .user-support-body {
-  flex: 1;                  /* Takes remaining height */
+  flex: 1;                    /* Takes remaining space */
   padding: 20px;
-  overflow-y: auto;         /* ONLY this scrolls */
+  overflow-y: auto;           /* Only messages scroll */
   background: #f8fafc;
   display: flex;
   flex-direction: column;
 }
 
-/* Scrollbar styling (optional modern look) */
+/* Optional clean scrollbar */
 .user-support-body::-webkit-scrollbar {
   width: 6px;
 }
@@ -145,7 +145,8 @@ html, body {
 
 @media (max-width: 768px) {
   .user-support-container {
-    height: 100vh;
+    height: calc(100vh - 80px); /* adjust if needed */
+    margin: 0;
     border-radius: 0;
   }
 
@@ -161,4 +162,3 @@ html, body {
     font-size: 13px;
   }
 }
-
