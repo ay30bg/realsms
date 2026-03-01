@@ -34,7 +34,7 @@
 
 
 import React, { useState, useRef, useEffect } from "react";
-import "../styles/userSupport.css";
+import "../styles/support.css";
 
 const UserSupport = () => {
   const [messages, setMessages] = useState([
@@ -132,3 +132,4 @@ const UserSupport = () => {
 };
 
 export default UserSupport;
+
