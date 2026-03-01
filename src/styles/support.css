@@ -8,7 +8,7 @@
   width: 100%;
   max-width: 800px;
 
-  margin: 20px auto; /* space top & bottom */
+  margin: 120px auto; /* space top & bottom */
 
   background: #ffffff;
   border-radius: 14px; /* softer modern look */
@@ -164,3 +164,4 @@
     padding: 12px;
   }
 }
+
