@@ -170,9 +170,11 @@
   .user-support-container {
     height: calc(100vh - 80px);
     margin: 5px auto;
+    margin-top: 10px;
     border-radius: 10px;
   }
 }
+
 
 
 
