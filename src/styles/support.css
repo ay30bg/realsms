@@ -10,7 +10,7 @@ body {
   flex-direction: column;
 
   /* Full viewport minus navbar */
-  height: calc(100vh - 80px); /* change 80px to your navbar height */
+  height: calc(100vh - 90px); /* change 80px to your navbar height */
 
   width: 100%;
   max-width: 800px;
@@ -116,3 +116,4 @@ body {
     max-width: 85%;
   }
 }
+
