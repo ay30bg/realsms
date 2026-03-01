@@ -11,12 +11,12 @@ html, body {
   flex-direction: column;
 
   /* Adjust height: subtract topbar height */
-  height: calc(100vh - 60px); /* 60px = navbar height */
+  height: calc(100vh - 80px); /* 60px = navbar height */
   width: 100%;
   max-width: 800px;
 
   /* Start below navbar */
-  margin: 60px auto 0; /* top margin = navbar height */
+  margin: 80px auto 0; /* top margin = navbar height */
 
   background: #ffffff;
   border-radius: 0;
@@ -116,3 +116,4 @@ html, body {
     max-width: 85%;
   }
 }
+
