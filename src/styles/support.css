@@ -4,7 +4,7 @@
   flex-direction: column;
 
   /* Reduced height with breathing space */
-  height: calc(100vh - 140px); /* reduced from -60px */
+  height: calc(100vh - 120px); /* reduced from -60px */
   width: 100%;
   max-width: 800px;
 
@@ -164,6 +164,7 @@
     padding: 12px;
   }
 }
+
 
 
 
