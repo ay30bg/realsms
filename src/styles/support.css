@@ -1,21 +1,33 @@
+/* Prevent page scrolling */
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+/* Main Container */
+
 .user-support-container {
   display: flex;
   flex-direction: column;
-  height: 85vh;
+  height: 100vh;
+  max-height: 100vh;
+  width: 100%;
   max-width: 800px;
-  margin: auto;
+  margin: 0 auto;
   background: #ffffff;
   border-radius: 14px;
   overflow: hidden;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
 }
 
-/* Header */
+/* ================= HEADER ================= */
 
 .user-support-header {
   padding: 18px 22px;
   border-bottom: 1px solid #f1f1f1;
   background: #f9fafb;
+  flex-shrink: 0; /* Prevent shrinking */
 }
 
 .user-support-header h3 {
@@ -28,14 +40,28 @@
   color: #777;
 }
 
-/* Chat Body */
+/* ================= CHAT BODY ================= */
 
 .user-support-body {
-  flex: 1;
+  flex: 1;                  /* Takes remaining height */
   padding: 20px;
-  overflow-y: auto;
+  overflow-y: auto;         /* ONLY this scrolls */
   background: #f8fafc;
+  display: flex;
+  flex-direction: column;
 }
+
+/* Scrollbar styling (optional modern look) */
+.user-support-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.user-support-body::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+}
+
+/* ================= MESSAGES ================= */
 
 .chat-message {
   display: flex;
@@ -56,6 +82,7 @@
   border-radius: 18px;
   font-size: 14px;
   position: relative;
+  word-wrap: break-word;
 }
 
 .chat-message.user .bubble {
@@ -76,13 +103,15 @@
   opacity: 0.7;
 }
 
-/* Input */
+/* ================= INPUT AREA ================= */
 
 .user-support-input {
   display: flex;
+  align-items: center;
   padding: 15px;
   border-top: 1px solid #f1f1f1;
-  background: #fff;
+  background: #ffffff;
+  flex-shrink: 0; /* Prevent shrinking */
 }
 
 .user-support-input input {
@@ -92,6 +121,11 @@
   border: 1px solid #ddd;
   outline: none;
   font-size: 14px;
+  transition: 0.2s ease;
+}
+
+.user-support-input input:focus {
+  border-color: #2563eb;
 }
 
 .user-support-input button {
@@ -109,7 +143,7 @@
   background: #1d4ed8;
 }
 
-/* Mobile */
+/* ================= MOBILE ================= */
 
 @media (max-width: 768px) {
   .user-support-container {
@@ -120,5 +154,12 @@
   .bubble {
     max-width: 85%;
   }
-}
 
+  .user-support-input {
+    padding: 12px;
+  }
+
+  .user-support-input input {
+    font-size: 13px;
+  }
+}
