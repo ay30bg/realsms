@@ -1,58 +1,59 @@
-/* Remove default body spacing */
-body {
+/* ================= GLOBAL ================= */
+html, body {
+  height: 100%;
   margin: 0;
+  overflow: hidden; /* LOCK the page */
 }
 
 /* ================= MAIN CONTAINER ================= */
-
 .user-support-container {
   display: flex;
   flex-direction: column;
-
-  /* Full viewport minus navbar */
-  height: calc(100vh - 90px); /* change 80px to your navbar height */
-
+  height: 100vh;      /* full viewport height */
   width: 100%;
   max-width: 800px;
-
-  margin: 0 auto; /* remove vertical margin */
-
-  background: #ffffff;
-  border-radius: 0; /* remove radius to prevent overflow issues */
-  overflow: hidden;
-
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 0;   /* no overflow issues */
+  overflow: hidden;   /* no scroll */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
 }
 
 /* ================= HEADER ================= */
-
 .user-support-header {
   padding: 18px 22px;
   border-bottom: 1px solid #f1f1f1;
   background: #f9fafb;
-  flex-shrink: 0;
+  flex-shrink: 0; /* fix height */
 }
 
 /* ================= CHAT BODY ================= */
-
 .user-support-body {
-  flex: 1;
+  flex: 1;           /* takes remaining space */
   padding: 20px;
-  overflow-y: auto; /* ONLY this scrolls */
+  overflow-y: auto;  /* ONLY chat scrolls */
   background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Scrollbar styling (optional) */
+.user-support-body::-webkit-scrollbar {
+  width: 6px;
+}
+.user-support-body::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.08);
+  border-radius: 10px;
 }
 
 /* ================= MESSAGES ================= */
-
 .chat-message {
   display: flex;
   margin-bottom: 15px;
 }
-
 .chat-message.user {
   justify-content: flex-end;
 }
-
 .chat-message.support {
   justify-content: flex-start;
 }
@@ -64,29 +65,25 @@ body {
   font-size: 14px;
   word-wrap: break-word;
 }
-
 .chat-message.user .bubble {
   background: #2563eb;
   color: #fff;
   border-bottom-right-radius: 4px;
 }
-
 .chat-message.support .bubble {
   background: #e5e7eb;
   border-bottom-left-radius: 4px;
 }
 
 /* ================= INPUT ================= */
-
 .user-support-input {
   display: flex;
   align-items: center;
   padding: 15px;
   border-top: 1px solid #f1f1f1;
-  background: #ffffff;
-  flex-shrink: 0;
+  background: #fff;
+  flex-shrink: 0; /* fixed at bottom */
 }
-
 .user-support-input input {
   flex: 1;
   padding: 10px 14px;
@@ -94,7 +91,6 @@ body {
   border: 1px solid #ddd;
   outline: none;
 }
-
 .user-support-input button {
   margin-left: 10px;
   padding: 10px 18px;
@@ -106,14 +102,11 @@ body {
 }
 
 /* ================= MOBILE ================= */
-
 @media (max-width: 768px) {
   .user-support-container {
-    height: calc(100vh - 80px);
+    height: 100vh;
   }
-
   .bubble {
     max-width: 85%;
   }
 }
-
