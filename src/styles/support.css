@@ -5,18 +5,21 @@ html, body {
   overflow: hidden; /* lock page scroll */
 }
 
+/* ================= BODY OFFSET FOR FIXED TOPBAR ================= */
+body {
+  padding-top: 60px; /* matches .topbar height */
+}
+
 /* ================= MAIN CONTAINER ================= */
 .user-support-container {
   display: flex;
   flex-direction: column;
 
-  /* Slightly more space than navbar height */
-  height: calc(100vh - 75px); /* was 60px */
+  height: calc(100vh - 60px); /* subtract topbar height */
   width: 100%;
   max-width: 800px;
 
-  /* Move down a bit more */
-  margin: 75px auto 0; /* was 60px */
+  margin: 0 auto; /* no extra top margin */
 
   background: #ffffff;
   border-radius: 0;
@@ -46,6 +49,7 @@ html, body {
 .user-support-body::-webkit-scrollbar {
   width: 6px;
 }
+
 .user-support-body::-webkit-scrollbar-thumb {
   background: rgba(0,0,0,0.08);
   border-radius: 10px;
@@ -91,7 +95,7 @@ html, body {
   padding: 15px;
   border-top: 1px solid #f1f1f1;
   background: #ffffff;
-  flex-shrink: 0; /* fixed at bottom */
+  flex-shrink: 0;
 }
 
 .user-support-input input {
@@ -115,8 +119,7 @@ html, body {
 /* ================= MOBILE ================= */
 @media (max-width: 768px) {
   .user-support-container {
-    height: calc(100vh - 75px);
-    margin-top: 75px;
+    height: calc(100vh - 60px);
   }
 
   .bubble {
