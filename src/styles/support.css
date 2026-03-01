@@ -149,6 +149,7 @@
   .user-support-container {
     height: calc(100vh - 100px); 
     margin: 10px auto;
+    margin-top: 100px;
     border-radius: 10px; 
   }
   
@@ -164,3 +165,4 @@
     padding: 12px;
   } 
 }
+
