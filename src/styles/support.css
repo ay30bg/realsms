@@ -166,11 +166,13 @@
   }
 }
 
-
-
-
-
-
+@media (max-width: 480px) {
+  .user-support-container {
+    height: calc(100vh - 80px);
+    margin: 5px auto;
+    border-radius: 10px;
+  }
+}
 
 
 
