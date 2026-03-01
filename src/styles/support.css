@@ -1,15 +1,3 @@
-/* ================= GLOBAL ================= */
-html, body {
-  height: 100%;
-  margin: 0;
-  overflow: hidden; /* lock page scroll */
-}
-
-/* ================= BODY OFFSET FOR FIXED TOPBAR ================= */
-body {
-  padding-top: 60px; /* matches .topbar height */
-}
-
 /* ================= MAIN CONTAINER ================= */
 .user-support-container {
   display: flex;
@@ -126,3 +114,4 @@ body {
     max-width: 85%;
   }
 }
+
