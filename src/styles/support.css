@@ -6,7 +6,7 @@
   /* Reduced height with breathing space */
   height: calc(100vh - 140px); /* reduced from -60px */
   width: 100%;
-  max-width: 800px;
+  max-width: 900px;
 
   margin: 30px auto; /* space top & bottom */
   margin-top: 20px;
@@ -165,6 +165,7 @@
     padding: 12px;
   }
 }
+
 
 
 
