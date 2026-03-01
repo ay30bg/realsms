@@ -147,7 +147,7 @@
 
 @media (max-width: 768px) {
   .user-support-container {
-    height: calc(100vh - 100px); 
+    height: calc(100vh - 60px); 
     margin: 10px auto;
     margin-top: 100px;
     border-radius: 10px; 
@@ -165,4 +165,5 @@
     padding: 12px;
   } 
 }
+
 
