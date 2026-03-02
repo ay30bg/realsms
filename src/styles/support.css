@@ -185,8 +185,17 @@
   .user-support-input {
     padding: 12px;
   } 
+
+   .telegram-float {
+    width: 46px;
+    height: 46px;
+    font-size: 18px;
+
+    /* Extra spacing for mobile safe area */
+    bottom: 80px; /* prevents covering input */
+    right: 16px;
+
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  }
 }
-
-
-
-
+}
