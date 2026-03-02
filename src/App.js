@@ -1,6 +1,74 @@
+// // App.jsx
+// import React from "react";
+// import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+// // Layout
+// import Layout from "./components/Layout";
+
+// // Pages
+// import Dashboard from "./pages/Dashboard";
+// import BuyNumbers from "./pages/BuyNumbers";
+// import ActiveOrder from "./pages/ActiveOrder";
+// import OrderHistory from "./pages/OrderHistory";
+// import FundWallet from "./pages/FundWallet";
+// import FundSuccess from "./pages/FundSuccess";
+// import FundCancel from "./pages/FundCancel";
+// import Login from "./pages/Login";
+// import Register from "./pages/Register";
+// import ForgotPassword from "./pages/ForgotPassword";
+// import ResetPassword from "./pages/ResetPassword";
+// import Support from "./pages/Support";
+// import PaystackFund from "./pages/PaystackFund";
+// import KorapayFund from "./pages/KorapayFund";
+// import FlutterwaveFund from "./pages/FlutterwaveFund";
+// import USDTFund from "./pages/FundWalletUSDT";
+
+
+// function App() {
+//   return (
+//     <Router>
+//       <Routes>
+//         {/* Auth Pages */}
+//         <Route path="/" element={<Login />} />
+//         <Route path="/register" element={<Register />} />
+//         <Route path="/forgot-password" element={<ForgotPassword />} />
+//         <Route path="/reset-password/:token" element={<ResetPassword />} />
+
+//         {/* Protected Pages inside Layout */}
+//         <Route
+//           path="/*"
+//           element={
+//             <Layout>
+//               <Routes>
+//                 <Route path="/dashboard" element={<Dashboard />} />
+//                 <Route path="/buy-numbers" element={<BuyNumbers />} />
+//                 <Route path="/active-orders" element={<ActiveOrder />} />
+//                 <Route path="/order-history" element={<OrderHistory />} />
+//                 <Route path="/fund-wallet" element={<FundWallet />} />
+//                 <Route path="/fund-wallet/paystack" element={<PaystackFund />} />
+//                 <Route path="/fund-wallet/usdt" element={<USDTFund />} />
+//                 <Route path="/fund-wallet/korapay" element={<KorapayFund />} />
+//                 <Route path="/fund-wallet/flutterwave" element={<FlutterwaveFund />} />
+//                 <Route path="/fund-success" element={<FundSuccess />} />
+//                 <Route path="/fund-cancel" element={<FundCancel />} />
+//                 <Route path="/support" element={<Support />} />
+//               </Routes>
+//             </Layout>
+//           }
+//         />
+//       </Routes>
+//     </Router>
+//   );
+// }
+
+// export default App;
+
 // App.jsx
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+// Scroll Component
+import ScrollToTop from "./components/ScrollToTop";
 
 // Layout
 import Layout from "./components/Layout";
@@ -23,10 +91,12 @@ import KorapayFund from "./pages/KorapayFund";
 import FlutterwaveFund from "./pages/FlutterwaveFund";
 import USDTFund from "./pages/FundWalletUSDT";
 
-
 function App() {
   return (
     <Router>
+      {/* ✅ Scroll To Top on route change */}
+      <ScrollToTop />
+
       <Routes>
         {/* Auth Pages */}
         <Route path="/" element={<Login />} />
@@ -45,10 +115,16 @@ function App() {
                 <Route path="/active-orders" element={<ActiveOrder />} />
                 <Route path="/order-history" element={<OrderHistory />} />
                 <Route path="/fund-wallet" element={<FundWallet />} />
-                <Route path="/fund-wallet/paystack" element={<PaystackFund />} />
+                <Route
+                  path="/fund-wallet/paystack"
+                  element={<PaystackFund />}
+                />
                 <Route path="/fund-wallet/usdt" element={<USDTFund />} />
                 <Route path="/fund-wallet/korapay" element={<KorapayFund />} />
-                <Route path="/fund-wallet/flutterwave" element={<FlutterwaveFund />} />
+                <Route
+                  path="/fund-wallet/flutterwave"
+                  element={<FlutterwaveFund />}
+                />
                 <Route path="/fund-success" element={<FundSuccess />} />
                 <Route path="/fund-cancel" element={<FundCancel />} />
                 <Route path="/support" element={<Support />} />
@@ -62,4 +138,3 @@ function App() {
 }
 
 export default App;
-
