@@ -2,15 +2,11 @@
 .user-support-container {
   display: flex;
   flex-direction: column;
-
-  /* Reduced height with breathing space */
   height: calc(100vh - 140px); /* reduced from -60px */
   width: 100%;
   max-width: 900px;
-
   margin: 30px auto; /* space top & bottom */
   margin-top: 20px;
-
   background: #ffffff;
   border-radius: 14px; /* softer modern look */
   overflow: hidden;
@@ -149,7 +145,7 @@
   .user-support-container {
     height: calc(100vh - 160px); 
     margin: 10px auto;
-    margin: 30px 0;
+    margin: 40px 0;
     border-radius: 10px; 
   }
   
@@ -165,6 +161,7 @@
     padding: 12px;
   } 
 }
+
 
 
 
