@@ -10,7 +10,7 @@
   background: #ffffff;
   border-radius: 14px; /* softer modern look */
   overflow: hidden;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 /* ================= HEADER ================= */
@@ -186,6 +186,7 @@
     padding: 12px;
   } 
 }
+
 
 
 
