@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { FaTelegramPlane } from "react-icons/fa";
 import "../styles/support.css";
 
 const UserSupport = () => {
@@ -13,6 +14,11 @@ const UserSupport = () => {
 
   const [input, setInput] = useState("");
   const chatEndRef = useRef(null);
+
+  // ✅ Set Page Title
+  useEffect(() => {
+    document.title = "Customer Support - RealSMS";
+  }, []);
 
   const scrollToBottom = () => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -92,6 +98,16 @@ const UserSupport = () => {
         />
         <button onClick={handleSend}>Send</button>
       </div>
+
+      {/* Floating Telegram Button */}
+      <a
+        href="https://t.me/yourusername" // Replace with your Telegram username
+        target="_blank"
+        rel="noopener noreferrer"
+        className="telegram-float"
+      >
+        <FaTelegramPlane />
+      </a>
     </div>
   );
 };
