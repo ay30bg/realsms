@@ -194,6 +194,7 @@ import axios from "axios";
 import "../styles/order-history.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
+const ORDERS_PER_PAGE = 10;
 
 const NumberHistory = ({ darkMode }) => {
   const [orders, setOrders] = useState([]);
@@ -201,19 +202,12 @@ const NumberHistory = ({ darkMode }) => {
   const [loadingPage, setLoadingPage] = useState(true);
 
   const [filter, setFilter] = useState("all");
-  const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-
-  const ORDERS_PER_PAGE = 8;
 
   useEffect(() => {
     document.title = "Number History - RealSMS";
     fetchOrders();
   }, []);
-
-  useEffect(() => {
-    setCurrentPage(1); // reset page when filter/search changes
-  }, [filter, search]);
 
   const fetchOrders = async () => {
     try {
@@ -249,7 +243,7 @@ const NumberHistory = ({ darkMode }) => {
       } else {
         alert(res.data.message);
       }
-    } catch {
+    } catch (err) {
       alert("Failed to refund order");
     } finally {
       setLoadingId(null);
@@ -269,19 +263,18 @@ const NumberHistory = ({ darkMode }) => {
       );
 
       if (res.data.success) {
-        alert("OTP resent successfully!");
+        alert("OTP resent successfully! Check your number.");
         fetchOrders();
       } else {
         alert(res.data.message || "Failed to resend OTP");
       }
-    } catch {
+    } catch (err) {
       alert("Failed to resend OTP");
     } finally {
       setLoadingId(null);
     }
   };
 
-  // ✅ Safe service name
   const getServiceName = (service) => {
     if (!service) return "N/A";
     if (typeof service === "object" && service.name) return service.name;
@@ -289,36 +282,17 @@ const NumberHistory = ({ darkMode }) => {
     return "N/A";
   };
 
-  // ✅ Safe date formatting
-  const formatDate = (date) => {
-    if (!date) return "N/A";
-    return new Date(date).toLocaleString();
-  };
-
-  // ✅ FILTER + SEARCH (FIXED waiting issue)
+  /* =============================
+     FILTERED ORDERS
+  ============================= */
   const filteredOrders = useMemo(() => {
-    let data = [...orders];
+    if (filter === "all") return orders;
+    return orders.filter((o) => o.status === filter);
+  }, [orders, filter]);
 
-    // Status filter (case-safe)
-    if (filter !== "all") {
-      data = data.filter(
-        (o) => o.status?.toLowerCase().trim() === filter.toLowerCase()
-      );
-    }
-
-    // Search filter
-    if (search.trim()) {
-      data = data.filter(
-        (o) =>
-          o.number?.includes(search) ||
-          o.orderid?.includes(search)
-      );
-    }
-
-    return data;
-  }, [orders, filter, search]);
-
-  // Pagination
+  /* =============================
+     PAGINATION LOGIC
+  ============================= */
   const totalPages = Math.ceil(filteredOrders.length / ORDERS_PER_PAGE);
 
   const paginatedOrders = filteredOrders.slice(
@@ -326,39 +300,45 @@ const NumberHistory = ({ darkMode }) => {
     currentPage * ORDERS_PER_PAGE
   );
 
+  const changePage = (page) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+  };
+
+  /* =============================
+     DATE FORMATTER
+  ============================= */
+  const formatDate = (date) => {
+    if (!date) return "-";
+    return new Date(date).toLocaleString();
+  };
+
   return (
     <div className={`order-history-page ${darkMode ? "dark" : ""}`}>
       <div className="order-history-card">
         <h2 className="order-history-title">Number History</h2>
 
-        {/* FILTERS */}
-        <div className="history-controls">
+        {/* FILTER */}
+        <div className="order-filter">
           <select
             value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            className="filter-select"
+            onChange={(e) => {
+              setFilter(e.target.value);
+              setCurrentPage(1);
+            }}
           >
             <option value="all">All</option>
             <option value="waiting">Waiting</option>
             <option value="received">Received</option>
             <option value="refunded">Refunded</option>
+            <option value="cancelled">Cancelled</option>
           </select>
-
-          <input
-            type="text"
-            placeholder="Search number or order ID..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="search-input"
-          />
         </div>
 
         {loadingPage ? (
-          <div className="loading-spinner">
-            <p>Loading history...</p>
-          </div>
-        ) : paginatedOrders.length === 0 ? (
-          <p className="no-orders">No matching orders.</p>
+          <p>Loading history...</p>
+        ) : filteredOrders.length === 0 ? (
+          <p className="no-orders">No orders found.</p>
         ) : (
           <>
             <div className="order-table-scroll">
@@ -368,10 +348,11 @@ const NumberHistory = ({ darkMode }) => {
                     <th>Date</th>
                     <th>Number</th>
                     <th>Order ID</th>
-                    <th>OTP</th>
-                    <th>Country</th>
                     <th>Service</th>
+                    <th>Country</th>
                     <th>Amount</th>
+                    <th>OTP</th>
+                    <th>Status</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -379,13 +360,27 @@ const NumberHistory = ({ darkMode }) => {
                 <tbody>
                   {paginatedOrders.map((order) => (
                     <tr key={order._id}>
-                      <td>{formatDate(order.createdAt)}</td>
+                      <td data-label="Date">
+                        {formatDate(order.createdAt)}
+                      </td>
 
-                      <td>{order.number}</td>
+                      <td data-label="Number">{order.number}</td>
 
-                      <td>{order.orderid}</td>
+                      <td data-label="Order ID">{order.orderid}</td>
 
-                      <td>
+                      <td data-label="Service">
+                        {getServiceName(order.service)}
+                      </td>
+
+                      <td data-label="Country">
+                        {order.country?.code}
+                      </td>
+
+                      <td data-label="Amount">
+                        ₦{order.priceCharged?.toLocaleString()}
+                      </td>
+
+                      <td data-label="OTP">
                         {order.otp ? (
                           <span className="otp-success">{order.otp}</span>
                         ) : (
@@ -393,43 +388,35 @@ const NumberHistory = ({ darkMode }) => {
                         )}
                       </td>
 
-                      <td>
-                        {order.country?.code || order.country}
+                      <td data-label="Status">
+                        <span className={`status-badge ${order.status}`}>
+                          {order.status}
+                        </span>
                       </td>
 
-                      <td>{getServiceName(order.service)}</td>
-
-                      <td>₦{order.amount?.toLocaleString()}</td>
-
-                      <td>
-                        {order.status?.toLowerCase() === "waiting" ? (
+                      <td data-label="Action">
+                        {order.status === "waiting" ? (
                           <button
                             className="refund-btn"
                             disabled={loadingId === order.orderid}
-                            onClick={() =>
-                              handleRefund(order.orderid)
-                            }
+                            onClick={() => handleRefund(order.orderid)}
                           >
                             {loadingId === order.orderid
                               ? "Processing..."
                               : "Refund"}
                           </button>
-                        ) : order.status?.toLowerCase() === "received" ? (
+                        ) : order.status === "received" ? (
                           <button
                             className="resend-btn"
                             disabled={loadingId === order.orderid}
-                            onClick={() =>
-                              handleResend(order.orderid)
-                            }
+                            onClick={() => handleResend(order.orderid)}
                           >
                             {loadingId === order.orderid
                               ? "Sending..."
                               : "Resend OTP"}
                           </button>
                         ) : (
-                          <span className="status-refunded">
-                            {order.status}
-                          </span>
+                          "-"
                         )}
                       </td>
                     </tr>
@@ -438,32 +425,20 @@ const NumberHistory = ({ darkMode }) => {
               </table>
             </div>
 
-            {/* PAGINATION */}
-            {totalPages > 1 && (
-              <div className="pagination">
-                <button
-                  disabled={currentPage === 1}
-                  onClick={() =>
-                    setCurrentPage((prev) => prev - 1)
-                  }
-                >
-                  Prev
-                </button>
+            {/* PAGINATION CONTROLS */}
+            <div className="pagination">
+              <button onClick={() => changePage(currentPage - 1)}>
+                Prev
+              </button>
 
-                <span>
-                  Page {currentPage} of {totalPages}
-                </span>
+              <span>
+                Page {currentPage} of {totalPages || 1}
+              </span>
 
-                <button
-                  disabled={currentPage === totalPages}
-                  onClick={() =>
-                    setCurrentPage((prev) => prev + 1)
-                  }
-                >
-                  Next
-                </button>
-              </div>
-            )}
+              <button onClick={() => changePage(currentPage + 1)}>
+                Next
+              </button>
+            </div>
           </>
         )}
       </div>
