@@ -335,6 +335,8 @@ const BuyNumbers = ({ darkMode }) => {
 
   // ---------------- RESTORE ACTIVE ORDER ----------------
   useEffect(() => {
+    if (!token) return;
+
     const saved = localStorage.getItem("activeOrder");
     if (!saved) return;
 
@@ -357,6 +359,8 @@ const BuyNumbers = ({ darkMode }) => {
     setTimeLeft(remainingTime);
     setOrderStatus("waiting");
 
+    if (pollOtp.current) clearInterval(pollOtp.current);
+
     pollOtp.current = setInterval(async () => {
       try {
         const otpRes = await axios.post(
@@ -373,24 +377,33 @@ const BuyNumbers = ({ darkMode }) => {
         }
       } catch {}
     }, 2000);
-  }, []);
+
+    return () => {
+      if (pollOtp.current) clearInterval(pollOtp.current);
+    };
+  }, [token, API_URL]);
 
   // ---------------- FETCH COUNTRIES ----------------
   useEffect(() => {
     const fetchCountries = async () => {
-      if (!token) return setLoadingCountries(false);
+      if (!token) {
+        setLoadingCountries(false);
+        return;
+      }
+
       setLoadingCountries(true);
       try {
         const res = await axios.get(`${API_URL}/api/smspool/servers`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setCountries(Array.isArray(res.data) ? res.data : []);
-      } catch (err) {
+      } catch {
         setCountries([]);
       } finally {
         setLoadingCountries(false);
       }
     };
+
     fetchCountries();
   }, [token, API_URL]);
 
@@ -398,7 +411,9 @@ const BuyNumbers = ({ darkMode }) => {
   useEffect(() => {
     const fetchServices = async () => {
       if (!selectedCountry || !token) return;
+
       setLoadingServices(true);
+
       try {
         const res = await axios.get(`${API_URL}/api/smspool/services`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -433,9 +448,9 @@ const BuyNumbers = ({ darkMode }) => {
   // ---------------- HANDLE COUNTRY CHANGE ----------------
   const handleCountryChange = (e) => {
     const countryId = e.target.value;
+
     const country =
-      countries.find((c) => c.ID.toString() === countryId) ||
-      null;
+      countries.find((c) => c.ID.toString() === countryId) || null;
 
     setSelectedCountry(country);
     setActiveOrder(null);
@@ -445,6 +460,7 @@ const BuyNumbers = ({ darkMode }) => {
     setSearch("");
     setCopied(false);
     setServices([]);
+
     localStorage.removeItem("activeOrder");
 
     if (pollOtp.current) clearInterval(pollOtp.current);
@@ -454,10 +470,13 @@ const BuyNumbers = ({ darkMode }) => {
   const handleBuy = async (service) => {
     if (!selectedCountry)
       return alert("Please select a country first!");
+
     if (!service.price)
       return alert("Service not available for this country!");
+
     if (balance < service.price)
       return alert("Insufficient balance");
+
     if (orderStatus === "waiting")
       return alert("You already have an active order!");
 
@@ -476,36 +495,30 @@ const BuyNumbers = ({ darkMode }) => {
 
       if (res.data.success === 0) {
         setOrderStatus("idle");
-        return alert(
-          `Purchase failed: ${res.data.message}`
-        );
+        return alert(`Purchase failed: ${res.data.message}`);
       }
 
-      const { number, orderid, remainingBalance } =
-        res.data.data;
+      const { number, orderid, remainingBalance } = res.data.data;
 
       const expiryTime = Date.now() + 300000;
 
-      const savedOrder = {
-        service,
-        number,
-        orderid,
-        expiryTime,
-      };
-
       localStorage.setItem(
         "activeOrder",
-        JSON.stringify(savedOrder)
+        JSON.stringify({
+          service,
+          number,
+          orderid,
+          expiryTime,
+        })
       );
 
       setActiveOrder({ ...service, number, orderid });
 
       if (remainingBalance !== undefined) {
-        localStorage.setItem(
-          "balance",
-          remainingBalance
-        );
+        localStorage.setItem("balance", remainingBalance);
       }
+
+      if (pollOtp.current) clearInterval(pollOtp.current);
 
       pollOtp.current = setInterval(async () => {
         try {
@@ -527,8 +540,7 @@ const BuyNumbers = ({ darkMode }) => {
       setOrderStatus("idle");
       alert(
         `Purchase failed: ${
-          err.response?.data?.message ||
-          err.message
+          err.response?.data?.message || err.message
         }`
       );
     }
@@ -544,8 +556,8 @@ const BuyNumbers = ({ darkMode }) => {
           clearInterval(timer);
           setOrderStatus("expired");
           localStorage.removeItem("activeOrder");
-          if (pollOtp.current)
-            clearInterval(pollOtp.current);
+
+          if (pollOtp.current) clearInterval(pollOtp.current);
           return 0;
         }
         return t - 1;
@@ -558,25 +570,16 @@ const BuyNumbers = ({ darkMode }) => {
   // ---------------- RESET COPIED ----------------
   useEffect(() => {
     if (!copied) return;
-    const timer = setTimeout(
-      () => setCopied(false),
-      2000
-    );
+    const timer = setTimeout(() => setCopied(false), 2000);
     return () => clearTimeout(timer);
   }, [copied]);
 
   const filteredServices = services.filter((s) =>
-    s.name
-      .toLowerCase()
-      .includes(search.toLowerCase())
+    s.name.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
-    <div
-      className={`marketplace ${
-        darkMode ? "dark" : ""
-      }`}
-    >
+    <div className={`marketplace ${darkMode ? "dark" : ""}`}>
       <div className="buy-number-card">
         <h2>Buy Numbers</h2>
 
@@ -588,9 +591,7 @@ const BuyNumbers = ({ darkMode }) => {
             value={selectedCountry?.ID || ""}
             onChange={handleCountryChange}
           >
-            <option value="">
-              Select Country
-            </option>
+            <option value="">Select Country</option>
             {countries.map((c) => (
               <option key={c.ID} value={c.ID}>
                 {c.name}
@@ -605,41 +606,27 @@ const BuyNumbers = ({ darkMode }) => {
             placeholder="Search service"
             className="search-input"
             value={search}
-            onChange={(e) =>
-              setSearch(e.target.value)
-            }
-            disabled={
-              !selectedCountry ||
-              loadingServices
-            }
+            onChange={(e) => setSearch(e.target.value)}
+            disabled={!selectedCountry || loadingServices}
           />
           <FiSearch className="search-icon" />
         </div>
 
-        {(selectedCountry ||
-          loadingServices) && (
+        {(selectedCountry || loadingServices) && (
           <div className="services-container">
             {loadingServices ? (
               <p>Loading services...</p>
-            ) : filteredServices.length ===
-              0 ? (
-              <p className="empty">
-                No services available
-              </p>
+            ) : filteredServices.length === 0 ? (
+              <p className="empty">No services available</p>
             ) : (
               <div className="services-grid">
-                {filteredServices.map(
-                  (service) => (
-                    <ServiceCard
-                      key={
-                        service.ID ||
-                        service.id
-                      }
-                      service={service}
-                      onBuy={handleBuy}
-                    />
-                  )
-                )}
+                {filteredServices.map((service) => (
+                  <ServiceCard
+                    key={service.ID || service.id}
+                    service={service}
+                    onBuy={handleBuy}
+                  />
+                ))}
               </div>
             )}
           </div>
@@ -649,28 +636,17 @@ const BuyNumbers = ({ darkMode }) => {
           <div className="otp-box">
             <div className="otp-header">
               <p>
-                <strong>Number:</strong>{" "}
-                {activeOrder.number}
+                <strong>Number:</strong> {activeOrder.number}
                 <FiCopy
                   className="copy-icon"
                   onClick={() => {
-                    navigator.clipboard.writeText(
-                      activeOrder.number
-                    );
+                    navigator.clipboard.writeText(activeOrder.number);
                     setCopied(true);
                   }}
-                  style={{
-                    cursor: "pointer",
-                    marginLeft: "8px",
-                  }}
+                  style={{ cursor: "pointer", marginLeft: "8px" }}
                 />
                 {copied && (
-                  <span
-                    style={{
-                      marginLeft: "6px",
-                      color: "#28a745",
-                    }}
-                  >
+                  <span style={{ marginLeft: "6px", color: "#28a745" }}>
                     Copied ✓
                   </span>
                 )}
@@ -683,66 +659,43 @@ const BuyNumbers = ({ darkMode }) => {
                   setCopied(false);
                   setOrderStatus("idle");
                   setOtp(null);
-                  localStorage.removeItem(
-                    "activeOrder"
-                  );
+                  localStorage.removeItem("activeOrder");
+
                   if (pollOtp.current)
-                    clearInterval(
-                      pollOtp.current
-                    );
+                    clearInterval(pollOtp.current);
                 }}
               >
                 ×
               </button>
             </div>
 
-            {orderStatus ===
-              "waiting" && (
+            {orderStatus === "waiting" && (
               <>
-                <p>
-                  Waiting for OTP...
-                </p>
+                <p>Waiting for OTP...</p>
                 <p className="timer">
-                  {Math.floor(
-                    timeLeft / 60
-                  )}
-                  :
-                  {String(
-                    timeLeft % 60
-                  ).padStart(2, "0")}
+                  {Math.floor(timeLeft / 60)}:
+                  {String(timeLeft % 60).padStart(2, "0")}
                 </p>
               </>
             )}
 
-            {orderStatus ===
-              "received" && (
+            {orderStatus === "received" && (
               <>
                 <h2>{otp}</h2>
                 <button
-                  className={`copy-btn ${
-                    copied
-                      ? "copied"
-                      : ""
-                  }`}
+                  className={`copy-btn ${copied ? "copied" : ""}`}
                   onClick={() => {
-                    navigator.clipboard.writeText(
-                      otp
-                    );
+                    navigator.clipboard.writeText(otp);
                     setCopied(true);
                   }}
                 >
-                  {copied
-                    ? "Copied ✓"
-                    : "Copy OTP"}
+                  {copied ? "Copied ✓" : "Copy OTP"}
                 </button>
               </>
             )}
 
-            {orderStatus ===
-              "expired" && (
-              <p className="error">
-                OTP expired
-              </p>
+            {orderStatus === "expired" && (
+              <p className="error">OTP expired</p>
             )}
           </div>
         )}
