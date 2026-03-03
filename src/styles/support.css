@@ -156,10 +156,9 @@
   .user-support-container {
     height: 100vh;
     margin: 0;
-    max-width: 100%;
+    width:100%;
+    max-width: 50px;
     border-radius: 0;
-    padding-left: 10px; 
-    padding-right: 10px;
   }
   .bubble {
     max-width: 85%;
@@ -169,10 +168,3 @@
     right: 20px;
   }
 }
-
-
-
-
-
-
-
