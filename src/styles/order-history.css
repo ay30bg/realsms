@@ -15,8 +15,8 @@
 /* TITLE */
 .order-history-title {
   margin-bottom: 20px;
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: 700;
   color: #111827;
 }
 
@@ -240,5 +240,6 @@
     margin-top: 8px;
   }
 }
+
 
 
