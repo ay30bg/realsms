@@ -235,13 +235,24 @@
 }
 
 @media (max-width: 640px) {
-  .order-history-page {
+  /* .order-history-page {
     padding: 10px;
   }
 
   .order-history-card {
     padding: 15px;
     border-radius: 8px;
+  } */
+
+   .order-history-page {
+    padding: 0; /* remove side padding */
+  }
+
+  .order-history-card {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 8px; /* optional: makes it edge-to-edge */
+    padding: 16px;
   }
 
   /* Hide table header */
@@ -288,6 +299,7 @@
     margin-top: 8px;
   }
 }
+
 
 
 
