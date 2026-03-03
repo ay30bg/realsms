@@ -153,12 +153,17 @@
 
 /* ================= RESPONSIVE ================= */
 @media (max-width: 768px) {
+.user-support-page {
+    padding: 0; /* remove side padding */
+  }
+
   .user-support-container {
     height: 100vh;
     margin: 0;
-    width:100%;
-    padding: 5px;
-    border-radius: 0;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 8px; /* optional: makes it edge-to-edge */
+    padding: 16px;
   }
   .bubble {
     max-width: 85%;
@@ -168,6 +173,7 @@
     right: 20px;
   }
 }
+
 
 
 
