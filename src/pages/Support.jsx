@@ -48,7 +48,8 @@ const UserSupport = () => {
   };
 
   return (
-    <div className="user-support-container">
+    <div>
+     <div className="user-support-container">
       <div className="user-support-header">
         <h3>Customer Support</h3>
         <span>We typically reply within minutes</span>
@@ -81,8 +82,10 @@ const UserSupport = () => {
         <FaTelegramPlane />
       </a>
     </div>
+    </div> 
   );
 };
 
 export default UserSupport;
+
 
