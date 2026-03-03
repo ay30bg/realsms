@@ -2,60 +2,61 @@
 .user-support-container {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 140px); /* reduced from -60px */
-  width: 100%;
+  height: 100vh; /* full viewport */
   max-width: 900px;
-  margin: 30px auto; /* space top & bottom */
-  margin-top: 20px;
+  margin: 0 auto;
   background: #ffffff;
-  border-radius: 14px; /* softer modern look */
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
 /* ================= HEADER ================= */
 .user-support-header {
-  padding: 18px 22px;
-  border-bottom: 1px solid #f1f1f1;
+  padding: 16px 24px;
+  border-bottom: 1px solid #e5e7eb;
   background: #f9fafb;
   flex-shrink: 0;
 }
 
 .user-support-header h3 {
   margin: 0;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
+  color: #111827;
 }
 
 .user-support-header span {
   font-size: 13px;
   color: #6b7280;
+  display: block;
+  margin-top: 4px;
 }
 
 /* ================= CHAT BODY ================= */
 .user-support-body {
   flex: 1;
   padding: 20px;
-  overflow-y: auto; /* ONLY chat scrolls */
+  overflow-y: auto;
   background: #f8fafc;
   display: flex;
   flex-direction: column;
+  gap: 12px; /* space between messages */
 }
 
 /* Scrollbar styling */
 .user-support-body::-webkit-scrollbar {
   width: 6px;
 }
-
 .user-support-body::-webkit-scrollbar-thumb {
-  background: rgba(0,0,0,0.08);
+  background: rgba(0, 0, 0, 0.08);
   border-radius: 10px;
 }
 
 /* ================= MESSAGES ================= */
 .chat-message {
   display: flex;
-  margin-bottom: 15px;
+  width: 100%;
 }
 
 .chat-message.user {
@@ -71,9 +72,10 @@
   padding: 12px 16px;
   border-radius: 18px;
   font-size: 14px;
-  line-height: 1.4;
+  line-height: 1.5;
   word-wrap: break-word;
   position: relative;
+  display: inline-block;
 }
 
 /* User bubble */
@@ -86,10 +88,11 @@
 /* Support bubble */
 .chat-message.support .bubble {
   background: #e5e7eb;
+  color: #111827;
   border-bottom-left-radius: 4px;
 }
 
-/* Message time */
+/* Message timestamp */
 .bubble span {
   display: block;
   font-size: 11px;
@@ -101,20 +104,20 @@
 .user-support-input {
   display: flex;
   align-items: center;
-  padding: 15px;
-  border-top: 1px solid #f1f1f1;
+  padding: 14px 20px;
+  border-top: 1px solid #e5e7eb;
   background: #ffffff;
   flex-shrink: 0;
 }
 
 .user-support-input input {
   flex: 1;
-  padding: 11px 16px;
+  padding: 10px 16px;
   border-radius: 25px;
   border: 1px solid #e5e7eb;
-  outline: none;
   font-size: 14px;
-  transition: border 0.2s ease;
+  outline: none;
+  transition: border-color 0.2s ease;
 }
 
 .user-support-input input:focus {
@@ -123,7 +126,7 @@
 
 .user-support-input button {
   margin-left: 10px;
-  padding: 11px 20px;
+  padding: 10px 20px;
   border-radius: 25px;
   border: none;
   background: #2563eb;
@@ -141,7 +144,7 @@
   transform: scale(0.97);
 }
 
-/* Floating Telegram Button */
+/* ================= FLOATING TELEGRAM BUTTON ================= */
 .telegram-float {
   position: fixed;
   bottom: 20px;
@@ -166,24 +169,23 @@
   background-color: #0077b5;
 }
 
+/* ================= RESPONSIVE ================= */
 @media (max-width: 768px) {
   .user-support-container {
-    height: calc(100vh - 160px); 
-    margin: 10px auto;
-    margin: 20px 0 20px 0;
-    border-radius: 10px; 
+    max-width: 100%;
+    height: 100vh;
+    border-radius: 0;
   }
-  
-  .bubble { 
+
+  .bubble {
     max-width: 85%;
   }
-  
-  .user-support-body { 
-    padding: 15px; 
-  } 
-  
-  .user-support-input {
-    padding: 12px;
-  } 
-}
 
+  .user-support-body {
+    padding: 16px;
+  }
+
+  .user-support-input {
+    padding: 12px 16px;
+  }
+}
