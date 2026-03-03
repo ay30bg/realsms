@@ -158,6 +158,8 @@
     margin: 0;
     max-width: 100%;
     border-radius: 0;
+    padding-left: 10px; 
+    padding-right: 10px;
   }
   .bubble {
     max-width: 85%;
@@ -167,6 +169,7 @@
     right: 20px;
   }
 }
+
 
 
 
