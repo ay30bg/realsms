@@ -179,7 +179,10 @@ const NumberHistory = ({ darkMode }) => {
       const res = await axios.get(`${API_URL}/api/smspool/orders`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
-      if (res.data.success) setOrders(res.data.data);
+
+      if (res.data.success) {
+        setOrders(res.data.data);
+      }
     } catch (err) {
       console.error("Fetch Orders Error:", err.response?.data);
     } finally {
@@ -190,10 +193,13 @@ const NumberHistory = ({ darkMode }) => {
   const handleRefund = async (orderid) => {
     try {
       setLoadingId(orderid);
+
       const res = await axios.post(
         `${API_URL}/api/smspool/cancel`,
         { orderid },
-        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
       );
 
       if (res.data.success) {
@@ -212,10 +218,13 @@ const NumberHistory = ({ darkMode }) => {
   const handleResend = async (orderid) => {
     try {
       setLoadingId(orderid);
+
       const res = await axios.post(
         `${API_URL}/api/smspool/resend`,
         { orderid },
-        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
       );
 
       if (res.data.success) {
@@ -230,6 +239,23 @@ const NumberHistory = ({ darkMode }) => {
     } finally {
       setLoadingId(null);
     }
+  };
+
+  // ✅ Safely get service name (supports old & new orders)
+  const getServiceName = (service) => {
+    if (!service) return "N/A";
+
+    // New structure { id, name }
+    if (typeof service === "object" && service.name) {
+      return service.name;
+    }
+
+    // Old structure (string ID)
+    if (typeof service === "string") {
+      return service; // fallback until migrated
+    }
+
+    return "N/A";
   };
 
   return (
@@ -253,7 +279,7 @@ const NumberHistory = ({ darkMode }) => {
                   <th>Order ID</th>
                   <th>OTP</th>
                   <th>Country</th>
-                  <th>Service</th> {/* Changed from Status */}
+                  <th>Service</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -262,7 +288,9 @@ const NumberHistory = ({ darkMode }) => {
                 {orders.map((order) => (
                   <tr key={order._id}>
                     <td data-label="Number">{order.number}</td>
+
                     <td data-label="Order ID">{order.orderid}</td>
+
                     <td data-label="OTP">
                       {order.otp ? (
                         <span className="otp-success">{order.otp}</span>
@@ -270,12 +298,16 @@ const NumberHistory = ({ darkMode }) => {
                         <span className="otp-waiting">Waiting...</span>
                       )}
                     </td>
+
                     <td data-label="Country">
-                      {typeof order.country === "string"
-                        ? order.country
-                        : order.country?.code}
+                      {order.country?.code || order.country}
                     </td>
-                    <td data-label="Service">{order.service}</td> {/* Display service */}
+
+                    {/* ✅ SERVICE NAME DISPLAY */}
+                    <td data-label="Service">
+                      {getServiceName(order.service)}
+                    </td>
+
                     <td data-label="Action">
                       {order.status === "waiting" ? (
                         <button
@@ -295,7 +327,9 @@ const NumberHistory = ({ darkMode }) => {
                           disabled={loadingId === order.orderid}
                           onClick={() => handleResend(order.orderid)}
                         >
-                          {loadingId === order.orderid ? "Sending..." : "Resend OTP"}
+                          {loadingId === order.orderid
+                            ? "Sending..."
+                            : "Resend OTP"}
                         </button>
                       ) : (
                         <span className="status-refunded">Refunded</span>
