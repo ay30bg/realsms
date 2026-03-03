@@ -130,7 +130,7 @@
 /* ================= TELEGRAM FLOAT ================= */
 .telegram-float {
   position: fixed;
-  bottom: 20px;
+  bottom: 80px;
   right: 20px;
   background-color: #0088cc;
   color: white;
@@ -166,6 +166,7 @@
     right: 20px;
   }
 }
+
 
 
 
