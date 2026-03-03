@@ -715,6 +715,7 @@ import "../styles/buy-number.css";
 
 const BuyNumbers = ({ darkMode }) => {
   const { balance } = useBalance();
+
   const [countries, setCountries] = useState([]);
   const [services, setServices] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState(null);
@@ -744,11 +745,11 @@ const BuyNumbers = ({ darkMode }) => {
     if (!saved) return;
 
     const parsed = JSON.parse(saved);
-    const remainingTime = Math.floor(
+    const remaining = Math.floor(
       (parsed.expiryTime - Date.now()) / 1000
     );
 
-    if (remainingTime <= 0) {
+    if (remaining <= 0) {
       localStorage.removeItem("activeOrder");
       return;
     }
@@ -759,21 +760,21 @@ const BuyNumbers = ({ darkMode }) => {
       orderid: parsed.orderid,
     });
 
-    setTimeLeft(remainingTime);
+    setTimeLeft(remaining);
     setOrderStatus("waiting");
 
     if (pollOtp.current) clearInterval(pollOtp.current);
 
     pollOtp.current = setInterval(async () => {
       try {
-        const otpRes = await axios.post(
+        const res = await axios.post(
           `${API_URL}/api/smspool/otp`,
           { orderid: parsed.orderid },
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
-        if (otpRes.data?.otp) {
-          setOtp(otpRes.data.otp);
+        if (res.data?.otp) {
+          setOtp(res.data.otp);
           setOrderStatus("received");
           clearInterval(pollOtp.current);
           localStorage.removeItem("activeOrder");
@@ -817,7 +818,7 @@ const BuyNumbers = ({ darkMode }) => {
 
         const data = Array.isArray(res.data) ? res.data : [];
 
-        const servicesWithPrice = data.map((s) => {
+        const withPrice = data.map((s) => {
           const priceObj = s.pricing?.find(
             (p) =>
               String(p.countryID) ===
@@ -830,7 +831,7 @@ const BuyNumbers = ({ darkMode }) => {
           };
         });
 
-        setServices(servicesWithPrice);
+        setServices(withPrice);
       } catch {
         setServices([]);
       } finally {
@@ -870,7 +871,6 @@ const BuyNumbers = ({ darkMode }) => {
       return alert("You already have an active order!");
 
     setOrderStatus("waiting");
-    setActiveOrder(null);
     setOtp(null);
     setTimeLeft(300);
     setCopied(false);
@@ -884,7 +884,7 @@ const BuyNumbers = ({ darkMode }) => {
 
       if (res.data.success === 0) {
         setOrderStatus("idle");
-        return alert(`Purchase failed: ${res.data.message}`);
+        return alert(res.data.message);
       }
 
       const { number, orderid } = res.data.data;
@@ -917,14 +917,11 @@ const BuyNumbers = ({ darkMode }) => {
       }, 2000);
     } catch (err) {
       setOrderStatus("idle");
-      alert(
-        `Purchase failed: ${
-          err.response?.data?.message || err.message
-        }`
-      );
+      alert(err.response?.data?.message || err.message);
     }
   };
 
+  // ---------------- COUNTDOWN ----------------
   useEffect(() => {
     if (orderStatus !== "waiting") return;
 
@@ -946,8 +943,8 @@ const BuyNumbers = ({ darkMode }) => {
 
   useEffect(() => {
     if (!copied) return;
-    const timer = setTimeout(() => setCopied(false), 2000);
-    return () => clearTimeout(timer);
+    const t = setTimeout(() => setCopied(false), 2000);
+    return () => clearTimeout(t);
   }, [copied]);
 
   const filteredServices = services.filter((s) =>
@@ -959,7 +956,6 @@ const BuyNumbers = ({ darkMode }) => {
       <div className="buy-number-card">
         <h2>Buy Numbers</h2>
 
-        {/* COUNTRY SELECT (always visible) */}
         <select
           className="server-select"
           value={selectedCountry?.ID || ""}
@@ -989,7 +985,7 @@ const BuyNumbers = ({ darkMode }) => {
           <div className="services-container">
             {loadingServices ? (
               <div className="loading-spinner">
-                <div className={`spinner ${darkMode ? "dark" : ""}`}></div>
+                <div className={`spinner ${darkMode ? "dark" : ""}`} />
                 <p>Loading services...</p>
               </div>
             ) : filteredServices.length === 0 ? (
@@ -1013,8 +1009,44 @@ const BuyNumbers = ({ darkMode }) => {
             <div className="otp-header">
               <p>
                 <strong>Number:</strong> {activeOrder.number}
+                <FiCopy
+                  onClick={() => {
+                    navigator.clipboard.writeText(activeOrder.number);
+                    setCopied(true);
+                  }}
+                  style={{ cursor: "pointer", marginLeft: 8 }}
+                />
               </p>
             </div>
+
+            {orderStatus === "waiting" && (
+              <>
+                <p>Waiting for OTP...</p>
+                <p className="timer">
+                  {Math.floor(timeLeft / 60)}:
+                  {String(timeLeft % 60).padStart(2, "0")}
+                </p>
+              </>
+            )}
+
+            {orderStatus === "received" && (
+              <>
+                <h2>{otp}</h2>
+                <button
+                  className="copy-btn"
+                  onClick={() => {
+                    navigator.clipboard.writeText(otp);
+                    setCopied(true);
+                  }}
+                >
+                  Copy OTP
+                </button>
+              </>
+            )}
+
+            {orderStatus === "expired" && (
+              <p className="error">OTP expired</p>
+            )}
           </div>
         )}
       </div>
