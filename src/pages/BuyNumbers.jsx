@@ -311,6 +311,7 @@ import "../styles/buy-number.css";
 
 const BuyNumbers = ({ darkMode }) => {
   const { balance } = useBalance();
+
   const [countries, setCountries] = useState([]);
   const [services, setServices] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState(null);
@@ -319,9 +320,6 @@ const BuyNumbers = ({ darkMode }) => {
   const [otp, setOtp] = useState(null);
   const [timeLeft, setTimeLeft] = useState(300);
   const [search, setSearch] = useState("");
-  const [loadingCountries, setLoadingCountries] = useState(true);
-  const [loadingServices, setLoadingServices] = useState(false);
-  const [copied, setCopied] = useState(false);
 
   const token = localStorage.getItem("token");
   const API_URL =
@@ -357,11 +355,63 @@ const BuyNumbers = ({ darkMode }) => {
     setOrderStatus("waiting");
     setTimeLeft(remaining);
 
+    startPolling(parsed.orderid);
+
+    return () => clearInterval(pollOtp.current);
+  }, [API_URL, token]);
+
+  // ---------------- FETCH COUNTRIES ----------------
+  useEffect(() => {
+    const fetchCountries = async () => {
+      if (!token) return;
+      try {
+        const res = await axios.get(`${API_URL}/api/smspool/servers`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setCountries(Array.isArray(res.data) ? res.data : []);
+      } catch {
+        setCountries([]);
+      }
+    };
+
+    fetchCountries();
+  }, [token, API_URL]);
+
+  // ---------------- FETCH SERVICES ----------------
+  useEffect(() => {
+    const fetchServices = async () => {
+      if (!selectedCountry || !token) return;
+
+      try {
+        const res = await axios.get(`${API_URL}/api/smspool/services`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const data = Array.isArray(res.data) ? res.data : [];
+
+        const servicesWithPrice = data.map((s) => {
+          const priceObj = s.pricing?.find(
+            (p) => String(p.countryID) === String(selectedCountry.ID)
+          );
+          return { ...s, price: priceObj?.priceNGN || null };
+        });
+
+        setServices(servicesWithPrice);
+      } catch {
+        setServices([]);
+      }
+    };
+
+    fetchServices();
+  }, [selectedCountry, token, API_URL]);
+
+  // ---------------- START POLLING ----------------
+  const startPolling = (orderid) => {
     pollOtp.current = setInterval(async () => {
       try {
         const otpRes = await axios.post(
           `${API_URL}/api/smspool/otp`,
-          { orderid: parsed.orderid },
+          { orderid },
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -373,69 +423,18 @@ const BuyNumbers = ({ darkMode }) => {
         }
       } catch {}
     }, 2000);
-
-    return () => clearInterval(pollOtp.current);
-  }, [API_URL, token]);
-
-  // ---------------- FETCH COUNTRIES ----------------
-  useEffect(() => {
-    const fetchCountries = async () => {
-      if (!token) return setLoadingCountries(false);
-      setLoadingCountries(true);
-      try {
-        const res = await axios.get(`${API_URL}/api/smspool/servers`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setCountries(Array.isArray(res.data) ? res.data : []);
-      } catch {
-        setCountries([]);
-      } finally {
-        setLoadingCountries(false);
-      }
-    };
-    fetchCountries();
-  }, [token, API_URL]);
-
-  // ---------------- FETCH SERVICES ----------------
-  useEffect(() => {
-    const fetchServices = async () => {
-      if (!selectedCountry || !token) return;
-      setLoadingServices(true);
-      try {
-        const res = await axios.get(`${API_URL}/api/smspool/services`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        const data = Array.isArray(res.data) ? res.data : [];
-        const servicesWithPrice = data.map((s) => {
-          const priceObj = s.pricing?.find(
-            (p) => String(p.countryID) === String(selectedCountry.ID)
-          );
-          return { ...s, price: priceObj?.priceNGN || null };
-        });
-
-        setServices(servicesWithPrice);
-      } catch {
-        setServices([]);
-      } finally {
-        setLoadingServices(false);
-      }
-    };
-    fetchServices();
-  }, [selectedCountry, token, API_URL]);
+  };
 
   // ---------------- HANDLE BUY ----------------
   const handleBuy = async (service) => {
-    if (!selectedCountry) return alert("Please select a country first!");
-    if (!service.price) return alert("Service not available!");
+    if (!selectedCountry) return alert("Select a country first");
+    if (!service.price) return alert("Service not available");
     if (balance < service.price) return alert("Insufficient balance");
-    if (orderStatus === "waiting") return alert("You have an active order!");
+    if (orderStatus === "waiting") return alert("Active order already running");
 
     setOrderStatus("waiting");
-    setActiveOrder(null);
     setOtp(null);
     setTimeLeft(300);
-    setCopied(false);
 
     try {
       const res = await axios.post(
@@ -465,22 +464,7 @@ const BuyNumbers = ({ darkMode }) => {
         })
       );
 
-      pollOtp.current = setInterval(async () => {
-        try {
-          const otpRes = await axios.post(
-            `${API_URL}/api/smspool/otp`,
-            { orderid },
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
-
-          if (otpRes.data?.otp) {
-            setOtp(otpRes.data.otp);
-            setOrderStatus("received");
-            localStorage.removeItem("activeOrder");
-            clearInterval(pollOtp.current);
-          }
-        } catch {}
-      }, 2000);
+      startPolling(orderid);
     } catch (err) {
       setOrderStatus("idle");
       alert(err.response?.data?.message || err.message);
@@ -497,7 +481,7 @@ const BuyNumbers = ({ darkMode }) => {
           clearInterval(timer);
           setOrderStatus("expired");
           localStorage.removeItem("activeOrder");
-          if (pollOtp.current) clearInterval(pollOtp.current);
+          clearInterval(pollOtp.current);
           return 0;
         }
         return t - 1;
@@ -569,6 +553,7 @@ const BuyNumbers = ({ darkMode }) => {
                   style={{ marginLeft: 8, cursor: "pointer" }}
                 />
               </p>
+
               <button
                 className="close-btn"
                 onClick={() => {
@@ -576,7 +561,7 @@ const BuyNumbers = ({ darkMode }) => {
                   setOrderStatus("idle");
                   setOtp(null);
                   localStorage.removeItem("activeOrder");
-                  if (pollOtp.current) clearInterval(pollOtp.current);
+                  clearInterval(pollOtp.current);
                 }}
               >
                 ×
@@ -616,4 +601,3 @@ const BuyNumbers = ({ darkMode }) => {
 };
 
 export default BuyNumbers;
-
