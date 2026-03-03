@@ -48,7 +48,7 @@ const UserSupport = () => {
   };
 
   return (
-    <div>
+    <div className="user-support-page">
      <div className="user-support-container">
       <div className="user-support-header">
         <h3>Customer Support</h3>
@@ -87,5 +87,6 @@ const UserSupport = () => {
 };
 
 export default UserSupport;
+
 
 
