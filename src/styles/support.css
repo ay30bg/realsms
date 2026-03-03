@@ -157,7 +157,6 @@
     height: 100vh;
     margin: 0;
     width:100%;
-    max-width: 500px;
     border-radius: 0;
   }
   .bubble {
@@ -168,5 +167,6 @@
     right: 20px;
   }
 }
+
 
 
