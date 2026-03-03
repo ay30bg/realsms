@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaTelegramPlane } from "react-icons/fa";
-import "../styles/user-support.css";
+import "../styles/support.css";
 
 const UserSupport = () => {
   const [messages, setMessages] = useState([
@@ -85,3 +85,4 @@ const UserSupport = () => {
 };
 
 export default UserSupport;
+
