@@ -10,7 +10,7 @@ const FundWallet = () => {
 
   // 🔥 Toggle payment methods here
   const usdtEnabled = true;
-  const paystackEnabled = true;     
+  const paystackEnabled = false;     
   const flutterwaveEnabled = true;  
 
   useEffect(() => {
@@ -82,5 +82,6 @@ const FundWallet = () => {
 };
 
 export default FundWallet;
+
 
 
