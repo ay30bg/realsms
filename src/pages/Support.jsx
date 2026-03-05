@@ -78,7 +78,7 @@ const UserSupport = () => {
         <button onClick={handleSend}>Send</button>
       </div>
 
-      <a href="https://t.me/yourusername" target="_blank" rel="noopener noreferrer" className="telegram-float">
+      <a href="https://t.me/real6ixsms" target="_blank" rel="noopener noreferrer" className="telegram-float">
         <FaTelegramPlane />
       </a>
     </div>
@@ -87,6 +87,7 @@ const UserSupport = () => {
 };
 
 export default UserSupport;
+
 
 
 
