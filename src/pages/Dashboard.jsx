@@ -144,10 +144,10 @@ const Dashboard = ({ darkMode }) => {
             </p>
 
             <p className="notice-highlight">
-              Crypto & Korapay funding is temporarily not working for now.
+             Kindly contact the support team for any transaction or log-related issues. Also note that any issue not reported within 24 hours will not be attended to.
             </p>
 
-            <p>You can fund your wallet using Paystack & Flutterwave.</p>
+            <p>You can fund your wallet using Flutterwave.</p>
 
             <p>
               Thank you — <strong>realsms.store</strong>
@@ -181,6 +181,7 @@ const Dashboard = ({ darkMode }) => {
 };
 
 export default Dashboard;
+
 
 
 
