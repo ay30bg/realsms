@@ -103,26 +103,26 @@ const UserSupport = () => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // Fetch user messages
-  const fetchMessages = async () => {
-    try {
-      const res = await fetch("/api/support/user", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const data = await res.json();
-      setMessages(data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
+  // Fetch messages
   useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        const res = await fetch("/api/support/user", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await res.json();
+        setMessages(data);
+      } catch (err) {
+        console.error("Error fetching messages:", err);
+      }
+    };
+
     document.title = "Customer Support - RealSMS";
     fetchMessages();
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     scrollToBottom();
@@ -147,7 +147,7 @@ const UserSupport = () => {
       setMessages((prev) => [...prev, data]);
       setInput("");
     } catch (err) {
-      console.error(err);
+      console.error("Send message error:", err);
     }
   };
 
@@ -179,6 +179,7 @@ const UserSupport = () => {
               </div>
             </div>
           ))}
+
           <div ref={chatEndRef}></div>
         </div>
 
@@ -190,7 +191,10 @@ const UserSupport = () => {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
           />
-          <button onClick={handleSend}>Send</button>
+
+          <button onClick={handleSend}>
+            Send
+          </button>
         </div>
 
         <a
@@ -208,6 +212,3 @@ const UserSupport = () => {
 };
 
 export default UserSupport;
-
-
-
