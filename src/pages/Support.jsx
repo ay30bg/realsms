@@ -95,26 +95,40 @@ import "../styles/support.css";
 const UserSupport = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const chatEndRef = useRef(null);
 
   const token = localStorage.getItem("token");
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const scrollToBottom = () => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // Fetch messages
+  // ===============================
+  // Fetch Messages
+  // ===============================
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const res = await fetch("/api/support/user", {
+        const res = await fetch(`${API_URL}/api/support/user`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
+        if (!res.ok) {
+          throw new Error("Failed to fetch messages");
+        }
+
         const data = await res.json();
-        setMessages(data);
+
+        if (Array.isArray(data)) {
+          setMessages(data);
+        } else {
+          setMessages([]);
+        }
       } catch (err) {
         console.error("Error fetching messages:", err);
       }
@@ -122,18 +136,25 @@ const UserSupport = () => {
 
     document.title = "Customer Support - RealSMS";
     fetchMessages();
-  }, [token]);
+  }, [API_URL, token]);
 
+  // ===============================
+  // Scroll to latest message
+  // ===============================
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
-  // Send message
+  // ===============================
+  // Send Message
+  // ===============================
   const handleSend = async () => {
     if (!input.trim()) return;
 
     try {
-      const res = await fetch("/api/support/send", {
+      setLoading(true);
+
+      const res = await fetch(`${API_URL}/api/support/send`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -142,12 +163,30 @@ const UserSupport = () => {
         body: JSON.stringify({ message: input }),
       });
 
+      if (!res.ok) {
+        throw new Error("Failed to send message");
+      }
+
       const data = await res.json();
 
-      setMessages((prev) => [...prev, data]);
+      if (data) {
+        setMessages((prev) => [...prev, data]);
+      }
+
       setInput("");
     } catch (err) {
       console.error("Send message error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ===============================
+  // Handle Enter key
+  // ===============================
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSend();
     }
   };
 
@@ -155,12 +194,20 @@ const UserSupport = () => {
     <div className="user-support-page">
       <div className="user-support-container">
 
+        {/* Header */}
         <div className="user-support-header">
           <h3>Customer Support</h3>
           <span>We typically reply within minutes</span>
         </div>
 
+        {/* Messages */}
         <div className="user-support-body">
+          {messages.length === 0 && (
+            <div className="no-messages">
+              Start a conversation with support
+            </div>
+          )}
+
           {messages.map((msg) => (
             <div
               key={msg._id}
@@ -183,20 +230,23 @@ const UserSupport = () => {
           <div ref={chatEndRef}></div>
         </div>
 
+        {/* Input */}
         <div className="user-support-input">
           <input
             type="text"
             placeholder="Type your message..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            onKeyDown={handleKeyDown}
+            disabled={loading}
           />
 
-          <button onClick={handleSend}>
-            Send
+          <button onClick={handleSend} disabled={loading}>
+            {loading ? "Sending..." : "Send"}
           </button>
         </div>
 
+        {/* Telegram floating button */}
         <a
           href="https://t.me/real6ixsms"
           target="_blank"
