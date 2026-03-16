@@ -1,6 +1,54 @@
-// components/Sidebar.jsx
-import React from "react";
+// // components/Sidebar.jsx
+// import React from "react";
+// import { NavLink } from "react-router-dom";
+// import {
+//   FiHome,
+//   FiShoppingCart,
+//   FiClock,
+//   FiPlusCircle,
+//   FiHeadphones
+// } from "react-icons/fi";
+// import "../styles/sidebar.css";
+// import logo from "../assets/logo.png";
+
+// const Sidebar = ({ isOpen, toggleSidebar }) => {
+//   return (
+//     <div className={`sidebar ${isOpen ? "open" : ""}`}>
+//       {/* Close button for mobile */}
+//       <div className="close-btn" onClick={toggleSidebar}>
+//         &times;
+//       </div>
+
+//       <div className="sidebar-logo">
+//         <img src={logo} alt="SMS Market Logo" />
+//       </div>
+
+//       <nav>
+//         <NavLink to="/dashboard" onClick={toggleSidebar}>
+//           <FiHome className="sidebar-icon" /> <span>Dashboard</span>
+//         </NavLink>
+//         <NavLink to="/buy-numbers" onClick={toggleSidebar}>
+//           <FiShoppingCart className="sidebar-icon" /> <span>Buy Numbers</span>
+//         </NavLink>
+//         <NavLink to="/order-history" onClick={toggleSidebar}>
+//           <FiClock className="sidebar-icon" /> <span>Number History</span>
+//         </NavLink>
+//         <NavLink to="/fund-wallet" onClick={toggleSidebar}>
+//           <FiPlusCircle className="sidebar-icon" /> <span>Fund Wallet</span>
+//         </NavLink>
+//         <NavLink to="/support" onClick={toggleSidebar}>
+//           <FiHeadphones className="sidebar-icon" /> <span>Support</span>
+//         </NavLink>
+//       </nav>
+//     </div>
+//   );
+// };
+
+// export default Sidebar;
+
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import axios from "axios";
 import {
   FiHome,
   FiShoppingCart,
@@ -8,12 +56,53 @@ import {
   FiPlusCircle,
   FiHeadphones
 } from "react-icons/fi";
+
 import "../styles/sidebar.css";
 import logo from "../assets/logo.png";
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
+
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  const API_URL = process.env.REACT_APP_API_URL;
+  const token = localStorage.getItem("token");
+
+  // =============================
+  // Fetch unread support messages
+  // =============================
+  const fetchUnreadMessages = async () => {
+    if (!token) return;
+
+    try {
+      const res = await axios.get(`${API_URL}/api/support/user`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      const messages = res.data || [];
+
+      // Count admin messages that user hasn't read
+      const unread = messages.filter(
+        (msg) => msg.sender === "admin" && !msg.read
+      ).length;
+
+      setUnreadCount(unread);
+    } catch (error) {
+      console.error("Unread message fetch error:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUnreadMessages();
+
+    // Poll every 10 seconds
+    const interval = setInterval(fetchUnreadMessages, 10000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className={`sidebar ${isOpen ? "open" : ""}`}>
+
       {/* Close button for mobile */}
       <div className="close-btn" onClick={toggleSidebar}>
         &times;
@@ -25,19 +114,32 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
       <nav>
         <NavLink to="/dashboard" onClick={toggleSidebar}>
-          <FiHome className="sidebar-icon" /> <span>Dashboard</span>
+          <FiHome className="sidebar-icon" />
+          <span>Dashboard</span>
         </NavLink>
+
         <NavLink to="/buy-numbers" onClick={toggleSidebar}>
-          <FiShoppingCart className="sidebar-icon" /> <span>Buy Numbers</span>
+          <FiShoppingCart className="sidebar-icon" />
+          <span>Buy Numbers</span>
         </NavLink>
+
         <NavLink to="/order-history" onClick={toggleSidebar}>
-          <FiClock className="sidebar-icon" /> <span>Number History</span>
+          <FiClock className="sidebar-icon" />
+          <span>Number History</span>
         </NavLink>
+
         <NavLink to="/fund-wallet" onClick={toggleSidebar}>
-          <FiPlusCircle className="sidebar-icon" /> <span>Fund Wallet</span>
+          <FiPlusCircle className="sidebar-icon" />
+          <span>Fund Wallet</span>
         </NavLink>
-        <NavLink to="/support" onClick={toggleSidebar}>
-          <FiHeadphones className="sidebar-icon" /> <span>Support</span>
+
+        <NavLink to="/support" onClick={toggleSidebar} className="support-link">
+          <FiHeadphones className="sidebar-icon" />
+          <span>Support</span>
+
+          {unreadCount > 0 && (
+            <span className="support-badge">{unreadCount}</span>
+          )}
         </NavLink>
       </nav>
     </div>
@@ -45,5 +147,3 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 };
 
 export default Sidebar;
-
-
