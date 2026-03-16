@@ -58,12 +58,14 @@ import axios from "axios";
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const [unreadCount, setUnreadCount] = useState(0);
 
-  // Fetch unread admin messages
   useEffect(() => {
     const fetchUnreadMessages = async () => {
       try {
-        const { data } = await axios.get("/api/support/user/unread"); // adjust base URL if needed
-        setUnreadCount(data.count);
+        const token = localStorage.getItem("token"); // adjust based on your auth
+        const { data } = await axios.get("/api/support/user/unread", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setUnreadCount(data.count); // use data.length if API returns array
       } catch (err) {
         console.error("Error fetching unread messages:", err);
       }
@@ -71,7 +73,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
     fetchUnreadMessages();
 
-    // Optional: poll every 30 seconds
+    // Optional: poll every 20-30s to update badge
     const interval = setInterval(fetchUnreadMessages, 30000);
     return () => clearInterval(interval);
   }, []);
