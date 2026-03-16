@@ -4,7 +4,7 @@ import "../styles/paystack-fund.css";
 import flutterwaveLogo from "../assets/flutterwave.png"; // 👈 Add flutterwave logo
 
 const QUICK_AMOUNTS = [1000, 5000, 10000, 50000];
-const MIN_AMOUNT = 100;
+const MIN_AMOUNT = 1000;
 const MAX_AMOUNT = 500000;
 
 const FlutterwaveFund = () => {
