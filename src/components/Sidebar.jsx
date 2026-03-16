@@ -369,6 +369,12 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   // =============================
   useEffect(() => {
 
+    // If support page is open, unread should be 0
+    if (location.pathname === "/support") {
+      setUnreadCount(0);
+      return;
+    }
+
     fetchUnreadMessages();
 
     const interval = setInterval(() => {
@@ -377,18 +383,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
     return () => clearInterval(interval);
 
-  }, [fetchUnreadMessages]);
-
-  // =============================
-  // When support page opens
-  // =============================
-  useEffect(() => {
-
-    if (location.pathname === "/support") {
-      fetchUnreadMessages(); // refetch after messages become read
-    }
-
-  }, [location, fetchUnreadMessages]);
+  }, [fetchUnreadMessages, location]);
 
   return (
     <div className={`sidebar ${isOpen ? "open" : ""}`}>
