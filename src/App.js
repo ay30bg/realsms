@@ -74,14 +74,44 @@
 
 // export default App;
 
-// index.jsx or App.jsx
+// App.jsx
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+// Scroll Component
+import ScrollToTop from "./components/ScrollToTop";
+
+// Layout
+import Layout from "./components/Layout";
+
+// Pages
+import Dashboard from "./pages/Dashboard";
+import BuyNumbers from "./pages/BuyNumbers";
+import ActiveOrder from "./pages/ActiveOrder";
+import OrderHistory from "./pages/OrderHistory";
+import FundWallet from "./pages/FundWallet";
+import FundSuccess from "./pages/FundSuccess";
+import FundCancel from "./pages/FundCancel";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+import Support from "./pages/Support";
+import PaystackFund from "./pages/PaystackFund";
+import KorapayFund from "./pages/KorapayFund";
+import FlutterwaveFund from "./pages/FlutterwaveFund";
+import USDTFund from "./pages/FundWalletUSDT";
+
+// Context for unread messages
 import { UnreadProvider } from "./context/UnreadContext";
 
 function App() {
   return (
     <UnreadProvider>
       <Router>
+        {/* Scroll To Top on route change */}
         <ScrollToTop />
+
         <Routes>
           {/* Auth Pages */}
           <Route path="/" element={<Login />} />
