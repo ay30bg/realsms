@@ -308,137 +308,262 @@
 
 // export default Sidebar;
 
+// // components/Sidebar.jsx
+// import React, { useEffect, useState, useCallback } from "react";
+// import { NavLink, useLocation } from "react-router-dom";
+// import axios from "axios";
+// import {
+//   FiHome,
+//   FiShoppingCart,
+//   FiClock,
+//   FiPlusCircle,
+//   FiHeadphones
+// } from "react-icons/fi";
+
+// import "../styles/sidebar.css";
+// import logo from "../assets/logo.png";
+
+// const Sidebar = ({ isOpen, toggleSidebar }) => {
+
+//   const [unreadCount, setUnreadCount] = useState(0);
+
+//   const API_URL = process.env.REACT_APP_API_URL;
+//   const token = localStorage.getItem("token");
+
+//   const location = useLocation();
+
+//   // =============================
+//   // Fetch unread messages
+//   // =============================
+//   const fetchUnreadMessages = useCallback(async () => {
+
+//     if (!token) return;
+
+//     try {
+
+//       const res = await axios.get(`${API_URL}/api/support/user`, {
+//         headers: {
+//           Authorization: `Bearer ${token}`
+//         }
+//       });
+
+//       const messages = res.data || [];
+
+//       const unread = messages.filter(
+//         (msg) => msg.sender === "admin" && msg.read === false
+//       ).length;
+
+//       setUnreadCount(unread);
+
+//     } catch (error) {
+//       console.error(
+//         "Support unread fetch error:",
+//         error.response?.data || error.message
+//       );
+//     }
+
+//   }, [API_URL, token]);
+
+//   // =============================
+//   // Poll unread messages
+//   // =============================
+//   useEffect(() => {
+
+//     // If support page is open, unread should be 0
+//     if (location.pathname === "/support") {
+//       setUnreadCount(0);
+//       return;
+//     }
+
+//     fetchUnreadMessages();
+
+//     const interval = setInterval(() => {
+//       fetchUnreadMessages();
+//     }, 10000);
+
+//     return () => clearInterval(interval);
+
+//   }, [fetchUnreadMessages, location]);
+
+//   return (
+//     <div className={`sidebar ${isOpen ? "open" : ""}`}>
+
+//       <div className="close-btn" onClick={toggleSidebar}>
+//         &times;
+//       </div>
+
+//       <div className="sidebar-logo">
+//         <img src={logo} alt="SMS Market Logo" />
+//       </div>
+
+//       <nav>
+
+//         <NavLink to="/dashboard" onClick={toggleSidebar}>
+//           <FiHome className="sidebar-icon" />
+//           <span>Dashboard</span>
+//         </NavLink>
+
+//         <NavLink to="/buy-numbers" onClick={toggleSidebar}>
+//           <FiShoppingCart className="sidebar-icon" />
+//           <span>Buy Numbers</span>
+//         </NavLink>
+
+//         <NavLink to="/order-history" onClick={toggleSidebar}>
+//           <FiClock className="sidebar-icon" />
+//           <span>Number History</span>
+//         </NavLink>
+
+//         <NavLink to="/fund-wallet" onClick={toggleSidebar}>
+//           <FiPlusCircle className="sidebar-icon" />
+//           <span>Fund Wallet</span>
+//         </NavLink>
+
+//         <NavLink
+//           to="/support"
+//           onClick={toggleSidebar}
+//           className="support-link"
+//         >
+//           <FiHeadphones className="sidebar-icon" />
+//           <span>Support</span>
+
+//           {unreadCount > 0 && (
+//             <span className="support-badge">
+//               {unreadCount}
+//             </span>
+//           )}
+
+//         </NavLink>
+
+//       </nav>
+
+//     </div>
+//   );
+// };
+
+// export default Sidebar;
+
 // components/Sidebar.jsx
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import axios from "axios";
 import {
   FiHome,
   FiShoppingCart,
   FiClock,
   FiPlusCircle,
-  FiHeadphones
+  FiHeadphones,
 } from "react-icons/fi";
-
 import "../styles/sidebar.css";
 import logo from "../assets/logo.png";
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
-
-  const [unreadCount, setUnreadCount] = useState(0);
-
-  const API_URL = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token");
+  const [isMobile, setIsMobile] = useState(false);
+  const [unreadMessages, setUnreadMessages] = useState(0);
 
   const location = useLocation();
+  const getToken = () => localStorage.getItem("token"); // user token
 
-  // =============================
-  // Fetch unread messages
-  // =============================
-  const fetchUnreadMessages = useCallback(async () => {
+  /* ==============================
+     Detect Mobile Screen
+  ============================== */
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
-    if (!token) return;
-
+  /* ==============================
+     Fetch Unread Support Messages
+  ============================== */
+  const fetchUnreadMessages = async () => {
     try {
+      const token = getToken();
+      if (!token) return;
 
-      const res = await axios.get(`${API_URL}/api/support/user`, {
-        headers: {
-          Authorization: `Bearer ${token}`
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/support/user`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      });
+      );
 
-      const messages = res.data || [];
+      if (!res.ok) return;
 
-      const unread = messages.filter(
-        (msg) => msg.sender === "admin" && msg.read === false
+      const messages = await res.json();
+      let unread = messages.filter(
+        (msg) => msg.sender === "admin" && !msg.read
       ).length;
 
-      setUnreadCount(unread);
+      // If user is on /support, consider messages read
+      if (location.pathname === "/support") unread = 0;
 
-    } catch (error) {
-      console.error(
-        "Support unread fetch error:",
-        error.response?.data || error.message
-      );
+      setUnreadMessages(unread);
+    } catch (err) {
+      console.error("Sidebar unread messages error:", err);
     }
+  };
 
-  }, [API_URL, token]);
-
-  // =============================
-  // Poll unread messages
-  // =============================
   useEffect(() => {
-
-    // If support page is open, unread should be 0
-    if (location.pathname === "/support") {
-      setUnreadCount(0);
-      return;
-    }
-
     fetchUnreadMessages();
 
-    const interval = setInterval(() => {
-      fetchUnreadMessages();
-    }, 10000);
-
+    // Poll every 30 seconds
+    const interval = setInterval(fetchUnreadMessages, 30000);
     return () => clearInterval(interval);
-
-  }, [fetchUnreadMessages, location]);
+  }, [location.pathname]);
 
   return (
-    <div className={`sidebar ${isOpen ? "open" : ""}`}>
+    <>
+      {isOpen && isMobile && (
+        <div className="sidebar-overlay" onClick={toggleSidebar}></div>
+      )}
 
-      <div className="close-btn" onClick={toggleSidebar}>
-        &times;
-      </div>
+      <aside className={`sidebar ${isOpen ? "open" : ""}`}>
+        <div className="close-btn" onClick={toggleSidebar}>
+          &times;
+        </div>
 
-      <div className="sidebar-logo">
-        <img src={logo} alt="SMS Market Logo" />
-      </div>
+        <div className="sidebar-logo">
+          <img src={logo} alt="RealSMS" />
+        </div>
 
-      <nav>
+        <nav>
+          <NavLink to="/dashboard" onClick={toggleSidebar}>
+            <FiHome className="sidebar-icon" />
+            <span>Dashboard</span>
+          </NavLink>
 
-        <NavLink to="/dashboard" onClick={toggleSidebar}>
-          <FiHome className="sidebar-icon" />
-          <span>Dashboard</span>
-        </NavLink>
+          <NavLink to="/buy-numbers" onClick={toggleSidebar}>
+            <FiShoppingCart className="sidebar-icon" />
+            <span>Buy Numbers</span>
+          </NavLink>
 
-        <NavLink to="/buy-numbers" onClick={toggleSidebar}>
-          <FiShoppingCart className="sidebar-icon" />
-          <span>Buy Numbers</span>
-        </NavLink>
+          <NavLink to="/order-history" onClick={toggleSidebar}>
+            <FiClock className="sidebar-icon" />
+            <span>Number History</span>
+          </NavLink>
 
-        <NavLink to="/order-history" onClick={toggleSidebar}>
-          <FiClock className="sidebar-icon" />
-          <span>Number History</span>
-        </NavLink>
+          <NavLink to="/fund-wallet" onClick={toggleSidebar}>
+            <FiPlusCircle className="sidebar-icon" />
+            <span>Fund Wallet</span>
+          </NavLink>
 
-        <NavLink to="/fund-wallet" onClick={toggleSidebar}>
-          <FiPlusCircle className="sidebar-icon" />
-          <span>Fund Wallet</span>
-        </NavLink>
-
-        <NavLink
-          to="/support"
-          onClick={toggleSidebar}
-          className="support-link"
-        >
-          <FiHeadphones className="sidebar-icon" />
-          <span>Support</span>
-
-          {unreadCount > 0 && (
-            <span className="support-badge">
-              {unreadCount}
-            </span>
-          )}
-
-        </NavLink>
-
-      </nav>
-
-    </div>
+          <NavLink
+            to="/support"
+            onClick={toggleSidebar}
+            className="nav-with-badge"
+          >
+            <FiHeadphones className="sidebar-icon" />
+            <span>Support</span>
+            {unreadMessages > 0 && (
+              <span className="badge unread pulse">{unreadMessages}</span>
+            )}
+          </NavLink>
+        </nav>
+      </aside>
+    </>
   );
 };
 
 export default Sidebar;
-
