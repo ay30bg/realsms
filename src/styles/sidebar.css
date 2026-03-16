@@ -95,13 +95,13 @@
   position: absolute;
   top: 5px;
   right: 10px;
-  margin-top: 5px;
+  margin-top: 10px;
   background: red;
   color: white;
-  font-size: 12px;
+  font-size: 10px;
   padding: 2px 6px;
   border-radius: 50%;
-  font-weight: bold;
+  font-weight: 400;
   display: flex;
   align-items: center;
   justify-content: center;
