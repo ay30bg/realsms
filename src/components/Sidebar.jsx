@@ -46,6 +46,7 @@
 
 // export default Sidebar;
 
+
 // components/Sidebar.jsx
 import React, { useEffect, useState, useCallback } from "react";
 import { NavLink } from "react-router-dom";
@@ -72,41 +73,51 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   // Fetch unread support messages
   // =============================
   const fetchUnreadMessages = useCallback(async () => {
+
     if (!token) return;
 
     try {
       const res = await axios.get(`${API_URL}/api/support/user`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       });
 
       const messages = res.data || [];
 
-      // Count admin messages that user hasn't read
       const unread = messages.filter(
-        (msg) => msg.sender === "admin" && !msg.read
+        (msg) => msg.sender === "admin" && msg.read === false
       ).length;
 
       setUnreadCount(unread);
 
     } catch (error) {
-      console.error("Unread message fetch error:", error);
+      console.error(
+        "Unread support fetch error:",
+        error.response?.data || error.message
+      );
     }
+
   }, [API_URL, token]);
 
   // =============================
   // Load unread messages
   // =============================
   useEffect(() => {
+
     fetchUnreadMessages();
 
-    const interval = setInterval(fetchUnreadMessages, 10000);
+    const interval = setInterval(() => {
+      fetchUnreadMessages();
+    }, 10000);
 
     return () => clearInterval(interval);
+
   }, [fetchUnreadMessages]);
 
   return (
     <div className={`sidebar ${isOpen ? "open" : ""}`}>
-      
+
       {/* Close button for mobile */}
       <div className="close-btn" onClick={toggleSidebar}>
         &times;
@@ -117,34 +128,42 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       </div>
 
       <nav>
+
         <NavLink to="/dashboard" onClick={toggleSidebar}>
-          <FiHome className="sidebar-icon" /> 
+          <FiHome className="sidebar-icon" />
           <span>Dashboard</span>
         </NavLink>
 
         <NavLink to="/buy-numbers" onClick={toggleSidebar}>
-          <FiShoppingCart className="sidebar-icon" /> 
+          <FiShoppingCart className="sidebar-icon" />
           <span>Buy Numbers</span>
         </NavLink>
 
         <NavLink to="/order-history" onClick={toggleSidebar}>
-          <FiClock className="sidebar-icon" /> 
+          <FiClock className="sidebar-icon" />
           <span>Number History</span>
         </NavLink>
 
         <NavLink to="/fund-wallet" onClick={toggleSidebar}>
-          <FiPlusCircle className="sidebar-icon" /> 
+          <FiPlusCircle className="sidebar-icon" />
           <span>Fund Wallet</span>
         </NavLink>
 
-        <NavLink to="/support" onClick={toggleSidebar} className="support-link">
-          <FiHeadphones className="sidebar-icon" /> 
+        <NavLink
+          to="/support"
+          onClick={toggleSidebar}
+          className="support-link"
+        >
+          <FiHeadphones className="sidebar-icon" />
           <span>Support</span>
 
           {unreadCount > 0 && (
-            <span className="support-badge">{unreadCount}</span>
+            <span className="support-badge">
+              {unreadCount}
+            </span>
           )}
         </NavLink>
+
       </nav>
     </div>
   );
