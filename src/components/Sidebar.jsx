@@ -46,7 +46,6 @@
 
 // export default Sidebar;
 
-```jsx
 // components/Sidebar.jsx
 import React, { useEffect, useState, useCallback } from "react";
 import { NavLink } from "react-router-dom";
@@ -152,4 +151,3 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 };
 
 export default Sidebar;
-```
