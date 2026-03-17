@@ -120,9 +120,9 @@ const TransactionHistory = ({ darkMode }) => {
                       </td>
 
                       <td data-label="Status">
-                        <span className={`tx-badge ${tx.status}`}>
-                          {tx.status || "completed"}
-                        </span>
+                        <span className={`tx-badge ${tx.status?.toLowerCase()}`}>
+  {tx.status?.toUpperCase() || "COMPLETED"}
+</span>
                       </td>
                     </tr>
                   ))}
