@@ -222,36 +222,28 @@
   100% { transform: rotate(360deg); }
 }
 
-/* ==========================
-   MOBILE ADJUSTMENTS
-=========================== */
+/* =========================
+   MOBILE STYLING (like Transaction History)
+========================= */
 @media (max-width: 640px) {
-  .refund-btn {
-    width: 100%;
-    margin-top: 8px;
-    font-size: 13px;
-    padding: 10px 0;
-  }
-}
-
-@media (max-width: 640px) {
-   .order-history-page {
-    padding: 0; /* remove side padding */
+  .order-history-page {
+    padding: 0;
   }
 
   .order-history-card {
     width: 100%;
     max-width: 100%;
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   }
 
-  /* Hide table header */
+  /* Hide table headers */
   .order-history-table thead {
     display: none;
   }
 
-  /* Make table behave like stacked cards */
+  /* Make table block on mobile */
   .order-history-table,
   .order-history-table tbody,
   .order-history-table tr,
@@ -261,32 +253,62 @@
   }
 
   .order-history-table tr {
-    background: #ffffff;
+    background: #fff;
     margin-bottom: 12px;
     padding: 12px;
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
   }
 
+  /* Flex layout for td to prevent cramped content */
   .order-history-table td {
-    border: none;
-    padding: 6px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    padding: 6px 10px;
     font-size: 13px;
+    border: none;
+    position: relative;
+    flex-wrap: wrap;
   }
 
-  /* Add labels above each value */
   .order-history-table td::before {
     content: attr(data-label);
-    display: block;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
-    color: #6b7280;
-    margin-bottom: 3px;
     text-transform: uppercase;
+    color: #6b7280;
+    min-width: 90px;
+    margin-right: 10px;
   }
 
+  /* Adjust badges */
+  .status-badge {
+    margin-left: 10px;
+    margin-top: 3px;
+    float: none;
+  }
+
+  /* Buttons full-width & spacing */
+  .refund-btn,
   .resend-btn {
     width: 100%;
     margin-top: 8px;
+  }
+
+  /* Pagination fixes */
+  .pagination {
+    flex-direction: row;
+    justify-content: center;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 5px;
+  }
+
+  .pagination button {
+    padding: 4px 8px;
+    font-size: 13px;
   }
 }
