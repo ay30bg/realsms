@@ -117,13 +117,13 @@
 }
 
 .tx-badge.pending {
-  background: #fff7ed; /* light orange */
-  color: #b45309;      /* dark orange */
+  background: #f59e0b; 
+  color: #fff;     
 }
 
 .tx-badge.failed {
-  background: #fee2e2; /* light red */
-  color: #991b1b;      /* dark red */
+  background: #dc2626; /* light red */
+  color: #fff;      /* dark red */
 }
 
 /* SPINNER */
