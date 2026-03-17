@@ -112,8 +112,8 @@
    STATUS BADGES
 ========================== */
 .tx-badge.success {
-  background: #d1fae5; /* light green */
-  color: #065f46;      /* dark green */
+  background: ##16a34a; 
+  color: #fff;
 }
 
 .tx-badge.pending {
@@ -122,8 +122,8 @@
 }
 
 .tx-badge.failed {
-  background: #dc2626; /* light red */
-  color: #fff;      /* dark red */
+  background: #dc2626;
+  color: #fff;   
 }
 
 /* SPINNER */
