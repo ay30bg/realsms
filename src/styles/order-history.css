@@ -298,7 +298,7 @@
   ======================== */
   .order-history-table td[data-label="Action"] {
     display: flex;
-    justify-content: flex-estart
+    justify-content: flex-start;
     gap: 6px;
     flex-wrap: wrap;
     padding-top: 8px;
