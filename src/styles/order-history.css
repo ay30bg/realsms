@@ -223,8 +223,7 @@
 }
 
 /* =========================
-   NUMBER HISTORY MOBILE STYLING
-   Full responsive, like Transaction History + admin-table buttons
+   MOBILE STYLING (like Transaction History)
 ========================= */
 @media (max-width: 640px) {
   .order-history-page {
@@ -285,67 +284,18 @@
     margin-right: 10px;
   }
 
-  /* Status badges */
+  /* Adjust badges */
   .status-badge {
     margin-left: 10px;
     margin-top: 3px;
     float: none;
   }
 
-  /* =========================
-     Action Buttons (Refund / Resend)
-     Styled like admin-table
-  ======================== */
-  .order-history-table td[data-label="Action"] {
-    display: flex;
-    justify-content: flex-end;
-    gap: 6px;
-    flex-wrap: wrap;
-    padding-top: 8px;
-  }
-
+  /* Buttons full-width & spacing */
   .refund-btn,
   .resend-btn {
-    padding: 4px 10px;
-    font-size: 12px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    min-width: 80px;
-    text-align: center;
-    white-space: nowrap;
-    flex: 0 0 auto; /* prevent shrinking */
-  }
-
-  .refund-btn {
-    background: #ef4444; /* red */
-    color: #fff;
-  }
-
-  .refund-btn:hover:not(:disabled) {
-    background: #b91c1c;
-    transform: translateY(-1px);
-  }
-
-  .refund-btn:disabled {
-    background: #fca5a5;
-    cursor: not-allowed;
-  }
-
-  .resend-btn {
-    background: #2563eb; /* blue */
-    color: #fff;
-  }
-
-  .resend-btn:hover:not(:disabled) {
-    background: #1e40af;
-    transform: translateY(-1px);
-  }
-
-  .resend-btn:disabled {
-    background: #9ca3af;
-    cursor: not-allowed;
+    width: 100%;
+    margin-top: 8px;
   }
 
   /* Pagination fixes */
@@ -358,22 +308,7 @@
   }
 
   .pagination button {
-    flex: 0 0 auto; /* prevent shrinking */
     padding: 4px 8px;
     font-size: 13px;
-    white-space: nowrap;
-  }
-
-  /* Filter select adjustments */
-  .order-filter select {
-    width: 100%;
-    margin-bottom: 12px;
-  }
-
-  /* OTP & status alignment */
-  .otp-success,
-  .otp-waiting {
-    margin-left: 10px;
   }
 }
-
