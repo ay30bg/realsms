@@ -172,8 +172,37 @@
 }
 
 .order-filter select {
-  padding: 6px 10px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  background-color: #fff;
+  border: 1px solid #d1d5db;
   border-radius: 6px;
+
+  padding: 8px 12px;
+  font-size: 14px;
+  color: #111827;
+
+  outline: none;
+  cursor: pointer;
+
+  /* Custom dropdown arrow */
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0L5 6L10 0H0Z' fill='%236B7280'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 10px 6px;
+}
+
+/* Focus effect (same as transaction page) */
+.order-filter select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+/* Hide default arrow for IE */
+.order-filter select::-ms-expand {
+  display: none;
 }
 
 .pagination {
