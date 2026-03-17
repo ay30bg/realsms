@@ -69,6 +69,10 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
             <FiClock className="sidebar-icon" /> <span>Number History</span>
           </NavLink>
 
+           <NavLink to="/transaction-history" onClick={toggleSidebar}>
+            <FiClock className="sidebar-icon" /> <span>Transaction History</span>
+          </NavLink>
+
           <NavLink to="/fund-wallet" onClick={toggleSidebar}>
             <FiPlusCircle className="sidebar-icon" /> <span>Fund Wallet</span>
           </NavLink>
