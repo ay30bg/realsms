@@ -304,19 +304,20 @@
     padding-top: 8px;
   }
 
-  .refund-btn,
-  .resend-btn {
-    padding: 4px 10px;
-    font-size: 12px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    min-width: 80px;
-    text-align: center;
-    white-space: nowrap;
-    flex: 0 0 auto; /* prevent shrinking */
-  }
+.refund-btn,
+.resend-btn {
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px;
+  text-align: center;
+  white-space: nowrap;
+  flex: 0 0 auto;
+  margin-left: auto; 
+}
 
   .refund-btn {
     background: #ef4444; /* red */
