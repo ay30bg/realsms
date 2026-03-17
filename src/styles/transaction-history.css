@@ -134,6 +134,16 @@
 /* MOBILE */
 
 @media (max-width: 640px) {
+   .transaction-page {
+    padding: 0; 
+  }
+
+  .transaction-card {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 8px; /* optional: makes it edge-to-edge */
+    padding: 16px;
+  }
 
   .transaction-table thead {
     display: none;
