@@ -235,15 +235,6 @@
 }
 
 @media (max-width: 640px) {
-  /* .order-history-page {
-    padding: 10px;
-  }
-
-  .order-history-card {
-    padding: 15px;
-    border-radius: 8px;
-  } */
-
    .order-history-page {
     padding: 0; /* remove side padding */
   }
@@ -299,11 +290,3 @@
     margin-top: 8px;
   }
 }
-
-
-
-
-
-
-
-
