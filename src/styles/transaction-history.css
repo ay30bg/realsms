@@ -108,6 +108,24 @@
   cursor: pointer;
 }
 
+/* ==========================
+   STATUS BADGES
+========================== */
+.tx-badge.success {
+  background: #d1fae5; /* light green */
+  color: #065f46;      /* dark green */
+}
+
+.tx-badge.pending {
+  background: #fff7ed; /* light orange */
+  color: #b45309;      /* dark orange */
+}
+
+.tx-badge.failed {
+  background: #fee2e2; /* light red */
+  color: #991b1b;      /* dark red */
+}
+
 /* SPINNER */
 
 .loading-spinner {
