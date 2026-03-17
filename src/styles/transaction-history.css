@@ -169,7 +169,7 @@
     width: 100%;
     border-collapse: collapse;
     display: block;
-    overflow-x: auto; /* horizontal scroll if needed */
+    overflow-x: auto;
     white-space: nowrap;
   }
 
@@ -205,18 +205,12 @@
     text-overflow: ellipsis;
   }
 
-  /* Reference / Value cell fix */
   .transaction-table td .value {
-    flex: 1 1 65%; /* allow shrinking */
+    flex: 1 1 auto;
     text-align: right;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-  }
-
-  /* Tooltip on hover */
-  .transaction-table td .value:hover {
-    cursor: pointer;
   }
 
   .tx-badge {
@@ -244,7 +238,6 @@
     color: #fff;
   }
 
-  /* Pagination */
   .pagination {
     display: flex;
     justify-content: center;
