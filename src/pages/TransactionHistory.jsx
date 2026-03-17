@@ -237,10 +237,10 @@ const TransactionHistory = ({ darkMode }) => {
               setCurrentPage(1);
             }}
           >
-            <option value="all">All Statuses</option>
-            <option value="success">Success</option>
-            <option value="pending">Pending</option>
-            <option value="failed">Failed</option>
+            <option value="all">ALL</option>
+            <option value="success">SUCCESS</option>
+            <option value="pending">PENDING</option>
+            <option value="failed">FAILED</option>
           </select>
         </div>
 
