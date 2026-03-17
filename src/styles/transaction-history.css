@@ -149,20 +149,19 @@
   100% { transform: rotate(360deg);}
 }
 
-/* MOBILE */
-
 @media (max-width: 640px) {
-   .transaction-page {
-    padding: 0; 
+  .transaction-page {
+    padding: 10px;
   }
 
   .transaction-card {
     width: 100%;
-    max-width: 100%;
-    border-radius: 8px; /* optional: makes it edge-to-edge */
+    border-radius: 10px;
     padding: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   }
 
+  /* Make table block on mobile */
   .transaction-table thead {
     display: none;
   }
@@ -176,26 +175,52 @@
   }
 
   .transaction-table tr {
-    background: #fff;
     margin-bottom: 12px;
     padding: 12px;
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
   }
 
   .transaction-table td {
+    text-align: right;
+    padding: 6px 10px;
     border: none;
-    padding: 6px 0;
+    position: relative;
     font-size: 13px;
   }
 
   .transaction-table td::before {
     content: attr(data-label);
-    display: block;
-    font-size: 11px;
+    position: absolute;
+    left: 10px;
     font-weight: 600;
     color: #6b7280;
-    margin-bottom: 3px;
     text-transform: uppercase;
+    text-align: left;
+    font-size: 12px;
+  }
+
+  /* Make badges aligned right */
+  .tx-badge {
+    float: right;
+    padding: 3px 8px;
+    font-size: 11px;
+  }
+
+  /* Pagination tweaks */
+  .pagination {
+    flex-direction: row;
+    justify-content: center;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 5px;
+  }
+
+  .pagination button {
+    padding: 4px 8px;
+    font-size: 13px;
   }
 }
+
