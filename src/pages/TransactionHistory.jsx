@@ -270,11 +270,11 @@ const TransactionHistory = ({ darkMode }) => {
                         {tx.reference || tx.transactionId || tx._id}
                       </td>
 
-                      <td data-label="Payment Method">
-                        <span className={`tx-badge ${tx.paymentMethod}`}>
-                          {tx.paymentMethod || "wallet"}
-                        </span>
-                      </td>
+                     <td data-label="Payment Method">
+  <span className={`tx-badge ${tx.provider?.toLowerCase()}`}>
+    {tx.provider?.toUpperCase()}
+  </span>
+</td>
 
                       <td data-label="Amount">
                         ₦{tx.amount?.toLocaleString()}
