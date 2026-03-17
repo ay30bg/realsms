@@ -1,0 +1,173 @@
+/* PAGE */
+.transaction-page {
+  padding: 20px;
+}
+
+/* CARD */
+.transaction-card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+/* TITLE */
+.transaction-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+/* FILTER */
+.transaction-filter {
+  margin-bottom: 15px;
+}
+
+.transaction-filter select {
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+/* TABLE */
+.transaction-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.transaction-table th {
+  background: #f3f4f6;
+  padding: 12px;
+  text-align: left;
+  font-size: 13px;
+  text-transform: uppercase;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.transaction-table td {
+  padding: 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.transaction-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+/* BADGES */
+
+.tx-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.tx-badge.deposit {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.tx-badge.purchase {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.tx-badge.refund {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.tx-badge.deduction {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.tx-badge.completed {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+/* EMPTY */
+.no-transactions {
+  text-align: center;
+  color: #6b7280;
+}
+
+/* PAGINATION */
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* SPINNER */
+
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80px 0;
+}
+
+.spinner {
+  border: 4px solid rgba(0,0,0,0.1);
+  border-top: 4px solid #367e3a;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg);}
+  100% { transform: rotate(360deg);}
+}
+
+/* MOBILE */
+
+@media (max-width: 640px) {
+
+  .transaction-table thead {
+    display: none;
+  }
+
+  .transaction-table,
+  .transaction-table tbody,
+  .transaction-table tr,
+  .transaction-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .transaction-table tr {
+    background: #fff;
+    margin-bottom: 12px;
+    padding: 12px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+
+  .transaction-table td {
+    border: none;
+    padding: 6px 0;
+    font-size: 13px;
+  }
+
+  .transaction-table td::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: #6b7280;
+    margin-bottom: 3px;
+    text-transform: uppercase;
+  }
+}
