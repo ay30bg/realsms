@@ -189,28 +189,19 @@
   .transaction-table td {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     padding: 6px 0;
     font-size: 14px;
     border-bottom: 1px solid #f1f5f9;
+    position: relative;
   }
 
   .transaction-table td::before {
-    flex: 0 0 35%;
+    content: attr(data-label);
     font-weight: 600;
     color: #6b7280;
     text-transform: uppercase;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-
-  .transaction-table td .value {
-    flex: 1 1 auto;
-    text-align: right;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    margin-right: 8px;
+    flex: 1 0 auto;
   }
 
   .tx-badge {
@@ -267,4 +258,3 @@
     cursor: not-allowed;
   }
 }
-
