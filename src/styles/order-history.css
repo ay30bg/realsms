@@ -242,7 +242,7 @@
   .order-history-card {
     width: 100%;
     max-width: 100%;
-    border-radius: 8px; /* optional: makes it edge-to-edge */
+    border-radius: 8px;
     padding: 16px;
   }
 
