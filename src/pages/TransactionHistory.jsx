@@ -105,12 +105,17 @@ const TransactionHistory = ({ darkMode }) => {
                     <tr key={tx._id}>
                       <td data-label="Date">{formatDate(tx.createdAt)}</td>
 
-                      <td data-label="Reference">
-  <span className="value" title={tx.reference || tx.transactionId || tx._id}>
-    {tx.reference || tx.transactionId || tx._id}
+                     <td data-label="Reference">
+  <span
+    className="value"
+    title={tx.reference || tx.transactionId || tx._id}
+  >
+    {(tx.reference || tx.transactionId || tx._id)?.length > 10
+      ? (tx.reference || tx.transactionId || tx._id).slice(0, 10) + "..."
+      : tx.reference || tx.transactionId || tx._id}
   </span>
 </td>
-
+                      
                      <td data-label="Payment Method">
   <span className={`tx-badge ${tx.provider?.toLowerCase()}`}>
     {tx.provider?.toUpperCase()}
