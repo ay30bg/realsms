@@ -149,6 +149,9 @@
   100% { transform: rotate(360deg);}
 }
 
+/* =========================
+   MOBILE STYLING
+========================= */
 @media (max-width: 640px) {
   .transaction-page {
     padding: 10px;
@@ -161,11 +164,12 @@
     box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   }
 
-  /* Make table block on mobile */
+  /* Hide table headers */
   .transaction-table thead {
     display: none;
   }
 
+  /* Make table block on mobile */
   .transaction-table,
   .transaction-table tbody,
   .transaction-table tr,
@@ -175,41 +179,54 @@
   }
 
   .transaction-table tr {
+    background: #fff;
     margin-bottom: 12px;
     padding: 12px;
     border-radius: 10px;
     border: 1px solid #e5e7eb;
-    background: #fff;
     box-shadow: 0 2px 6px rgba(0,0,0,0.04);
   }
 
+  /* Flex layout for td to prevent jampacked content */
   .transaction-table td {
-    text-align: right;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
     padding: 6px 10px;
+    font-size: 13px;
     border: none;
     position: relative;
-    font-size: 13px;
+    flex-wrap: wrap;
   }
 
   .transaction-table td::before {
     content: attr(data-label);
-    position: absolute;
-    left: 10px;
-    font-weight: 600;
-    color: #6b7280;
-    text-transform: uppercase;
-    text-align: left;
     font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #6b7280;
+    min-width: 90px;
+    margin-right: 10px;
   }
 
-  /* Make badges aligned right */
+  /* Wrap badges properly */
   .tx-badge {
-    float: right;
-    padding: 3px 8px;
-    font-size: 11px;
+    margin-left: 10px;
+    margin-top: 3px;
+    float: none;
   }
 
-  /* Pagination tweaks */
+  /* Truncate reference */
+  .transaction-table td[data-label="Reference"] .value {
+    display: inline-block;
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Pagination fixes */
   .pagination {
     flex-direction: row;
     justify-content: center;
@@ -223,4 +240,3 @@
     font-size: 13px;
   }
 }
-
