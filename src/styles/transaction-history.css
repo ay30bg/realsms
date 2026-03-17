@@ -23,9 +23,38 @@
   margin-bottom: 15px;
 }
 
-.transaction-filter select {
+/* .transaction-filter select {
   padding: 6px 10px;
   border-radius: 6px;
+} */
+
+.transaction-filter select {
+  appearance: none;          /* Remove default styling */
+  -webkit-appearance: none;  /* Safari & Chrome */
+  -moz-appearance: none;     /* Firefox */
+  background-color: #fff;    /* White background */
+  border: 1px solid #d1d5db;/* Gray border */
+  border-radius: 6px;        /* Rounded corners */
+  padding: 8px 12px;         /* More consistent padding */
+  font-size: 14px;
+  color: #111827;
+  outline: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0L5 6L10 0H0Z' fill='%236B7280'/%3E%3C/svg%3E"); /* Custom arrow */
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 10px 6px;
+}
+
+/* Focus style */
+.transaction-filter select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+/* Optional: hide arrow for IE 10+ */
+select::-ms-expand {
+  display: none;
 }
 
 /* TABLE */
