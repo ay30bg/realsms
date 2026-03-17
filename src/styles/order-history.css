@@ -365,12 +365,6 @@
     white-space: nowrap;
   }
 
-  /* Filter select adjustments */
-  .order-filter select {
-    width: 100%;
-    margin-bottom: 12px;
-  }
-
   /* OTP & status alignment */
   .otp-success,
   .otp-waiting {
