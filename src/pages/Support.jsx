@@ -103,7 +103,7 @@ const UserSupport = () => {
           <button onClick={handleSend} disabled={loading}>{loading ? "Sending..." : "Send"}</button>
         </div>
 
-        <a href="https://t.me/real6ixsms" target="_blank" rel="noopener noreferrer" className="telegram-float">
+        <a href="https://t.me/realsms_store" target="_blank" rel="noopener noreferrer" className="telegram-float">
           <FaTelegramPlane />
         </a>
       </div>
