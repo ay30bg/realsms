@@ -120,7 +120,7 @@ const Dashboard = ({ darkMode }) => {
                 rel="noopener noreferrer"
                 className="notice-highlight notice-link"
               >
-                @real6ixsms
+                @realsms_store
               </a>
             </p>
 
