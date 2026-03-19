@@ -115,7 +115,7 @@ const Dashboard = ({ darkMode }) => {
 
             <p>
               <a
-                href="https://t.me/real6ixsms"
+                href="https://t.me/realsms_store"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="notice-highlight notice-link"
@@ -135,7 +135,7 @@ const Dashboard = ({ darkMode }) => {
                 rel="noopener noreferrer"
                 className="notice-link"
               >
-                https://t.me/real_6ixsms
+                https://t.me/realsms_store
               </a>
             </p>
 
