@@ -130,7 +130,7 @@ const Dashboard = ({ darkMode }) => {
               Our only official channel:
               <br />
               <a
-                href="https://t.me/real_6ixsms"
+                href="https://t.me/realsms_store"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="notice-link"
