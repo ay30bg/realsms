@@ -11,6 +11,7 @@ import Layout from "./components/Layout";
 // Pages
 import Dashboard from "./pages/Dashboard";
 import BuyNumbers from "./pages/BuyNumbers";
+import PurchaseLogs from "./pages/PurchaseLogs";
 import ActiveOrder from "./pages/ActiveOrder";
 import OrderHistory from "./pages/OrderHistory";
 import TransactionHistory from "./pages/TransactionHistory";
@@ -52,6 +53,7 @@ function App() {
                 <Routes>
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/buy-numbers" element={<BuyNumbers />} />
+                  <Route path="/purchase-logs" element={<PurchaseLogs />} />
                   <Route path="/active-orders" element={<ActiveOrder />} />
                   <Route path="/order-history" element={<OrderHistory />} />
                   <Route path="/transaction-history" element={<TransactionHistory />} />
