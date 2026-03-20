@@ -1,7 +1,7 @@
 // components/UserSidebar.jsx
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { FiHome, FiShoppingCart, FiClock, FiCreditCard, FiPlusCircle, FiHeadphones } from "react-icons/fi";
+import { FiHome, FiShoppingCart, FiMessageCircle, FiClock, FiCreditCard, FiPlusCircle, FiHeadphones } from "react-icons/fi";
 import "../styles/sidebar.css";
 import logo from "../assets/logo.png";
 import { useUnread } from "../context/UnreadContext";
@@ -66,7 +66,7 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
           </NavLink>
 
            <NavLink to="/purchase-logs" onClick={toggleSidebar}>
-            <FiShoppingCart className="sidebar-icon" /> <span>Purchase Logs</span>
+            <FiMessageCircle className="sidebar-icon" /> <span>Purchase Logs</span>
           </NavLink>
 
           <NavLink to="/order-history" onClick={toggleSidebar}>
