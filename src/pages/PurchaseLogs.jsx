@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { FiShoppingBag, FiClock } from "react-icons/fi";
-import "../styles/coming-soon.css";
+import "../styles/purchase-logs.css";
 
 const PurchaseLogs = () => {
   useEffect(() => {
