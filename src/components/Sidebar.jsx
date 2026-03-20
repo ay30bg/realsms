@@ -65,6 +65,10 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
             <FiShoppingCart className="sidebar-icon" /> <span>Buy Numbers</span>
           </NavLink>
 
+           <NavLink to="/purchase-logs" onClick={toggleSidebar}>
+            <FiShoppingCart className="sidebar-icon" /> <span>Purchase Logs</span>
+          </NavLink>
+
           <NavLink to="/order-history" onClick={toggleSidebar}>
             <FiClock className="sidebar-icon" /> <span>Number History</span>
           </NavLink>
