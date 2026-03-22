@@ -42,72 +42,44 @@
 
 // export default PurchaseLogs;
 
+// pages/PurchaseLogs.jsx
 import React, { useState, useEffect } from "react";
 import { FiSearch, FiCopy } from "react-icons/fi";
-import SocialCard from "../components/SocialCard";
-import "../styles/marketplace.css";
+import "../styles/purchase-logs.css";
 
-const MOCK_CATEGORIES = [
-  { id: 1, name: "Instagram" },
-  { id: 2, name: "Twitter" },
-  { id: 3, name: "TikTok" },
-];
-
-const MOCK_LISTINGS = [
-  {
-    id: 1,
-    title: "Insta Account 10k Followers",
-    platform: "Instagram",
-    price: 5000,
-    details: "Username: insta_10k | Pass: 1234",
-    categoryId: 1,
-  },
-  {
-    id: 2,
-    title: "Twitter Account 5k Followers",
-    platform: "Twitter",
-    price: 3000,
-    details: "Username: twitter_5k | Pass: 5678",
-    categoryId: 2,
-  },
-  {
-    id: 3,
-    title: "TikTok Account 20k Followers",
-    platform: "TikTok",
-    price: 7000,
-    details: "Username: tiktok_20k | Pass: abcd",
-    categoryId: 3,
-  },
-];
-
-const SocialMarketplace = ({ darkMode }) => {
-  const [categories] = useState(MOCK_CATEGORIES);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [listings, setListings] = useState([]);
+const PurchaseLogs = ({ darkMode }) => {
+  const [logs, setLogs] = useState([]);
   const [search, setSearch] = useState("");
-  const [activePurchase, setActivePurchase] = useState(null);
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    document.title = "Social Marketplace";
+    document.title = "Purchase Logs - RealSMS";
+
+    // Mocked purchase logs
+    setLogs([
+      {
+        id: 1,
+        platform: "Instagram",
+        username: "@john_doe",
+        createdAt: "2026-03-21T12:45:00Z",
+        amount: 500,
+      },
+      {
+        id: 2,
+        platform: "Twitter",
+        username: "@janedoe",
+        createdAt: "2026-03-20T09:30:00Z",
+        amount: 300,
+      },
+      {
+        id: 3,
+        platform: "Facebook",
+        username: "@alex_smith",
+        createdAt: "2026-03-19T18:15:00Z",
+        amount: 200,
+      },
+    ]);
   }, []);
-
-  const handleCategoryChange = (e) => {
-    const categoryId = parseInt(e.target.value);
-    const category = categories.find((c) => c.id === categoryId) || null;
-    setSelectedCategory(category);
-    setActivePurchase(null);
-    setSearch("");
-    setListings(MOCK_LISTINGS.filter((l) => l.categoryId === categoryId));
-  };
-
-  const handlePurchase = (listing) => {
-    setActivePurchase(listing);
-  };
-
-  const filteredListings = listings.filter((l) =>
-    l.title.toLowerCase().includes(search.toLowerCase())
-  );
 
   useEffect(() => {
     if (!copied) return;
@@ -115,74 +87,69 @@ const SocialMarketplace = ({ darkMode }) => {
     return () => clearTimeout(t);
   }, [copied]);
 
+  const filteredLogs = logs.filter(
+    (log) =>
+      log.username.toLowerCase().includes(search.toLowerCase()) ||
+      log.platform.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
-    <div className={`sm-marketplace ${darkMode ? "sm-dark" : ""}`}>
-      <div className="sm-container">
-        <h2 className="sm-title">Social Media Marketplace</h2>
+    <div className={`purchase-logs ${darkMode ? "dark" : ""}`}>
+      <div className="logs-card">
+        <h2>Social Media Purchase Logs</h2>
 
-        <select
-          className="sm-category-select"
-          value={selectedCategory?.id || ""}
-          onChange={handleCategoryChange}
-        >
-          <option value="">Select Category</option>
-          {categories.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
-          ))}
-        </select>
-
-        <div className="sm-search-container">
+        <div className="search-container">
           <input
             type="text"
-            placeholder="Search listings"
-            className="sm-search-input"
+            placeholder="Search by username or platform"
+            className="search-input"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            disabled={!selectedCategory}
           />
-          <FiSearch className="sm-search-icon" />
+          <FiSearch className="search-icon" />
         </div>
 
-        {selectedCategory && (
-          <div className="sm-listings-wrapper">
-            {filteredListings.length === 0 ? (
-              <p className="sm-empty">No listings available</p>
-            ) : (
-              <div className="sm-listings-grid">
-                {filteredListings.map((listing) => (
-                  <SocialCard
-                    key={listing.id}
-                    listing={listing}
-                    onPurchase={handlePurchase}
-                    classNamePrefix="sm-card"
-                  />
+        <div className="logs-container">
+          {filteredLogs.length === 0 ? (
+            <p className="empty">No purchase logs found</p>
+          ) : (
+            <table className="logs-table">
+              <thead>
+                <tr>
+                  <th>Platform</th>
+                  <th>Username</th>
+                  <th>Purchased At</th>
+                  <th>Amount (NGN)</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredLogs.map((log) => (
+                  <tr key={log.id}>
+                    <td>{log.platform}</td>
+                    <td>{log.username}</td>
+                    <td>{new Date(log.createdAt).toLocaleString()}</td>
+                    <td>{log.amount}</td>
+                    <td>
+                      <FiCopy
+                        onClick={() => {
+                          navigator.clipboard.writeText(log.username);
+                          setCopied(true);
+                        }}
+                        style={{ cursor: "pointer" }}
+                      />
+                    </td>
+                  </tr>
                 ))}
-              </div>
-            )}
-          </div>
-        )}
+              </tbody>
+            </table>
+          )}
+        </div>
 
-        {activePurchase && (
-          <div className="sm-purchase-box">
-            <h3 className="sm-purchase-title">{activePurchase.title}</h3>
-            <p className="sm-purchase-details">
-              <strong>Account Details:</strong> {activePurchase.details}
-              <FiCopy
-                onClick={() => {
-                  navigator.clipboard.writeText(activePurchase.details);
-                  setCopied(true);
-                }}
-                style={{ cursor: "pointer", marginLeft: 8 }}
-              />
-            </p>
-            {copied && <span className="sm-copied">Copied!</span>}
-          </div>
-        )}
+        {copied && <p className="copied-msg">Copied to clipboard!</p>}
       </div>
     </div>
   );
 };
 
-export default SocialMarketplace;
+export default PurchaseLogs;
