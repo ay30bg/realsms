@@ -57,27 +57,9 @@ const PurchaseLogs = ({ darkMode }) => {
 
     // Mocked purchase logs
     setLogs([
-      {
-        id: 1,
-        platform: "Instagram",
-        username: "@john_doe",
-        createdAt: "2026-03-21T12:45:00Z",
-        amount: 500,
-      },
-      {
-        id: 2,
-        platform: "Twitter",
-        username: "@janedoe",
-        createdAt: "2026-03-20T09:30:00Z",
-        amount: 300,
-      },
-      {
-        id: 3,
-        platform: "Facebook",
-        username: "@alex_smith",
-        createdAt: "2026-03-19T18:15:00Z",
-        amount: 200,
-      },
+      { id: 1, platform: "Instagram", username: "@john_doe", purchasedAt: "2026-03-21T12:45:00Z", amount: 500 },
+      { id: 2, platform: "Twitter", username: "@janedoe", purchasedAt: "2026-03-20T09:30:00Z", amount: 300 },
+      { id: 3, platform: "Facebook", username: "@alex_smith", purchasedAt: "2026-03-19T18:15:00Z", amount: 200 },
     ]);
   }, []);
 
@@ -120,7 +102,7 @@ const PurchaseLogs = ({ darkMode }) => {
                   <th>Username</th>
                   <th>Purchased At</th>
                   <th>Amount (NGN)</th>
-                  <th>Actions</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -128,7 +110,7 @@ const PurchaseLogs = ({ darkMode }) => {
                   <tr key={log.id}>
                     <td>{log.platform}</td>
                     <td>{log.username}</td>
-                    <td>{new Date(log.createdAt).toLocaleString()}</td>
+                    <td>{new Date(log.purchasedAt).toLocaleString()}</td>
                     <td>{log.amount}</td>
                     <td>
                       <FiCopy
