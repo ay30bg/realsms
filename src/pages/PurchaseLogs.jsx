@@ -98,9 +98,7 @@ const SocialMarketplace = ({ darkMode }) => {
     setSelectedCategory(category);
     setActivePurchase(null);
     setSearch("");
-    setListings(
-      MOCK_LISTINGS.filter((l) => l.categoryId === categoryId)
-    );
+    setListings(MOCK_LISTINGS.filter((l) => l.categoryId === categoryId));
   };
 
   const handlePurchase = (listing) => {
@@ -118,12 +116,12 @@ const SocialMarketplace = ({ darkMode }) => {
   }, [copied]);
 
   return (
-    <div className={`marketplace ${darkMode ? "dark" : ""}`}>
-      <div className="marketplace-card">
-        <h2>Social Media Marketplace</h2>
+    <div className={`sm-marketplace ${darkMode ? "sm-dark" : ""}`}>
+      <div className="sm-container">
+        <h2 className="sm-title">Social Media Marketplace</h2>
 
         <select
-          className="category-select"
+          className="sm-category-select"
           value={selectedCategory?.id || ""}
           onChange={handleCategoryChange}
         >
@@ -135,29 +133,30 @@ const SocialMarketplace = ({ darkMode }) => {
           ))}
         </select>
 
-        <div className="search-container">
+        <div className="sm-search-container">
           <input
             type="text"
             placeholder="Search listings"
-            className="search-input"
+            className="sm-search-input"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             disabled={!selectedCategory}
           />
-          <FiSearch className="search-icon" />
+          <FiSearch className="sm-search-icon" />
         </div>
 
         {selectedCategory && (
-          <div className="listings-container">
+          <div className="sm-listings-wrapper">
             {filteredListings.length === 0 ? (
-              <p className="empty">No listings available</p>
+              <p className="sm-empty">No listings available</p>
             ) : (
-              <div className="listings-grid">
+              <div className="sm-listings-grid">
                 {filteredListings.map((listing) => (
                   <SocialCard
                     key={listing.id}
                     listing={listing}
                     onPurchase={handlePurchase}
+                    classNamePrefix="sm-card"
                   />
                 ))}
               </div>
@@ -166,9 +165,9 @@ const SocialMarketplace = ({ darkMode }) => {
         )}
 
         {activePurchase && (
-          <div className="account-box">
-            <h3>{activePurchase.title}</h3>
-            <p>
+          <div className="sm-purchase-box">
+            <h3 className="sm-purchase-title">{activePurchase.title}</h3>
+            <p className="sm-purchase-details">
               <strong>Account Details:</strong> {activePurchase.details}
               <FiCopy
                 onClick={() => {
@@ -178,7 +177,7 @@ const SocialMarketplace = ({ darkMode }) => {
                 style={{ cursor: "pointer", marginLeft: 8 }}
               />
             </p>
-            {copied && <span className="copied">Copied!</span>}
+            {copied && <span className="sm-copied">Copied!</span>}
           </div>
         )}
       </div>
