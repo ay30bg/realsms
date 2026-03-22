@@ -59,27 +59,40 @@
 /* =====================
    ROOT / WRAPPER
 ===================== */
-.marketplace {
+.sm-marketplace {
   padding: 20px;
 }
 
-.marketplace-card{
+.sm-marketplace.sm-dark {
+  background-color: #1a1a1a;
+  color: #eee;
+}
+
+.sm-container {
   background-color: #fff;
   padding: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
   border-radius: 6px;
 }
 
-.marketplace-card h2{
+.sm-marketplace.sm-dark .sm-container {
+  background-color: #2a2a2a;
+}
+
+/* =====================
+   TITLE
+===================== */
+.sm-title {
   font-size: 22px;
   font-weight: 700;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 /* =====================
    CATEGORY SELECT
 ===================== */
-.category-select {
+.sm-category-select {
   width: 100%;
   padding: 12px 14px;
   padding-right: 40px;
@@ -99,13 +112,13 @@
   background-size: 16px;
 }
 
-.category-select option {
+.sm-category-select option {
   background-color: #fff; 
   color: #000;              
   font-weight: lighter;
 }
 
-.category-select:focus {
+.sm-category-select:focus {
   outline: none;
   border-color: #367e3a;
   box-shadow: 0 0 0 2px #EAF2EB;
@@ -114,30 +127,28 @@
 /* =====================
    SEARCH
 ===================== */
-.search-input {
-  width: 100%;
-  padding: 12px;
-  border-radius: 6px;
-  border: 1px solid #e5e7eb;
-  margin: 16px 0;
-  font-size: 15px;
-}
-
-.search-input:focus {
-  outline: none;
-  border-color: #367e3a;
-  box-shadow: 0 0 0 2px #EAF2EB;
-}
-
-/* SEARCH INPUT WITH ICON */
-.search-container {
+.sm-search-container {
   position: relative;
   display: inline-block;
   width: 100%;
   margin: 15px 0;
 }
 
-.search-icon {
+.sm-search-input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  font-size: 15px;
+}
+
+.sm-search-input:focus {
+  outline: none;
+  border-color: #367e3a;
+  box-shadow: 0 0 0 2px #EAF2EB;
+}
+
+.sm-search-icon {
   position: absolute;
   right: 12px;
   top: 50%;
@@ -150,15 +161,27 @@
 /* =====================
    LISTINGS GRID
 ===================== */
-.listings-grid {
+.sm-listings-wrapper {
+  min-height: 200px;
+  margin-top: 20px;
+}
+
+.sm-listings-grid {
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 14px;
+}
+
+.sm-empty {
+  text-align: center;
+  color: #6B7280;
+  padding: 20px 0;
 }
 
 /* =====================
    SOCIAL CARD
 ===================== */
-.social-card {
+.sm-card {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -169,41 +192,50 @@
   transition: transform .15s ease, box-shadow .15s ease;
 }
 
-.social-card:active {
+.sm-marketplace.sm-dark .sm-card {
+  background: #333;
+  border: 1px solid #555;
+}
+
+.sm-card:active {
   transform: scale(0.98);
 }
 
-.social-card.disabled {
+.sm-card.disabled {
   opacity: 0.6;
 }
 
-.card-left {
+.sm-card-left {
   display: flex;
   flex-direction: column;
 }
 
-.card-left h4 {
+.sm-card-left h4 {
   margin: 0;
   font-size: 15px;
 }
 
-.card-left .platform {
+.sm-card-left .sm-platform {
   font-size: 13px;
   color: #367e3a;
 }
 
-.card-right {
+.sm-marketplace.sm-dark .sm-card-left .sm-platform {
+  color: #9CA3AF;
+}
+
+.sm-card-right {
   text-align: right;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.price {
+.sm-card-right .sm-price {
   font-weight: bold;
 }
 
-.social-card button {
+.sm-card-right button {
   background: #367e3a;
   color: #fff;
   border: none;
@@ -213,24 +245,15 @@
   font-size: 14px;
 }
 
-.social-card button:disabled {
+.sm-card-right button:disabled {
   background: #9CA3AF;
   cursor: not-allowed;
 }
 
 /* =====================
-   EMPTY STATE
-===================== */
-.empty {
-  text-align: center;
-  color: #6B7280;
-  padding: 20px 0;
-}
-
-/* =====================
    PURCHASE BOX
 ===================== */
-.account-box {
+.sm-purchase-box {
   position: fixed;
   bottom: 20px;
   right: 20px;
@@ -243,66 +266,71 @@
   transition: all 0.3s ease;
 }
 
-.account-box h3 {
+.sm-marketplace.sm-dark .sm-purchase-box {
+  background: #2a2a2a;
+  color: #eee;
+}
+
+.sm-purchase-title {
   margin-bottom: 10px;
 }
 
-.account-box p {
+.sm-purchase-details {
   display: flex;
   justify-content: space-between;
   align-items: center;
   word-break: break-word;
 }
 
-.copy-btn {
-  background: #367e3a;
-  color: #fff;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  width: 100%;
-  margin-top: 8px;
+.sm-copied {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: #4caf50;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
 }
 
 /* =====================
    MOBILE VIEW
 ===================== */
 @media (max-width: 768px) {
-  .marketplace {
+  .sm-marketplace {
     padding: 10px;
   }
 
-  .marketplace-card {
+  .sm-container {
     padding: 16px;
   }
 
-  .category-select,
-  .search-input {
+  .sm-category-select,
+  .sm-search-input {
     font-size: 14px;
     padding: 10px;
   }
 
-  .listings-grid {
+  .sm-listings-grid {
     gap: 12px;
   }
 
-  .social-card {
+  .sm-card {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
     padding: 12px;
   }
 
-  .card-right {
+  .sm-card-right {
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
 
-  .account-box {
+  .sm-purchase-box {
     position: relative;
     bottom: auto;
     right: auto;
