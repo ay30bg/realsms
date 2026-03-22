@@ -42,96 +42,126 @@
 
 // export default PurchaseLogs;
 
-// pages/PurchaseLogs.jsx
 import React, { useState, useEffect } from "react";
 import { FiSearch, FiCopy } from "react-icons/fi";
-import "../styles/purchase-logs.css";
+import ServiceCard from "../components/ServiceCard"; // Reuse your card component
+import "../styles/marketplace.css";
 
-const PurchaseLogs = ({ darkMode }) => {
-  const [logs, setLogs] = useState([]);
+const MOCK_CATEGORIES = [
+  { ID: 1, name: "Instagram" },
+  { ID: 2, name: "Twitter" },
+  { ID: 3, name: "TikTok" },
+];
+
+const MOCK_SERVICES = [
+  { ID: 1, categoryID: 1, name: "100 Instagram Followers", price: 500, account: "@instaUser1" },
+  { ID: 2, categoryID: 1, name: "500 Instagram Likes", price: 1200, account: "@instaUser2" },
+  { ID: 3, categoryID: 2, name: "50 Twitter Followers", price: 300, account: "@twitterUser1" },
+  { ID: 4, categoryID: 3, name: "10 TikTok Likes", price: 150, account: "@tiktokUser1" },
+];
+
+const SocialMediaMarketplace = ({ darkMode }) => {
+  const [categories] = useState(MOCK_CATEGORIES);
+  const [services] = useState(MOCK_SERVICES);
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [search, setSearch] = useState("");
-  const [copied, setCopied] = useState(false);
+  const [purchasedService, setPurchasedService] = useState(null);
+  const [balance, setBalance] = useState(2000); // mock balance
 
   useEffect(() => {
-    document.title = "Purchase Logs - RealSMS";
-
-    // Mocked purchase logs
-    setLogs([
-      { id: 1, platform: "Instagram", username: "@john_doe", purchasedAt: "2026-03-21T12:45:00Z", amount: 500 },
-      { id: 2, platform: "Twitter", username: "@janedoe", purchasedAt: "2026-03-20T09:30:00Z", amount: 300 },
-      { id: 3, platform: "Facebook", username: "@alex_smith", purchasedAt: "2026-03-19T18:15:00Z", amount: 200 },
-    ]);
+    document.title = "Social Media Marketplace - RealSMS";
   }, []);
 
-  useEffect(() => {
-    if (!copied) return;
-    const t = setTimeout(() => setCopied(false), 2000);
-    return () => clearTimeout(t);
-  }, [copied]);
+  const handleCategoryChange = (e) => {
+    const categoryId = parseInt(e.target.value);
+    const category = categories.find((c) => c.ID === categoryId) || null;
+    setSelectedCategory(category);
+    setPurchasedService(null);
+    setSearch("");
+  };
 
-  const filteredLogs = logs.filter(
-    (log) =>
-      log.username.toLowerCase().includes(search.toLowerCase()) ||
-      log.platform.toLowerCase().includes(search.toLowerCase())
+  const handleBuy = (service) => {
+    if (!selectedCategory) return alert("Please select a category first!");
+    if (balance < service.price) return alert("Insufficient balance");
+
+    setPurchasedService(service);
+    setBalance((prev) => prev - service.price);
+    alert("Purchase successful!");
+  };
+
+  const filteredServices = services.filter(
+    (s) =>
+      (!selectedCategory || s.categoryID === selectedCategory.ID) &&
+      s.name.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
-    <div className={`purchase-logs ${darkMode ? "dark" : ""}`}>
-      <div className="logs-card">
-        <h2>Social Media Purchase Logs</h2>
+    <div className={`marketplace ${darkMode ? "dark" : ""}`}>
+      <div className="marketplace-card">
+        <h2>Social Media Marketplace</h2>
+
+        <p>
+          <strong>Balance:</strong> ₦{balance}
+        </p>
+
+        <select
+          className="category-select"
+          value={selectedCategory?.ID || ""}
+          onChange={handleCategoryChange}
+        >
+          <option value="">Select Category</option>
+          {categories.map((c) => (
+            <option key={c.ID} value={c.ID}>
+              {c.name}
+            </option>
+          ))}
+        </select>
 
         <div className="search-container">
           <input
             type="text"
-            placeholder="Search by username or platform"
+            placeholder="Search service"
             className="search-input"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+            disabled={!selectedCategory}
           />
           <FiSearch className="search-icon" />
         </div>
 
-        <div className="logs-container">
-          {filteredLogs.length === 0 ? (
-            <p className="empty">No purchase logs found</p>
+        <div className="services-container">
+          {filteredServices.length === 0 ? (
+            <p className="empty">No services available</p>
           ) : (
-            <table className="logs-table">
-              <thead>
-                <tr>
-                  <th>Platform</th>
-                  <th>Username</th>
-                  <th>Purchased At</th>
-                  <th>Amount (NGN)</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredLogs.map((log) => (
-                  <tr key={log.id}>
-                    <td>{log.platform}</td>
-                    <td>{log.username}</td>
-                    <td>{new Date(log.purchasedAt).toLocaleString()}</td>
-                    <td>{log.amount}</td>
-                    <td>
-                      <FiCopy
-                        onClick={() => {
-                          navigator.clipboard.writeText(log.username);
-                          setCopied(true);
-                        }}
-                        style={{ cursor: "pointer" }}
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <div className="services-grid">
+              {filteredServices.map((service) => (
+                <ServiceCard
+                  key={service.ID}
+                  service={service}
+                  onBuy={handleBuy}
+                />
+              ))}
+            </div>
           )}
         </div>
 
-        {copied && <p className="copied-msg">Copied to clipboard!</p>}
+        {purchasedService && (
+          <div className="purchase-box">
+            <p>
+              <strong>Purchased Service:</strong> {purchasedService.name} -{" "}
+              <span>{purchasedService.account}</span>
+              <FiCopy
+                onClick={() =>
+                  navigator.clipboard.writeText(purchasedService.account)
+                }
+                style={{ cursor: "pointer", marginLeft: 8 }}
+              />
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-export default PurchaseLogs;
+export default SocialMediaMarketplace;
