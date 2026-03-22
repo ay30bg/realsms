@@ -1,4 +1,4 @@
-.coming-soon-page {
+/* .coming-soon-page {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -54,4 +54,262 @@
   border-radius: 8px;
   cursor: not-allowed;
   opacity: 0.8;
+} */
+
+/* =====================
+   ROOT / WRAPPER
+===================== */
+.marketplace {
+  padding: 20px;
+}
+
+.marketplace-card{
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  border-radius: 6px;
+}
+
+.marketplace-card h2{
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+/* =====================
+   CATEGORY SELECT
+===================== */
+.category-select {
+  width: 100%;
+  padding: 12px 14px;
+  padding-right: 40px;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  font-size: 15px;
+  background-color: #fff;
+  color: #000;
+  cursor: pointer;
+
+  -webkit-appearance: none;
+  appearance: none;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='gray'%3E%3Cpath d='M5.5 7.5l4.5 4.5 4.5-4.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+}
+
+.category-select option {
+  background-color: #fff; 
+  color: #000;              
+  font-weight: lighter;
+}
+
+.category-select:focus {
+  outline: none;
+  border-color: #367e3a;
+  box-shadow: 0 0 0 2px #EAF2EB;
+}
+
+/* =====================
+   SEARCH
+===================== */
+.search-input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  margin: 16px 0;
+  font-size: 15px;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #367e3a;
+  box-shadow: 0 0 0 2px #EAF2EB;
+}
+
+/* SEARCH INPUT WITH ICON */
+.search-container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  margin: 15px 0;
+}
+
+.search-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 18px;
+  color: #888;
+}
+
+/* =====================
+   LISTINGS GRID
+===================== */
+.listings-grid {
+  display: grid;
+  gap: 14px;
+}
+
+/* =====================
+   SOCIAL CARD
+===================== */
+.social-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px;
+  border-radius: 8px;
+  border: 2px solid #e5e7eb;
+  background: #fff;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.social-card:active {
+  transform: scale(0.98);
+}
+
+.social-card.disabled {
+  opacity: 0.6;
+}
+
+.card-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-left h4 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.card-left .platform {
+  font-size: 13px;
+  color: #367e3a;
+}
+
+.card-right {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.price {
+  font-weight: bold;
+}
+
+.social-card button {
+  background: #367e3a;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.social-card button:disabled {
+  background: #9CA3AF;
+  cursor: not-allowed;
+}
+
+/* =====================
+   EMPTY STATE
+===================== */
+.empty {
+  text-align: center;
+  color: #6B7280;
+  padding: 20px 0;
+}
+
+/* =====================
+   PURCHASE BOX
+===================== */
+.account-box {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #fff;
+  padding: 16px;
+  border-radius: 8px;
+  width: 260px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.15);
+  z-index: 999;
+  transition: all 0.3s ease;
+}
+
+.account-box h3 {
+  margin-bottom: 10px;
+}
+
+.account-box p {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  word-break: break-word;
+}
+
+.copy-btn {
+  background: #367e3a;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+/* =====================
+   MOBILE VIEW
+===================== */
+@media (max-width: 768px) {
+  .marketplace {
+    padding: 10px;
+  }
+
+  .marketplace-card {
+    padding: 16px;
+  }
+
+  .category-select,
+  .search-input {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .listings-grid {
+    gap: 12px;
+  }
+
+  .social-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .card-right {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .account-box {
+    position: relative;
+    bottom: auto;
+    right: auto;
+    left: auto;
+    width: 100%;
+    margin-top: 20px;
+    box-shadow: none;
+    border: 2px solid #e5e7eb;
+  }
 }
