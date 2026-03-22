@@ -93,6 +93,13 @@
   opacity: 0.6;
 }
 
+.chat-date {
+  text-align: center;
+  font-size: 12px;
+  color: #888;
+  margin: 10px 0;
+}
+
 /* ================= INPUT ================= */
 .user-support-input {
   display: flex;
