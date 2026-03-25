@@ -44,7 +44,7 @@
 
 import React, { useState, useEffect } from "react";
 import { FiSearch, FiCopy } from "react-icons/fi";
-import SocialServiceCard from "../components/SocialServiceCard"; // ✅ use your new card
+import SocialServiceCard from "../components/SocialServiceCard"; 
 import "../styles/buy-number.css";
 
 const BuySocialLogs = ({ darkMode }) => {
