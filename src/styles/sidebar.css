@@ -68,7 +68,11 @@
   color: #d1d5db;
 }
 
-.sidebar.dark nav a:hover,
+.sidebar.dark nav a:hover{
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
 .sidebar.dark nav a.active {
   background-color: #367e3a;
   color: #fff;
