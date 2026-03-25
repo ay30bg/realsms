@@ -233,7 +233,30 @@
   cursor: not-allowed;
 }
 
+.meta-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
 
+.type {
+  background: #eef2ff;
+  color: #4f46e5;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.stock {
+  background: #ecfdf5;
+  color: #059669;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-weight: 500;
+}
 
 /* =====================
    EMPTY STATE
@@ -308,7 +331,6 @@
   width: 100%;
   margin-top: 8px;
 }
-
 
 .otp-box button:disabled {
   background: #9ca3af;
