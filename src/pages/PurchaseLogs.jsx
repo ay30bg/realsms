@@ -44,7 +44,7 @@
 
 import React, { useState, useEffect } from "react";
 import { FiSearch, FiCopy } from "react-icons/fi";
-import SocialServiceCard from "../components/SocialServiceCard"; 
+import SocialServiceCard from "../components/SocialServiceCard"; // ✅ use your new card
 import "../styles/buy-number.css";
 
 const BuySocialLogs = ({ darkMode }) => {
@@ -56,7 +56,7 @@ const BuySocialLogs = ({ darkMode }) => {
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  // ---------------- MOCK DATA ----------------
+  // ---------------- INIT ----------------
   useEffect(() => {
     document.title = "Social Marketplace - RealSMS";
 
@@ -68,13 +68,12 @@ const BuySocialLogs = ({ darkMode }) => {
     ]);
   }, []);
 
-  // ---------------- FETCH PRODUCTS ----------------
+  // ---------------- LOAD PRODUCTS ----------------
   useEffect(() => {
     if (!selectedCategory) return;
 
     setLoading(true);
 
-    // Simulate API delay
     setTimeout(() => {
       const mockProducts = [
         {
@@ -99,7 +98,7 @@ const BuySocialLogs = ({ darkMode }) => {
         },
         {
           id: 3,
-          name: "Facebook Verified",
+          name: "Facebook Verified Account",
           price: 2500,
           stock: 10,
           type: "Verified",
@@ -109,7 +108,7 @@ const BuySocialLogs = ({ darkMode }) => {
         },
         {
           id: 4,
-          name: "Twitter Old Account",
+          name: "Twitter Aged Account",
           price: 1300,
           stock: 8,
           type: "Aged",
@@ -132,16 +131,18 @@ const BuySocialLogs = ({ darkMode }) => {
   const handleCategoryChange = (e) => {
     const cat = categories.find((c) => c.id === Number(e.target.value));
     setSelectedCategory(cat || null);
+
+    // reset state
     setProducts([]);
     setActiveOrder(null);
     setSearch("");
   };
 
   const handleBuy = (product, done) => {
-    // Simulate purchase
+    // simulate purchase
     setTimeout(() => {
       setActiveOrder(product);
-      done(); // stop spinner
+      done(); // stop spinner in card
     }, 1000);
   };
 
@@ -161,7 +162,7 @@ const BuySocialLogs = ({ darkMode }) => {
       <div className="buy-number-card">
         <h2>Social Media Marketplace</h2>
 
-        {/* CATEGORY */}
+        {/* CATEGORY SELECT */}
         <select
           className="server-select"
           value={selectedCategory?.id || ""}
@@ -203,7 +204,7 @@ const BuySocialLogs = ({ darkMode }) => {
                 {filteredProducts.map((product) => (
                   <SocialServiceCard
                     key={product.id}
-                    service={product} // reuse same structure
+                    product={product}   // ✅ correct prop
                     onBuy={handleBuy}
                   />
                 ))}
@@ -212,7 +213,7 @@ const BuySocialLogs = ({ darkMode }) => {
           </div>
         )}
 
-        {/* PURCHASE RESULT */}
+        {/* DELIVERY SECTION */}
         {activeOrder && (
           <div className="otp-box">
             <div className="otp-header">
