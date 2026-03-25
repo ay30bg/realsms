@@ -44,7 +44,8 @@
 
 import React, { useState, useEffect } from "react";
 import { FiSearch, FiCopy } from "react-icons/fi";
-import "../styles/buy-number.css"; // reuse styling
+import SocialServiceCard from "../components/SocialServiceCard"; 
+import "../styles/buy-number.css";
 
 const BuySocialLogs = ({ darkMode }) => {
   const [categories, setCategories] = useState([]);
@@ -52,10 +53,13 @@ const BuySocialLogs = ({ darkMode }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [activeOrder, setActiveOrder] = useState(null);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
 
   // ---------------- MOCK DATA ----------------
   useEffect(() => {
+    document.title = "Social Marketplace - RealSMS";
+
     setCategories([
       { id: 1, name: "Instagram" },
       { id: 2, name: "Facebook" },
@@ -64,61 +68,81 @@ const BuySocialLogs = ({ darkMode }) => {
     ]);
   }, []);
 
+  // ---------------- FETCH PRODUCTS ----------------
   useEffect(() => {
     if (!selectedCategory) return;
 
-    // Fake products (replace with API later)
-    const mockProducts = [
-      {
-        id: 1,
-        name: "Instagram Aged Account",
-        price: 1500,
-        details: "username:demo | pass:123456",
-        category: 1,
-      },
-      {
-        id: 2,
-        name: "Facebook Verified Account",
-        price: 2500,
-        details: "email:test@mail.com | pass:abcd",
-        category: 2,
-      },
-      {
-        id: 3,
-        name: "Twitter Old Account",
-        price: 1200,
-        details: "user:oldacc | pass:pass123",
-        category: 3,
-      },
-      {
-        id: 4,
-        name: "TikTok Creator Account",
-        price: 1800,
-        details: "user:tiktokpro | pass:tt123",
-        category: 4,
-      },
-    ];
+    setLoading(true);
 
-    const filtered = mockProducts.filter(
-      (p) => p.category === selectedCategory.id
-    );
+    // Simulate API delay
+    setTimeout(() => {
+      const mockProducts = [
+        {
+          id: 1,
+          name: "Instagram Aged Account",
+          price: 1500,
+          stock: 20,
+          type: "Aged",
+          details: "user:insta01 | pass:123456",
+          icon: "/icons/instagram.png",
+          category: 1,
+        },
+        {
+          id: 2,
+          name: "Instagram PVA Account",
+          price: 1200,
+          stock: 15,
+          type: "PVA",
+          details: "user:pva_acc | pass:abc123",
+          icon: "/icons/instagram.png",
+          category: 1,
+        },
+        {
+          id: 3,
+          name: "Facebook Verified",
+          price: 2500,
+          stock: 10,
+          type: "Verified",
+          details: "email:test@mail.com | pass:abcd",
+          icon: "/icons/facebook.png",
+          category: 2,
+        },
+        {
+          id: 4,
+          name: "Twitter Old Account",
+          price: 1300,
+          stock: 8,
+          type: "Aged",
+          details: "user:oldx | pass:pass123",
+          icon: "/icons/twitter.png",
+          category: 3,
+        },
+      ];
 
-    setProducts(filtered);
+      const filtered = mockProducts.filter(
+        (p) => p.category === selectedCategory.id
+      );
+
+      setProducts(filtered);
+      setLoading(false);
+    }, 800);
   }, [selectedCategory]);
 
   // ---------------- HANDLERS ----------------
   const handleCategoryChange = (e) => {
     const cat = categories.find((c) => c.id === Number(e.target.value));
     setSelectedCategory(cat || null);
+    setProducts([]);
     setActiveOrder(null);
     setSearch("");
   };
 
-  const handleBuy = (product) => {
-    if (!selectedCategory)
-      return alert("Please select a category first!");
-
-    setActiveOrder(product);
+  const handleBuy = (product, done) => {
+    // Simulate purchase
+    setTimeout(() => {
+      setActiveOrder(product);
+      done(); // stop spinner
+    }, 1000);
   };
 
   // ---------------- SEARCH ----------------
@@ -137,13 +161,13 @@ const BuySocialLogs = ({ darkMode }) => {
       <div className="buy-number-card">
         <h2>Social Media Marketplace</h2>
 
-        {/* CATEGORY SELECT */}
+        {/* CATEGORY */}
         <select
           className="server-select"
           value={selectedCategory?.id || ""}
           onChange={handleCategoryChange}
         >
-          <option value="">Select Category</option>
+          <option value="">Select Platform</option>
           {categories.map((c) => (
             <option key={c.id} value={c.id}>
               {c.name}
@@ -155,46 +179,45 @@ const BuySocialLogs = ({ darkMode }) => {
         <div className="search-container">
           <input
             type="text"
-            placeholder="Search product"
+            placeholder="Search accounts"
             className="search-input"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            disabled={!selectedCategory}
+            disabled={!selectedCategory || loading}
           />
           <FiSearch className="search-icon" />
         </div>
 
         {/* PRODUCTS */}
-        {selectedCategory && (
+        {(selectedCategory || loading) && (
           <div className="services-container">
-            {filteredProducts.length === 0 ? (
+            {loading ? (
+              <div className="loading-spinner">
+                <div className={`spinner ${darkMode ? "dark" : ""}`} />
+                <p>Loading products...</p>
+              </div>
+            ) : filteredProducts.length === 0 ? (
               <p className="empty">No products available</p>
             ) : (
               <div className="services-grid">
                 {filteredProducts.map((product) => (
-                  <div key={product.id} className="service-card">
-                    <h3>{product.name}</h3>
-                    <p>₦{product.price}</p>
-
-                    <button
-                      className="buy-btn"
-                      onClick={() => handleBuy(product)}
-                    >
-                      Buy
-                    </button>
-                  </div>
+                  <SocialServiceCard
+                    key={product.id}
+                    service={product} // reuse same structure
+                    onBuy={handleBuy}
+                  />
                 ))}
               </div>
             )}
           </div>
         )}
 
-        {/* ORDER DETAILS */}
+        {/* PURCHASE RESULT */}
         {activeOrder && (
           <div className="otp-box">
             <div className="otp-header">
               <p>
-                <strong>Details:</strong> {activeOrder.details}
+                <strong>Account:</strong> {activeOrder.details}
                 <FiCopy
                   onClick={() => {
                     navigator.clipboard.writeText(activeOrder.details);
@@ -205,7 +228,7 @@ const BuySocialLogs = ({ darkMode }) => {
               </p>
             </div>
 
-            <p className="success">Purchase successful ✅</p>
+            <p className="success">Delivered instantly ✅</p>
 
             <button
               className="copy-btn"
