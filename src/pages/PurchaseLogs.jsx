@@ -232,7 +232,16 @@ import tiktokIcon from "../assets/tiktok.png";
 
 const API = process.env.REACT_APP_API_URL;
 
-const BuySocialLogs = ({ darkMode }) => {
+// ✅ MOVE OUTSIDE (fixes useEffect warning)
+const platformIcons = {
+  Instagram: instagramIcon,
+  Facebook: facebookIcon,
+  Twitter: twitterIcon,
+  "Twitter (X)": twitterIcon,
+  TikTok: tiktokIcon,
+};
+
+const PurchaseLogs = ({ darkMode }) => {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -240,15 +249,6 @@ const BuySocialLogs = ({ darkMode }) => {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
-
-  // ✅ Platform → Icon map
-  const platformIcons = {
-    Instagram: instagramIcon,
-    Facebook: facebookIcon,
-    Twitter: twitterIcon,
-    "Twitter (X)": twitterIcon,
-    TikTok: tiktokIcon,
-  };
 
   // ---------------- INIT ----------------
   useEffect(() => {
@@ -262,7 +262,7 @@ const BuySocialLogs = ({ darkMode }) => {
     ]);
   }, []);
 
-  // ---------------- FETCH FROM API ----------------
+  // ---------------- FETCH LOGS ----------------
   useEffect(() => {
     if (!selectedCategory) return;
 
@@ -300,7 +300,7 @@ const BuySocialLogs = ({ darkMode }) => {
     };
 
     fetchLogs();
-  }, [selectedCategory]);
+  }, [selectedCategory]); // ✅ no warning anymore
 
   // ---------------- HANDLERS ----------------
   const handleCategoryChange = (e) => {
@@ -423,4 +423,4 @@ const BuySocialLogs = ({ darkMode }) => {
   );
 };
 
-export default BuySocialLogs;
+export default PurchaseLogs;
