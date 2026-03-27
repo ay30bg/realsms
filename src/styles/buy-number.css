@@ -217,6 +217,83 @@
   margin-bottom: 6px;
 }
 
+/* Quantity container */
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  background: #f5f7fb;
+  border-radius: 12px;
+  padding: 4px;
+  width: fit-content;
+}
+
+/* Dark mode */
+.dark .quantity-selector {
+  background: #1e1e2f;
+}
+
+/* Buttons (- and +) */
+.quantity-selector button {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  background: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Dark mode buttons */
+.dark .quantity-selector button {
+  background: #2a2a3d;
+  color: #fff;
+}
+
+/* Hover effect */
+.quantity-selector button:hover:not(:disabled) {
+  background: #e6ebf5;
+  transform: scale(1.05);
+}
+
+/* Dark hover */
+.dark .quantity-selector button:hover:not(:disabled) {
+  background: #3a3a55;
+}
+
+/* Disabled buttons */
+.quantity-selector button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Input field */
+.quantity-selector input {
+  width: 45px;
+  height: 32px;
+  border: none;
+  outline: none;
+  text-align: center;
+  font-weight: 600;
+  font-size: 14px;
+  background: transparent;
+}
+
+/* Remove arrows (Chrome) */
+.quantity-selector input::-webkit-outer-spin-button,
+.quantity-selector input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Remove arrows (Firefox) */
+.quantity-selector input[type="number"] {
+  -moz-appearance: textfield;
+}
+
 /* BUY BUTTON */
 .service-card button {
   background: #367e3a;
