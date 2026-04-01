@@ -243,6 +243,16 @@ const LogsHistory = ({ darkMode }) => {
   const truncate = (text, length = 20) =>
     text && text.length > length ? text.slice(0, length) + "..." : text;
 
+  // ================================
+  // COPY TO CLIPBOARD
+  // ================================
+  const copyToClipboard = (text) => {
+    navigator.clipboard
+      .writeText(text)
+      .then(() => alert("Details copied!"))
+      .catch((err) => console.error("Copy failed:", err));
+  };
+
   return (
     <div className={`order-history-page ${darkMode ? "dark" : ""}`}>
       <div className="order-history-card">
@@ -296,14 +306,40 @@ const LogsHistory = ({ darkMode }) => {
                       <td data-label="Date">{formatDate(log.createdAt)}</td>
                       <td data-label="Platform">{log.platform}</td>
                       <td data-label="Product">{truncate(log.name, 20)}</td>
-                      <td data-label="Price">
-                        ₦{log.price?.toLocaleString()}
-                      </td>
+                      <td data-label="Price">₦{log.price?.toLocaleString()}</td>
                       <td data-label="Quantity">{log.quantity}</td>
                       <td data-label="Details">
-                        <pre style={{ maxHeight: 80, overflow: "auto" }}>
-                          {log.details}
-                        </pre>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            maxHeight: 80,
+                          }}
+                        >
+                          <pre
+                            style={{
+                              overflow: "auto",
+                              margin: 0,
+                              flexGrow: 1,
+                            }}
+                          >
+                            {log.details}
+                          </pre>
+                          <button
+                            style={{
+                              marginTop: 4,
+                              padding: "2px 6px",
+                              fontSize: 12,
+                              borderRadius: 4,
+                              cursor: "pointer",
+                              backgroundColor: darkMode ? "#444" : "#f0f0f0",
+                              border: "1px solid #ccc",
+                            }}
+                            onClick={() => copyToClipboard(log.details)}
+                          >
+                            Copy
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
