@@ -74,7 +74,7 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
           </NavLink>
 
           <NavLink to="/logs-history" onClick={toggleSidebar}>
-            <FiClock className="sidebar-icon" /> <span>Number History</span>
+            <FiClock className="sidebar-icon" /> <span>Logs History</span>
           </NavLink>
 
            <NavLink to="/transaction-history" onClick={toggleSidebar}>
