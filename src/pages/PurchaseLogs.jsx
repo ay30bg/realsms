@@ -253,7 +253,7 @@ import facebookIcon from "../assets/facebook.png";
 import twitterIcon from "../assets/twitter.png";
 import tiktokIcon from "../assets/tiktok.png";
 
-import { useBalance } from "../contexts/BalanceContext"; // <-- Import
+import { useBalance } from "../contexts/BalanceContext"; // <-- Import balance context
 
 const API = process.env.REACT_APP_API_URL;
 
@@ -278,7 +278,7 @@ const PurchaseLogs = ({ darkMode }) => {
   // BALANCE CONTEXT
   const { balance, debitWallet, loading: balanceLoading, fetchBalance } = useBalance();
 
-  // INIT
+  // INIT: Categories
   useEffect(() => {
     document.title = "Purchase Logs - RealSMS";
 
@@ -338,10 +338,11 @@ const PurchaseLogs = ({ darkMode }) => {
     setSearch("");
   };
 
-  // BUY HANDLER (with balance check)
+  // BUY HANDLER (with balance deduction)
   const handleBuy = async (product, done, quantity) => {
     const totalCost = product.price * quantity;
 
+    // Check if user has enough balance
     if (balance < totalCost) {
       alert("Insufficient wallet balance");
       done();
@@ -349,6 +350,7 @@ const PurchaseLogs = ({ darkMode }) => {
     }
 
     try {
+      // Send purchase request to backend
       const res = await fetch(`${API}/api/log/buy/${product.id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -363,10 +365,10 @@ const PurchaseLogs = ({ darkMode }) => {
         return;
       }
 
-      // Debit the wallet
+      // Deduct the amount from user's wallet
       await debitWallet(totalCost);
 
-      // Refresh balance
+      // Refresh balance from backend
       await fetchBalance();
 
       // Show purchased accounts
@@ -410,8 +412,7 @@ const PurchaseLogs = ({ darkMode }) => {
 
         {/* BALANCE DISPLAY */}
         <p className="wallet-balance">
-          Wallet Balance:{" "}
-          {balanceLoading ? "Loading..." : `₦${balance.toLocaleString()}`}
+          Wallet Balance: {balanceLoading ? "Loading..." : `₦${balance.toLocaleString()}`}
         </p>
 
         {/* CATEGORY */}
@@ -469,10 +470,7 @@ const PurchaseLogs = ({ darkMode }) => {
         {activeOrder && (
           <div className="otp-box">
             {/* CLOSE BUTTON */}
-            <FiX
-              className="otp-close"
-              onClick={() => setActiveOrder(null)}
-            />
+            <FiX className="otp-close" onClick={() => setActiveOrder(null)} />
 
             <div className="otp-header">
               <p>
@@ -490,8 +488,7 @@ const PurchaseLogs = ({ darkMode }) => {
             </div>
 
             <p className="success">
-              Delivered {activeOrder.quantity} account(s) ✅{" "}
-              {copied && "(Copied!)"}
+              Delivered {activeOrder.quantity} account(s) ✅ {copied && "(Copied!)"}
             </p>
 
             <button
