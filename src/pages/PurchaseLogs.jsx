@@ -1,5 +1,5 @@
 // import React, { useState, useEffect } from "react";
-// import { FiSearch, FiCopy } from "react-icons/fi";
+// import { FiSearch, FiCopy, FiX } from "react-icons/fi";
 // import SocialServiceCard from "../components/SocialServiceCard";
 // import "../styles/buy-number.css";
 
@@ -89,14 +89,12 @@
 //     setSearch("");
 //   };
 
-//   // ✅ BUY HANDLER (REAL API)
+//   // BUY HANDLER
 //   const handleBuy = async (product, done, quantity) => {
 //     try {
 //       const res = await fetch(`${API}/api/log/buy/${product.id}`, {
 //         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
+//         headers: { "Content-Type": "application/json" },
 //         body: JSON.stringify({ quantity }),
 //       });
 
@@ -118,9 +116,7 @@
 //       // Update stock in UI instantly
 //       setProducts((prev) =>
 //         prev.map((p) =>
-//           p.id === product.id
-//             ? { ...p, stock: data.remainingStock }
-//             : p
+//           p.id === product.id ? { ...p, stock: data.remainingStock } : p
 //         )
 //       );
 
@@ -132,7 +128,7 @@
 //     }
 //   };
 
-//   // SEARCH
+//   // SEARCH FILTER
 //   const filteredProducts = products.filter((p) =>
 //     p.name.toLowerCase().includes(search.toLowerCase())
 //   );
@@ -200,15 +196,19 @@
 //           </div>
 //         )}
 
-//         {/* DELIVERY */}
+//         {/* DELIVERY / ACTIVE ORDER */}
 //         {activeOrder && (
 //           <div className="otp-box">
+//             {/* CLOSE BUTTON */}
+//             <FiX
+//               className="otp-close"
+//               onClick={() => setActiveOrder(null)}
+//             />
+
 //             <div className="otp-header">
 //               <p>
 //                 <strong>Accounts:</strong>
-//                 <pre className="details-block">
-//                   {activeOrder.details}
-//                 </pre>
+//                 <pre className="details-block">{activeOrder.details}</pre>
 
 //                 <FiCopy
 //                   onClick={() => {
@@ -221,8 +221,7 @@
 //             </div>
 
 //             <p className="success">
-//               Delivered {activeOrder.quantity} account(s) ✅{" "}
-//               {copied && "(Copied!)"}
+//               Delivered {activeOrder.quantity} account(s) ✅ {copied && "(Copied!)"}
 //             </p>
 
 //             <button
@@ -254,6 +253,8 @@ import facebookIcon from "../assets/facebook.png";
 import twitterIcon from "../assets/twitter.png";
 import tiktokIcon from "../assets/tiktok.png";
 
+import { useBalance } from "../contexts/BalanceContext"; // <-- Import
+
 const API = process.env.REACT_APP_API_URL;
 
 // Platform icons
@@ -273,6 +274,9 @@ const PurchaseLogs = ({ darkMode }) => {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  // BALANCE CONTEXT
+  const { balance, debitWallet, loading: balanceLoading, fetchBalance } = useBalance();
 
   // INIT
   useEffect(() => {
@@ -334,8 +338,16 @@ const PurchaseLogs = ({ darkMode }) => {
     setSearch("");
   };
 
-  // BUY HANDLER
+  // BUY HANDLER (with balance check)
   const handleBuy = async (product, done, quantity) => {
+    const totalCost = product.price * quantity;
+
+    if (balance < totalCost) {
+      alert("Insufficient wallet balance");
+      done();
+      return;
+    }
+
     try {
       const res = await fetch(`${API}/api/log/buy/${product.id}`, {
         method: "POST",
@@ -350,6 +362,12 @@ const PurchaseLogs = ({ darkMode }) => {
         done();
         return;
       }
+
+      // Debit the wallet
+      await debitWallet(totalCost);
+
+      // Refresh balance
+      await fetchBalance();
 
       // Show purchased accounts
       setActiveOrder({
@@ -389,6 +407,12 @@ const PurchaseLogs = ({ darkMode }) => {
     <div className={`marketplace ${darkMode ? "dark" : ""}`}>
       <div className="buy-number-card">
         <h2>Purchase Logs</h2>
+
+        {/* BALANCE DISPLAY */}
+        <p className="wallet-balance">
+          Wallet Balance:{" "}
+          {balanceLoading ? "Loading..." : `₦${balance.toLocaleString()}`}
+        </p>
 
         {/* CATEGORY */}
         <select
@@ -466,7 +490,8 @@ const PurchaseLogs = ({ darkMode }) => {
             </div>
 
             <p className="success">
-              Delivered {activeOrder.quantity} account(s) ✅ {copied && "(Copied!)"}
+              Delivered {activeOrder.quantity} account(s) ✅{" "}
+              {copied && "(Copied!)"}
             </p>
 
             <button
