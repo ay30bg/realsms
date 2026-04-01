@@ -336,7 +336,7 @@
 }
 
 .service-info h4 {
-  max-width: 180px; /* adjust as needed */
+  max-width: 100%; 
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
