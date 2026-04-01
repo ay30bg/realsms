@@ -243,6 +243,14 @@ const LogsHistory = ({ darkMode }) => {
   const truncate = (text, length = 20) =>
     text && text.length > length ? text.slice(0, length) + "..." : text;
 
+  const truncateLines = (text, maxLines = 3) => {
+    if (!text) return "";
+    const lines = text.split("\n");
+    return lines.length > maxLines
+      ? lines.slice(0, maxLines).join("\n") + "..."
+      : text;
+  };
+
   // ================================
   // COPY TO CLIPBOARD
   // ================================
@@ -323,7 +331,7 @@ const LogsHistory = ({ darkMode }) => {
                               flexGrow: 1,
                             }}
                           >
-                            {log.details}
+                            {truncateLines(log.details, 3)}
                           </pre>
                           <button
                             style={{
