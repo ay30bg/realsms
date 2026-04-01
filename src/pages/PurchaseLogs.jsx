@@ -253,7 +253,7 @@ import facebookIcon from "../assets/facebook.png";
 import twitterIcon from "../assets/twitter.png";
 import tiktokIcon from "../assets/tiktok.png";
 
-import { useBalance } from "../contexts/BalanceContext"; // <-- Import balance context
+import { useBalance } from "../context/BalanceContext"; // <-- Import balance context
 
 const API = process.env.REACT_APP_API_URL;
 
