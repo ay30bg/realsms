@@ -335,6 +335,13 @@
   font-weight: 500;
 }
 
+.service-info h4 {
+  max-width: 180px; /* adjust as needed */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* =====================
    EMPTY STATE
 ===================== */
