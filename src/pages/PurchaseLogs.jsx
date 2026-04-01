@@ -3,7 +3,7 @@
 // import SocialServiceCard from "../components/SocialServiceCard";
 // import "../styles/buy-number.css";
 
-// // ✅ ICONS
+// // ICONS
 // import instagramIcon from "../assets/instagram.png";
 // import facebookIcon from "../assets/facebook.png";
 // import twitterIcon from "../assets/twitter.png";
@@ -11,7 +11,7 @@
 
 // const API = process.env.REACT_APP_API_URL;
 
-// // ✅ Platform icons mapping
+// // Platform icons
 // const platformIcons = {
 //   Instagram: instagramIcon,
 //   Facebook: facebookIcon,
@@ -29,7 +29,7 @@
 //   const [loading, setLoading] = useState(false);
 //   const [copied, setCopied] = useState(false);
 
-//   // ---------------- INIT ----------------
+//   // INIT
 //   useEffect(() => {
 //     document.title = "Purchase Logs - RealSMS";
 
@@ -41,7 +41,7 @@
 //     ]);
 //   }, []);
 
-//   // ---------------- FETCH LOGS ----------------
+//   // FETCH LOGS
 //   useEffect(() => {
 //     if (!selectedCategory) return;
 
@@ -52,14 +52,12 @@
 //         const res = await fetch(`${API}/api/log`);
 //         const data = await res.json();
 
-//         // Filter logs by selected platform
 //         const filtered = data.filter((log) =>
 //           log.platform
 //             ?.toLowerCase()
 //             .includes(selectedCategory.name.toLowerCase().split(" ")[0])
 //         );
 
-//         // Format logs for UI
 //         const formatted = filtered.map((log) => ({
 //           id: log._id,
 //           name: log.name,
@@ -81,7 +79,7 @@
 //     fetchLogs();
 //   }, [selectedCategory]);
 
-//   // ---------------- HANDLERS ----------------
+//   // CATEGORY CHANGE
 //   const handleCategoryChange = (e) => {
 //     const cat = categories.find((c) => c.id === Number(e.target.value));
 //     setSelectedCategory(cat || null);
@@ -91,20 +89,34 @@
 //     setSearch("");
 //   };
 
-//   // Updated handleBuy to include quantity
+//   // BUY HANDLER (WITH QUANTITY + SPLIT DETAILS)
 //   const handleBuy = (product, done, quantity) => {
 //     setTimeout(() => {
-//       setActiveOrder({ ...product, quantity }); // store selected quantity
+//       // Split details safely
+//       const allDetails = product.details
+//         ?.split("\n")
+//         .map((line) => line.trim())
+//         .filter((line) => line !== "");
+
+//       // Take only requested quantity
+//       const selectedDetails = allDetails.slice(0, quantity);
+
+//       setActiveOrder({
+//         ...product,
+//         quantity,
+//         details: selectedDetails.join("\n"),
+//       });
+
 //       done();
 //     }, 500);
 //   };
 
-//   // ---------------- SEARCH ----------------
+//   // SEARCH
 //   const filteredProducts = products.filter((p) =>
 //     p.name.toLowerCase().includes(search.toLowerCase())
 //   );
 
-//   // ---------------- COPY FEEDBACK ----------------
+//   // COPY FEEDBACK
 //   useEffect(() => {
 //     if (!copied) return;
 //     const t = setTimeout(() => setCopied(false), 2000);
@@ -159,7 +171,7 @@
 //                   <SocialServiceCard
 //                     key={product.id}
 //                     product={product}
-//                     onBuy={handleBuy} // now receives quantity
+//                     onBuy={handleBuy}
 //                   />
 //                 ))}
 //               </div>
@@ -172,20 +184,24 @@
 //           <div className="otp-box">
 //             <div className="otp-header">
 //               <p>
-//                 <strong>Account:</strong> {activeOrder.details}{" "}
-//                 <span>×{activeOrder.quantity}</span>
+//                 <strong>Accounts:</strong>
+//                 <pre className="details-block">
+//                   {activeOrder.details}
+//                 </pre>
+
 //                 <FiCopy
 //                   onClick={() => {
 //                     navigator.clipboard.writeText(activeOrder.details);
 //                     setCopied(true);
 //                   }}
-//                   style={{ cursor: "pointer", marginLeft: 8 }}
+//                   style={{ cursor: "pointer", marginTop: 8 }}
 //                 />
 //               </p>
 //             </div>
 
 //             <p className="success">
-//               Delivered instantly ✅ {copied && "(Copied!)"}
+//               Delivered {activeOrder.quantity} account(s) ✅{" "}
+//               {copied && "(Copied!)"}
 //             </p>
 
 //             <button
@@ -195,7 +211,7 @@
 //                 setCopied(true);
 //               }}
 //             >
-//               Copy Details
+//               Copy All
 //             </button>
 //           </div>
 //         )}
@@ -205,6 +221,7 @@
 // };
 
 // export default PurchaseLogs;
+
 
 import React, { useState, useEffect } from "react";
 import { FiSearch, FiCopy } from "react-icons/fi";
@@ -297,26 +314,47 @@ const PurchaseLogs = ({ darkMode }) => {
     setSearch("");
   };
 
-  // BUY HANDLER (WITH QUANTITY + SPLIT DETAILS)
-  const handleBuy = (product, done, quantity) => {
-    setTimeout(() => {
-      // Split details safely
-      const allDetails = product.details
-        ?.split("\n")
-        .map((line) => line.trim())
-        .filter((line) => line !== "");
+  // ✅ BUY HANDLER (REAL API)
+  const handleBuy = async (product, done, quantity) => {
+    try {
+      const res = await fetch(`${API}/api/log/buy/${product.id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ quantity }),
+      });
 
-      // Take only requested quantity
-      const selectedDetails = allDetails.slice(0, quantity);
+      const data = await res.json();
 
+      if (!res.ok) {
+        alert(data.message || "Purchase failed");
+        done();
+        return;
+      }
+
+      // Show purchased accounts
       setActiveOrder({
         ...product,
         quantity,
-        details: selectedDetails.join("\n"),
+        details: data.purchased,
       });
 
+      // Update stock in UI instantly
+      setProducts((prev) =>
+        prev.map((p) =>
+          p.id === product.id
+            ? { ...p, stock: data.remainingStock }
+            : p
+        )
+      );
+
       done();
-    }, 500);
+    } catch (err) {
+      console.error("Buy error:", err);
+      alert("Something went wrong");
+      done();
+    }
   };
 
   // SEARCH
