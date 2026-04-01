@@ -187,6 +187,10 @@
   outline: none;
   cursor: pointer;
 
+  /* Make dropdown wider */
+  min-width: 160px;  /* increase width from default */
+  max-width: 100%;
+
   /* Custom dropdown arrow */
   background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0L5 6L10 0H0Z' fill='%236B7280'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
