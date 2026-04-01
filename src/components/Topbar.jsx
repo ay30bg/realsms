@@ -149,7 +149,7 @@
 
 // export default Topbar;
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   FiCreditCard,
   FiChevronDown,
@@ -169,6 +169,36 @@ const Topbar = ({ toggleSidebar }) => {
 
   const navigate = useNavigate();
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
+
+  // For animated balance
+  const [displayBalance, setDisplayBalance] = useState(0);
+  const previousBalance = useRef(0);
+
+  // Animate balance whenever it changes
+  useEffect(() => {
+    if (loading) return;
+
+    let start = previousBalance.current;
+    const end = balance;
+    const duration = 800; // animation duration in ms
+    const incrementTime = 20; // ms per step
+    const steps = duration / incrementTime;
+    const increment = (end - start) / steps;
+
+    let current = start;
+    const counter = setInterval(() => {
+      current += increment;
+      if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
+        current = end;
+        clearInterval(counter);
+      }
+      setDisplayBalance(Math.floor(current));
+    }, incrementTime);
+
+    previousBalance.current = end;
+
+    return () => clearInterval(counter);
+  }, [balance, loading]);
 
   // Logout handler
   const handleLogout = () => {
@@ -226,7 +256,7 @@ const Topbar = ({ toggleSidebar }) => {
           <div className="balance-text">
             <span>Balance</span>
             <strong>
-              {loading ? "₦..." : `₦${balance.toLocaleString()}`}
+              {loading ? "₦..." : `₦${displayBalance.toLocaleString()}`}
             </strong>
           </div>
         </div>
