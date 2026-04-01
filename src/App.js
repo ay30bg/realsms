@@ -14,6 +14,7 @@ import BuyNumbers from "./pages/BuyNumbers";
 import PurchaseLogs from "./pages/PurchaseLogs";
 import ActiveOrder from "./pages/ActiveOrder";
 import OrderHistory from "./pages/OrderHistory";
+import LogsHistory from "./pages/LogsHistory";
 import TransactionHistory from "./pages/TransactionHistory";
 import FundWallet from "./pages/FundWallet";
 import FundSuccess from "./pages/FundSuccess";
@@ -56,6 +57,7 @@ function App() {
                   <Route path="/purchase-logs" element={<PurchaseLogs />} />
                   <Route path="/active-orders" element={<ActiveOrder />} />
                   <Route path="/order-history" element={<OrderHistory />} />
+                  <Route path="/logs-history" element={<LogsHistory />} />
                   <Route path="/transaction-history" element={<TransactionHistory />} />
                   <Route path="/fund-wallet" element={<FundWallet />} />
                   <Route path="/fund-wallet/paystack" element={<PaystackFund />} />
