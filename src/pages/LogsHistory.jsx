@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
-import axios from "axios";
 import "../styles/order-history.css";
 
-const API_URL = process.env.REACT_APP_API_URL;
 const ORDERS_PER_PAGE = 10;
 
 const LogsHistory = ({ darkMode }) => {
@@ -13,24 +11,44 @@ const LogsHistory = ({ darkMode }) => {
 
   useEffect(() => {
     document.title = "Logs History - RealSMS";
-    fetchLogs();
-  }, []);
 
-  const fetchLogs = async () => {
-    try {
-      const res = await axios.get(`${API_URL}/api/log/orders`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+    // ✅ MOCK DATA (replace later with API)
+    const mockLogs = [
+      {
+        _id: "1",
+        name: "Instagram Account",
+        platform: "Instagram",
+        price: 500,
+        quantity: 2,
+        details: "user1:pass1\nuser2:pass2",
+        createdAt: new Date(),
+      },
+      {
+        _id: "2",
+        name: "Facebook Account",
+        platform: "Facebook",
+        price: 300,
+        quantity: 1,
+        details: "fbuser:fbpass",
+        createdAt: new Date(),
+      },
+      {
+        _id: "3",
+        name: "Twitter Account",
+        platform: "Twitter",
+        price: 400,
+        quantity: 3,
+        details: "tw1:pass\ntw2:pass\ntw3:pass",
+        createdAt: new Date(),
+      },
+    ];
 
-      if (res.data.success) {
-        setLogs(res.data.data);
-      }
-    } catch (err) {
-      console.error("Fetch Logs Error:", err);
-    } finally {
+    // simulate loading
+    setTimeout(() => {
+      setLogs(mockLogs);
       setLoadingPage(false);
-    }
-  };
+    }, 800);
+  }, []);
 
   // ================================
   // SEARCH FILTER
@@ -115,7 +133,7 @@ const LogsHistory = ({ darkMode }) => {
                       <td data-label="Platform">{log.platform}</td>
                       <td data-label="Product">{log.name}</td>
                       <td data-label="Price">₦{log.price?.toLocaleString()}</td>
-                      <td data-label="Quantity">{log.quantity || 1}</td>
+                      <td data-label="Quantity">{log.quantity}</td>
                       <td data-label="Details">
                         <pre style={{ maxHeight: 80, overflow: "auto" }}>
                           {log.details}
