@@ -187,6 +187,8 @@ const LogsHistory = ({ darkMode }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
 
+  const API_URL = process.env.REACT_APP_API_URL;
+
   // ================================
   // FETCH ORDER HISTORY
   // ================================
@@ -197,7 +199,7 @@ const LogsHistory = ({ darkMode }) => {
       try {
         setLoadingPage(true);
 
-        const res = await fetch("/api/log/orders");
+        const res = await fetch(`${API_URL}/api/log/orders`);
         const data = await res.json();
 
         if (data.success && data.data) {
@@ -213,7 +215,7 @@ const LogsHistory = ({ darkMode }) => {
     };
 
     fetchLogs();
-  }, []);
+  }, [API_URL]);
 
   // ================================
   // SEARCH FILTER
