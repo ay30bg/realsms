@@ -1,270 +1,3 @@
-// // import React, { useState, useEffect } from "react";
-// // import { FiSearch, FiCopy, FiX } from "react-icons/fi";
-// // import SocialServiceCard from "../components/SocialServiceCard";
-// // import "../styles/buy-number.css";
-
-// // // ICONS
-// // import instagramIcon from "../assets/instagram.png";
-// // import facebookIcon from "../assets/facebook.png";
-// // import twitterIcon from "../assets/twitter.png";
-// // import tiktokIcon from "../assets/tiktok.png";
-
-// // import { useBalance } from "../context/BalanceContext"; 
-
-// // const API = process.env.REACT_APP_API_URL;
-
-// // // Platform icons
-// // const platformIcons = {
-// //   Instagram: instagramIcon,
-// //   Facebook: facebookIcon,
-// //   Twitter: twitterIcon,
-// //   "Twitter (X)": twitterIcon,
-// //   TikTok: tiktokIcon,
-// // };
-
-// // const PurchaseLogs = ({ darkMode }) => {
-// //   const [categories, setCategories] = useState([]);
-// //   const [products, setProducts] = useState([]);
-// //   const [selectedCategory, setSelectedCategory] = useState(null);
-// //   const [activeOrder, setActiveOrder] = useState(null);
-// //   const [search, setSearch] = useState("");
-// //   const [loading, setLoading] = useState(false);
-// //   const [copied, setCopied] = useState(false);
-
-// //   // BALANCE CONTEXT
-// //   const { balance, debitWallet, loading: balanceLoading, fetchBalance } = useBalance();
-
-// //   // INIT: Categories
-// //   useEffect(() => {
-// //     document.title = "Purchase Logs - RealSMS";
-
-// //     setCategories([
-// //       { id: 1, name: "Instagram" },
-// //       { id: 2, name: "Facebook" },
-// //       { id: 3, name: "Twitter (X)" },
-// //       { id: 4, name: "TikTok" },
-// //     ]);
-// //   }, []);
-
-// //   // FETCH LOGS
-// //   useEffect(() => {
-// //     if (!selectedCategory) return;
-
-// //     const fetchLogs = async () => {
-// //       try {
-// //         setLoading(true);
-
-// //         const res = await fetch(`${API}/api/log`);
-// //         const data = await res.json();
-
-// //         const filtered = data.filter((log) =>
-// //           log.platform
-// //             ?.toLowerCase()
-// //             .includes(selectedCategory.name.toLowerCase().split(" ")[0])
-// //         );
-
-// //         const formatted = filtered.map((log) => ({
-// //           id: log._id,
-// //           name: log.name,
-// //           price: log.price,
-// //           stock: log.stock,
-// //           type: log.type,
-// //           details: log.details,
-// //           icon: platformIcons[log.platform] || instagramIcon,
-// //         }));
-
-// //         setProducts(formatted);
-// //       } catch (err) {
-// //         console.error("Fetch logs error:", err);
-// //       } finally {
-// //         setLoading(false);
-// //       }
-// //     };
-
-// //     fetchLogs();
-// //   }, [selectedCategory]);
-
-// //   // CATEGORY CHANGE
-// //   const handleCategoryChange = (e) => {
-// //     const cat = categories.find((c) => c.id === Number(e.target.value));
-// //     setSelectedCategory(cat || null);
-
-// //     setProducts([]);
-// //     setActiveOrder(null);
-// //     setSearch("");
-// //   };
-
-// //   // BUY HANDLER (with balance deduction)
-// //   const handleBuy = async (product, done, quantity) => {
-// //     const totalCost = product.price * quantity;
-
-// //     // Check if user has enough balance
-// //     if (balance < totalCost) {
-// //       alert("Insufficient wallet balance");
-// //       done();
-// //       return;
-// //     }
-
-// //     try {
-// //       // Send purchase request to backend
-// //       const res = await fetch(`${API}/api/log/buy/${product.id}`, {
-// //         method: "POST",
-// //         headers: { "Content-Type": "application/json" },
-// //         body: JSON.stringify({ quantity }),
-// //       });
-
-// //       const data = await res.json();
-
-// //       if (!res.ok) {
-// //         alert(data.message || "Purchase failed");
-// //         done();
-// //         return;
-// //       }
-
-// //       // Deduct the amount from user's wallet
-// //       await debitWallet(totalCost);
-
-// //       // Refresh balance from backend
-// //       await fetchBalance();
-
-// //       // Show purchased accounts
-// //       setActiveOrder({
-// //         ...product,
-// //         quantity,
-// //         details: data.purchased,
-// //       });
-
-// //       // Update stock in UI instantly
-// //       setProducts((prev) =>
-// //         prev.map((p) =>
-// //           p.id === product.id ? { ...p, stock: data.remainingStock } : p
-// //         )
-// //       );
-
-// //       done();
-// //     } catch (err) {
-// //       console.error("Buy error:", err);
-// //       alert("Something went wrong");
-// //       done();
-// //     }
-// //   };
-
-// //   // SEARCH FILTER
-// //   const filteredProducts = products.filter((p) =>
-// //     p.name.toLowerCase().includes(search.toLowerCase())
-// //   );
-
-// //   // COPY FEEDBACK
-// //   useEffect(() => {
-// //     if (!copied) return;
-// //     const t = setTimeout(() => setCopied(false), 2000);
-// //     return () => clearTimeout(t);
-// //   }, [copied]);
-
-// //   return (
-// //     <div className={`marketplace ${darkMode ? "dark" : ""}`}>
-// //       <div className="buy-number-card">
-// //         <h2>Purchase Logs</h2>
-
-// //         {/* BALANCE DISPLAY */}
-// //         <p className="wallet-balance">
-// //           Wallet Balance: {balanceLoading ? "Loading..." : `₦${balance.toLocaleString()}`}
-// //         </p>
-
-// //         {/* CATEGORY */}
-// //         <select
-// //           className="server-select"
-// //           value={selectedCategory?.id || ""}
-// //           onChange={handleCategoryChange}
-// //         >
-// //           <option value="">Select Platform</option>
-// //           {categories.map((c) => (
-// //             <option key={c.id} value={c.id}>
-// //               {c.name}
-// //             </option>
-// //           ))}
-// //         </select>
-
-// //         {/* SEARCH */}
-// //         <div className="search-container">
-// //           <input
-// //             type="text"
-// //             placeholder="Search accounts"
-// //             className="search-input"
-// //             value={search}
-// //             onChange={(e) => setSearch(e.target.value)}
-// //             disabled={!selectedCategory || loading}
-// //           />
-// //           <FiSearch className="search-icon" />
-// //         </div>
-
-// //         {/* PRODUCTS */}
-// //         {(selectedCategory || loading) && (
-// //           <div className="services-container">
-// //             {loading ? (
-// //               <div className="loading-spinner">
-// //                 <div className={`spinner ${darkMode ? "dark" : ""}`} />
-// //                 <p>Loading products...</p>
-// //               </div>
-// //             ) : filteredProducts.length === 0 ? (
-// //               <p className="empty">No products available</p>
-// //             ) : (
-// //               <div className="services-grid">
-// //                 {filteredProducts.map((product) => (
-// //                   <SocialServiceCard
-// //                     key={product.id}
-// //                     product={product}
-// //                     onBuy={handleBuy}
-// //                   />
-// //                 ))}
-// //               </div>
-// //             )}
-// //           </div>
-// //         )}
-
-// //         {/* DELIVERY / ACTIVE ORDER */}
-// //         {activeOrder && (
-// //           <div className="otp-box">
-// //             {/* CLOSE BUTTON */}
-// //             <FiX className="otp-close" onClick={() => setActiveOrder(null)} />
-
-// //             <div className="otp-header">
-// //               <p>
-// //                 <strong>Accounts:</strong>
-// //                 <pre className="details-block">{activeOrder.details}</pre>
-
-// //                 <FiCopy
-// //                   onClick={() => {
-// //                     navigator.clipboard.writeText(activeOrder.details);
-// //                     setCopied(true);
-// //                   }}
-// //                   style={{ cursor: "pointer", marginTop: 8 }}
-// //                 />
-// //               </p>
-// //             </div>
-
-// //             <p className="success">
-// //               Delivered {activeOrder.quantity} account(s) ✅ {copied && "(Copied!)"}
-// //             </p>
-
-// //             <button
-// //               className="copy-btn"
-// //               onClick={() => {
-// //                 navigator.clipboard.writeText(activeOrder.details);
-// //                 setCopied(true);
-// //               }}
-// //             >
-// //               Copy All
-// //             </button>
-// //           </div>
-// //         )}
-// //       </div>
-// //     </div>
-// //   );
-// // };
-
-// // export default PurchaseLogs;
-
 // import React, { useState, useEffect } from "react";
 // import { FiSearch, FiCopy, FiX } from "react-icons/fi";
 // import SocialServiceCard from "../components/SocialServiceCard";
@@ -298,8 +31,8 @@
 //   const [loading, setLoading] = useState(false);
 //   const [copied, setCopied] = useState(false);
 
-//   // BALANCE CONTEXT (still used internally)
-//   const { balance, debitWallet, fetchBalance } = useBalance();
+//   // ✅ Balance context (instant updates)
+//   const { balance, debitWallet } = useBalance();
 
 //   // INIT
 //   useEffect(() => {
@@ -361,7 +94,7 @@
 //     setSearch("");
 //   };
 
-//   // BUY HANDLER
+//   // ✅ BUY HANDLER (instant balance update)
 //   const handleBuy = async (product, done, quantity) => {
 //     const totalCost = product.price * quantity;
 
@@ -386,9 +119,8 @@
 //         return;
 //       }
 
-//       // Deduct balance
+//       // ✅ instant deduction (updates Topbar immediately)
 //       await debitWallet(totalCost);
-//       await fetchBalance();
 
 //       // Show purchased accounts
 //       setActiveOrder({
@@ -397,10 +129,12 @@
 //         details: data.purchased,
 //       });
 
-//       // Update stock
+//       // Update stock instantly
 //       setProducts((prev) =>
 //         prev.map((p) =>
-//           p.id === product.id ? { ...p, stock: data.remainingStock } : p
+//           p.id === product.id
+//             ? { ...p, stock: data.remainingStock }
+//             : p
 //         )
 //       );
 
@@ -501,7 +235,8 @@
 //             </div>
 
 //             <p className="success">
-//               Delivered {activeOrder.quantity} account(s) ✅ {copied && "(Copied!)"}
+//               Delivered {activeOrder.quantity} account(s) ✅{" "}
+//               {copied && "(Copied!)"}
 //             </p>
 
 //             <button
@@ -532,6 +267,9 @@ import instagramIcon from "../assets/instagram.png";
 import facebookIcon from "../assets/facebook.png";
 import twitterIcon from "../assets/twitter.png";
 import tiktokIcon from "../assets/tiktok.png";
+import mailIcon from "../assets/mail.png";
+import googleVoiceIcon from "../assets/google-voice.png";
+import netflixIcon from "../assets/netflix.png";
 
 import { useBalance } from "../context/BalanceContext";
 
@@ -544,6 +282,9 @@ const platformIcons = {
   Twitter: twitterIcon,
   "Twitter (X)": twitterIcon,
   TikTok: tiktokIcon,
+  Mail: mailIcon,
+  "Google Voice": googleVoiceIcon,
+  Netflix: netflixIcon,
 };
 
 const PurchaseLogs = ({ darkMode }) => {
@@ -558,7 +299,7 @@ const PurchaseLogs = ({ darkMode }) => {
   // ✅ Balance context (instant updates)
   const { balance, debitWallet } = useBalance();
 
-  // INIT
+  // INIT categories
   useEffect(() => {
     document.title = "Purchase Logs - RealSMS";
 
@@ -567,6 +308,9 @@ const PurchaseLogs = ({ darkMode }) => {
       { id: 2, name: "Facebook" },
       { id: 3, name: "Twitter (X)" },
       { id: 4, name: "TikTok" },
+      { id: 5, name: "Mail" },
+      { id: 6, name: "Google Voice" },
+      { id: 7, name: "Netflix" },
     ]);
   }, []);
 
