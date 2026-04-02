@@ -265,19 +265,20 @@ const LogsHistory = ({ darkMode }) => {
   }, [API_URL]);
 
   // ================================
-  // FILTERED LOGS (UPDATED)
+  // NORMALIZE FUNCTION (NEW)
+  // ================================
+  const normalize = (text) =>
+    (text || "").toLowerCase().replace(/\s+/g, "");
+
+  // ================================
+  // FILTERED LOGS (FIXED)
   // ================================
   const filteredLogs = useMemo(() => {
     if (platformFilter === "all") return logs;
 
-    return logs.filter((log) => {
-      const platform = log.platform?.toLowerCase() || "";
-      const filter = platformFilter.toLowerCase();
-
-      if (filter === "mail") return platform.includes("mail");
-      if (filter === "google voice") return platform.includes("google");
-      return platform === filter;
-    });
+    return logs.filter((log) =>
+      normalize(log.platform).includes(normalize(platformFilter))
+    );
   }, [logs, platformFilter]);
 
   // ================================
@@ -354,8 +355,6 @@ const LogsHistory = ({ darkMode }) => {
             <option value="facebook">Facebook</option>
             <option value="twitter">Twitter</option>
             <option value="tiktok">TikTok</option>
-
-            {/* NEW */}
             <option value="mail">Mail</option>
             <option value="netflix">Netflix</option>
             <option value="google voice">Google Voice</option>
