@@ -673,67 +673,72 @@ const PurchaseLogs = ({ darkMode }) => {
     setSearch("");
   };
 
-  // Buy handler with JWT token
-  const handleBuy = async (product, done, quantity) => {
-    const totalCost = product.price * quantity;
+ const handleBuy = async (product, done, quantity) => {
+  const totalCost = product.price * quantity;
 
-    if (balance < totalCost) {
-      alert("Insufficient wallet balance");
+  // Check wallet balance first
+  if (balance < totalCost) {
+    alert("Insufficient wallet balance");
+    done();
+    return;
+  }
+
+  // ✅ Get token from localStorage
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("You must be logged in to make a purchase.");
+    done();
+    return;
+  }
+
+  try {
+    // ✅ Debug: log token and request
+    console.log("Sending purchase request with token:", token);
+
+    const res = await fetch(`${API}/api/log/buy/${product.id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // send JWT token
+      },
+      body: JSON.stringify({ quantity }),
+    });
+
+    const data = await res.json();
+
+    // Check if backend responded with error
+    if (!res.ok) {
+      console.error("Purchase failed:", data);
+      alert(data.message || "Purchase failed");
       done();
       return;
     }
 
-    try {
-      const token = localStorage.getItem("JWT Token"); // Match key from login
-      if (!token) {
-        alert("You must be logged in to make a purchase");
-        done();
-        return;
-      }
+    // ✅ Update wallet immediately
+    await debitWallet(totalCost);
 
-      const res = await fetch(`${API}/api/log/buy/${product.id}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ quantity }),
-      });
+    // Show purchased accounts
+    setActiveOrder({
+      ...product,
+      quantity,
+      details: data.purchased,
+    });
 
-      const data = await res.json();
+    // Update stock locally
+    setProducts((prev) =>
+      prev.map((p) =>
+        p.id === product.id ? { ...p, stock: data.remainingStock } : p
+      )
+    );
 
-      if (!res.ok) {
-        if (res.status === 401) {
-          alert("Session expired or invalid token. Please log in again.");
-        } else {
-          alert(data.message || "Purchase failed");
-        }
-        done();
-        return;
-      }
-
-      await debitWallet(totalCost);
-
-      setActiveOrder({
-        ...product,
-        quantity,
-        details: data.purchased,
-      });
-
-      setProducts((prev) =>
-        prev.map((p) =>
-          p.id === product.id ? { ...p, stock: data.remainingStock } : p
-        )
-      );
-
-      done();
-    } catch (err) {
-      console.error("Buy error:", err);
-      alert("Something went wrong");
-      done();
-    }
-  };
-
+    done();
+  } catch (err) {
+    console.error("Buy error:", err);
+    alert("Something went wrong during purchase");
+    done();
+  }
+};
+  
   // Filter products by search
   const filteredProducts =
     products?.filter((p) => p.name.toLowerCase().includes(search.toLowerCase())) ||
