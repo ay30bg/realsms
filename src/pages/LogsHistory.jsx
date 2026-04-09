@@ -472,7 +472,7 @@
 // export default LogsHistory;
 
 import React, { useEffect, useState, useMemo } from "react";
-import "../styles/order-history.css";
+import "../styles/order-history.css"; 
 
 const ORDERS_PER_PAGE = 10;
 
