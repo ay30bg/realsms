@@ -743,7 +743,7 @@ const LogsHistory = ({ darkMode }) => {
         // Set Axios default Authorization header
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-        const res = await axios.get(`${API_URL}/api/logs/orders`);
+        const res = await axios.get(`${API_URL}/api/log/orders`);
 
         if (res.data?.data) {
           setLogs(res.data.data);
