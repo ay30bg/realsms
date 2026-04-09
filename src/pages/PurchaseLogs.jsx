@@ -572,8 +572,6 @@ import tiktokIcon from "../assets/tiktok.png";
 import mailIcon from "../assets/mail.png";
 import googleVoiceIcon from "../assets/google-voice.png";
 import netflixIcon from "../assets/netflix.png";
-
-// ✅ NEW ICONS
 import vpnIcon from "../assets/vpn.png";
 import textingIcon from "../assets/texting.png";
 
@@ -581,7 +579,7 @@ import { useBalance } from "../context/BalanceContext";
 
 const API = process.env.REACT_APP_API_URL;
 
-// Platform icons
+// Platform icons mapping
 const platformIcons = {
   Instagram: instagramIcon,
   Facebook: facebookIcon,
@@ -606,10 +604,9 @@ const PurchaseLogs = ({ darkMode }) => {
 
   const { balance, debitWallet } = useBalance();
 
-  // INIT categories
+  // Initialize categories
   useEffect(() => {
     document.title = "Purchase Logs - RealSMS";
-
     setCategories([
       { id: 1, name: "Instagram" },
       { id: 2, name: "Facebook" },
@@ -623,14 +620,13 @@ const PurchaseLogs = ({ darkMode }) => {
     ]);
   }, []);
 
-  // FETCH LOGS
+  // Fetch logs when category changes
   useEffect(() => {
     if (!selectedCategory) return;
 
     const fetchLogs = async () => {
       try {
         setLoading(true);
-
         const res = await fetch(`${API}/api/log`);
         const json = await res.json();
 
@@ -668,7 +664,7 @@ const PurchaseLogs = ({ darkMode }) => {
     fetchLogs();
   }, [selectedCategory]);
 
-  // CATEGORY CHANGE
+  // Handle category change
   const handleCategoryChange = (e) => {
     const cat = categories.find((c) => c.id === Number(e.target.value));
     setSelectedCategory(cat || null);
@@ -677,7 +673,7 @@ const PurchaseLogs = ({ darkMode }) => {
     setSearch("");
   };
 
-  // BUY HANDLER
+  // Buy handler with JWT token
   const handleBuy = async (product, done, quantity) => {
     const totalCost = product.price * quantity;
 
@@ -688,14 +684,18 @@ const PurchaseLogs = ({ darkMode }) => {
     }
 
     try {
-      // ✅ Get token if available
-      const token = localStorage.getItem("authToken");
+      const token = localStorage.getItem("JWT Token"); // Match key from login
+      if (!token) {
+        alert("You must be logged in to make a purchase");
+        done();
+        return;
+      }
 
       const res = await fetch(`${API}/api/log/buy/${product.id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          ...(token && { Authorization: `Bearer ${token}` }), // send token if exists
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ quantity }),
       });
@@ -703,12 +703,15 @@ const PurchaseLogs = ({ darkMode }) => {
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data.message || "Purchase failed");
+        if (res.status === 401) {
+          alert("Session expired or invalid token. Please log in again.");
+        } else {
+          alert(data.message || "Purchase failed");
+        }
         done();
         return;
       }
 
-      // update wallet instantly
       await debitWallet(totalCost);
 
       setActiveOrder({
@@ -717,7 +720,6 @@ const PurchaseLogs = ({ darkMode }) => {
         details: data.purchased,
       });
 
-      // update stock instantly
       setProducts((prev) =>
         prev.map((p) =>
           p.id === product.id ? { ...p, stock: data.remainingStock } : p
@@ -732,13 +734,12 @@ const PurchaseLogs = ({ darkMode }) => {
     }
   };
 
-  // SEARCH FILTER
+  // Filter products by search
   const filteredProducts =
-    products?.filter((p) =>
-      p.name.toLowerCase().includes(search.toLowerCase())
-    ) || [];
+    products?.filter((p) => p.name.toLowerCase().includes(search.toLowerCase())) ||
+    [];
 
-  // COPY FEEDBACK
+  // Copy feedback
   useEffect(() => {
     if (!copied) return;
     const t = setTimeout(() => setCopied(false), 2000);
@@ -750,7 +751,7 @@ const PurchaseLogs = ({ darkMode }) => {
       <div className="buy-number-card">
         <h2>Purchase Logs</h2>
 
-        {/* CATEGORY */}
+        {/* CATEGORY SELECT */}
         <select
           className="server-select"
           value={selectedCategory?.id || ""}
@@ -805,7 +806,6 @@ const PurchaseLogs = ({ darkMode }) => {
         {activeOrder && (
           <div className="otp-box">
             <FiX className="otp-close" onClick={() => setActiveOrder(null)} />
-
             <div className="otp-header">
               <p>
                 <strong>Accounts:</strong>
@@ -819,11 +819,9 @@ const PurchaseLogs = ({ darkMode }) => {
                 />
               </p>
             </div>
-
             <p className="success">
               Delivered {activeOrder.quantity} account(s) ✅ {copied && "(Copied!)"}
             </p>
-
             <button
               className="copy-btn"
               onClick={() => {
