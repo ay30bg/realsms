@@ -96,6 +96,7 @@ export const BalanceProvider = ({ children }) => {
     <BalanceContext.Provider
       value={{
         balance,
+        setBalance, 
         loading,
         fetchBalance,
         debitWallet,
