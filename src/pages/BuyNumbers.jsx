@@ -6,7 +6,7 @@ import { useBalance } from "../context/BalanceContext";
 import "../styles/buy-number.css";
 
 const BuyNumbers = ({ darkMode }) => {
-  const { balance } = useBalance();
+  const { balance, debitWallet } = useBalance();
 
   const [countries, setCountries] = useState([]);
   const [services, setServices] = useState([]);
