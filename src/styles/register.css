@@ -2,12 +2,6 @@
   box-sizing: border-box;
 }
 
-body {
-  background: #faf7f5;
-  margin: 0;
-  overflow-x: hidden;
-}
-
 /* =====================
    WRAPPER
 ===================== */
@@ -15,9 +9,13 @@ body {
   min-height: 100vh;
   display: grid;
   grid-template-columns: 1.1fr 1fr;
-  background: #faf7f5;
+
+  background: var(--bg-color);
+
   padding: 40px;
   gap: 40px;
+
+  transition: background 0.3s ease;
 }
 
 /* =====================
@@ -34,20 +32,87 @@ body {
 }
 
 /* =====================
-   RIGHT CARD
+   CARD
 ===================== */
 .register-card {
-  background: #ffffff;
+  background: var(--card-bg);
+  color: var(--text-color);
+
   border-radius: 16px;
+
   padding: 48px;
+
   max-width: 520px;
   width: 100%;
+
   display: flex;
   flex-direction: column;
+
   justify-content: flex-start;
+
   margin-top: -40px;
+
+  border: 1px solid var(--border-color);
+
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
 }
 
+/* =====================
+   HEADER
+===================== */
+.register-card h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--text-color);
+}
+
+/* =====================
+   FORM
+===================== */
+.register-form label {
+  font-size: 14px;
+  margin-bottom: 6px;
+  display: block;
+  color: var(--secondary-text);
+}
+
+.register-form input[type="text"],
+.register-form input[type="email"],
+.register-form input[type="password"] {
+  width: 100%;
+  padding: 14px 16px;
+
+  border-radius: 8px;
+
+  border: 1px solid var(--border-color);
+
+  margin-bottom: 14px;
+
+  font-size: 15px;
+
+  background: var(--card-bg);
+  color: var(--text-color);
+
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease,
+    color 0.3s ease;
+}
+
+.register-form input:focus {
+  outline: none;
+  border-color: #367e3a;
+}
+
+/* =====================
+   PASSWORD
+===================== */
 .password-wrapper {
   position: relative;
   display: flex;
@@ -56,12 +121,19 @@ body {
 
 .password-wrapper input {
   width: 100%;
-  padding-right: 40px; 
+  padding-right: 40px;
   height: 45px;
+
   border-radius: 6px;
-  border: 1px solid #ccc;
+
+  border: 1px solid var(--border-color);
+
   padding-left: 10px;
+
   font-size: 1rem;
+
+  background: var(--card-bg);
+  color: var(--text-color);
 }
 
 .eye-icon {
@@ -69,142 +141,115 @@ body {
   right: 10px;
   top: 50%;
   transform: translateY(-80%);
+
   cursor: pointer;
-  color: #555;
+
+  color: var(--secondary-text);
+
   font-size: 1.2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color 0.2s ease;
 }
 
-/* MOBILE LOGO */
-.register-mobile-logo {
-  display: none;
-  text-align: center;
-  margin-bottom: 14px;
-}
-
-.register-mobile-logo img {
-  width: 140px;
-  height: auto;
-}
-
-/* HEADER */
-.register-card h2 {
-  font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 20px;
-}
-
-/* FORM */
-.register-form label {
-  font-size: 14px;
-  margin-bottom: 6px;
-  display: block;
-  color: #444;
-}
-
-.register-form input[type="text"],
-.register-form input[type="email"],
-.register-form input[type="password"] {
-  width: 100%;
-  padding: 14px 16px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  margin-bottom: 14px; /* compact */
-  font-size: 15px;
-}
-
-.register-form input:focus {
-  outline: none;
-  border-color: #ff7a00;
-}
-
-/* NAME ROW */
+/* =====================
+   NAME ROW
+===================== */
 .name-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
 
-/* CAPTCHA MOCK */
+/* =====================
+   CAPTCHA
+===================== */
 .recaptcha-box {
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
   border-radius: 6px;
+
   padding: 16px;
+
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 14px; /* compact */
+
+  margin-bottom: 14px;
+
+  background: var(--card-bg);
 }
 
 .recaptcha-logo {
   margin-left: auto;
   font-size: 12px;
-  color: #777;
+  color: var(--secondary-text);
 }
 
-/* TERMS */
+/* =====================
+   TERMS
+===================== */
 .terms {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
   font-size: 13px;
+  color: var(--secondary-text);
 }
 
 .terms span {
   font-weight: 600;
-  color: #000;
+  color: var(--text-color);
 }
 
-/* BUTTON */
+/* =====================
+   BUTTON
+===================== */
 .register-btn {
   width: 100%;
   padding: 14px;
+
   border-radius: 8px;
+
   background: #367e3a;
   color: white;
+
   border: none;
+
   font-size: 16px;
   font-weight: 600;
+
   cursor: pointer;
-  margin-bottom: 14px; /* compact */
+
+  margin-bottom: 14px;
+
+  transition: background 0.3s ease;
 }
 
 .register-btn:hover {
   background: #2f6f33;
 }
 
-/* SIGN IN */
+/* =====================
+   SIGN IN
+===================== */
 .signin-text {
   text-align: center;
   font-size: 14px;
+  color: var(--secondary-text);
 }
 
-/* SIGN IN LINK */
 .signin-text a {
   font-weight: 600;
-  color: #000;
+  color: var(--text-color);
   text-decoration: none;
 }
 
 /* =====================
-   MOBILE (NO PAGE SCROLL + CARD UP)
+   MOBILE
 ===================== */
 @media (max-width: 900px) {
-  /* html,
-  body {
-    height: 100%;
-    overflow: hidden;
-  } */
-
   .register-wrapper {
     grid-template-columns: 1fr;
     padding: 16px;
-    height: 100vh;
-    overflow: hidden;
-    align-items: flex-start; /* move card up */
+    min-height: 100vh;
+    align-items: flex-start;
   }
 
   .register-illustration {
@@ -212,34 +257,17 @@ body {
   }
 
   .register-card {
-    margin: 20px auto 0; /* top spacing */
+    margin: 20px auto 0;
     padding: 20px;
+
     border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+
     max-height: calc(100vh - 40px);
-    overflow-y: auto; /* card scroll if needed */
+
+    overflow-y: auto;
   }
 
-  .register-mobile-logo {
-    display: block;
-  }
-
-  .terms {
-    display: grid;
-    grid-template-columns: auto 1fr; /* checkbox + text */
-    gap: 8px;
-    align-items: center; /* vertical center of checkbox with multi-line text */
-  }
-
-  .terms input[type="checkbox"] {
-    margin-top: 0; /* ensure no extra offset */
-  }
-
-  .terms p {
-    margin: 0;
+  .name-row {
+    grid-template-columns: 1fr;
   }
 }
-
-
-
-
