@@ -1,67 +1,145 @@
-/* PAGE */
+/* =========================
+   PAGE
+========================= */
 .order-history-page {
   padding: 20px;
+
+  background: var(--bg-color);
+  color: var(--text-color);
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
 }
 
-/* CARD */
+/* =========================
+   CARD
+========================= */
 .order-history-card {
-  background-color: #ffffff;
+  background: var(--card-bg);
+
+  color: var(--text-color);
+
   padding: 20px;
-  border-radius: 6px;
+
+  border-radius: 10px;
+
+  border: 1px solid var(--border-color);
+
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+
   max-width: 100%;
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
 }
 
-/* TITLE */
+/* =========================
+   TITLE
+========================= */
 .order-history-title {
   margin-bottom: 20px;
+
   font-size: 22px;
   font-weight: 700;
+
+  color: var(--text-color);
 }
 
-/* EMPTY STATE */
+/* =========================
+   EMPTY STATE
+========================= */
 .no-orders {
   text-align: center;
-  color: #6b7280;
+
+  color: var(--secondary-text);
+
   font-size: 14px;
 }
 
-/* TABLE WRAPPER */
+/* =========================
+   TABLE WRAPPER
+========================= */
 .order-table-scroll {
   width: 100%;
+  overflow-x: auto;
 }
 
-/* TABLE */
+/* =========================
+   TABLE
+========================= */
 .order-history-table {
   width: 100%;
+
   border-collapse: collapse;
+
   font-size: 14px;
 }
 
-/* HEADER */
+/* =========================
+   TABLE HEADER
+========================= */
 .order-history-table th {
-  background-color: #f3f4f6;
+  background: rgba(0, 0, 0, 0.04);
+
   padding: 12px;
+
   text-align: left;
+
   font-weight: 600;
   font-size: 13px;
+
   text-transform: uppercase;
-  color: #374151;
-  border-bottom: 1px solid #e5e7eb;
+
+  color: var(--secondary-text);
+
+  border-bottom: 1px solid var(--border-color);
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
 }
 
-/* BODY CELLS */
+body[data-theme="dark"] .order-history-table th {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* =========================
+   TABLE BODY
+========================= */
 .order-history-table td {
   padding: 12px;
-  border-bottom: 1px solid #e5e7eb;
+
+  border-bottom: 1px solid var(--border-color);
+
+  color: var(--text-color);
+
+  transition:
+    color 0.3s ease,
+    border-color 0.3s ease;
 }
 
-/* ROW HOVER */
+/* =========================
+   ROW HOVER
+========================= */
+.order-history-table tbody tr {
+  transition: background 0.2s ease;
+}
+
 .order-history-table tbody tr:hover {
-  background-color: #f9fafb;
+  background: rgba(0, 0, 0, 0.03);
 }
 
-/* OTP STATUS */
+body[data-theme="dark"] .order-history-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* =========================
+   OTP STATUS
+========================= */
 .otp-success {
   color: #16a34a;
   font-weight: 600;
@@ -72,87 +150,110 @@
   font-weight: 500;
 }
 
-/* BUTTON */
-.resend-btn {
-  padding: 6px 12px;
-  border-radius: 6px;
+/* =========================
+   BUTTONS
+========================= */
+.resend-btn,
+.refund-btn {
   border: none;
-  background-color: #2563eb;
-  color: #ffffff;
-  font-size: 13px;
+
   cursor: pointer;
-  transition: 0.2s ease;
+
+  transition:
+    all 0.2s ease,
+    transform 0.2s ease;
+
+  color: #fff;
 }
 
-.resend-btn:hover {
-  background-color: #1d4ed8;
+/* Resend */
+.resend-btn {
+  padding: 6px 12px;
+
+  border-radius: 8px;
+
+  background: #2563eb;
+
+  font-size: 13px;
+}
+
+.resend-btn:hover:not(:disabled) {
+  background: #1d4ed8;
+
+  transform: translateY(-1px);
 }
 
 .resend-btn:disabled {
-  background-color: #9ca3af;
+  background: #9ca3af;
   cursor: not-allowed;
 }
 
-/* ==========================
-   REFUND BUTTON STYLING
-=========================== */
+/* Refund */
 .refund-btn {
-  padding: 8px 16px; /* larger for mobile tap */
+  padding: 8px 16px;
+
   border-radius: 8px;
-  border: none;
-  background: linear-gradient(90deg, #ef4444, #dc2626); /* red gradient */
-  color: #ffffff;
+
+  background: linear-gradient(90deg, #ef4444, #dc2626);
+
   font-size: 14px;
   font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
+
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
 }
 
-.refund-btn:hover {
-  background: linear-gradient(90deg, #f87171, #b91c1c); /* lighter hover */
+.refund-btn:hover:not(:disabled) {
+  background: linear-gradient(90deg, #f87171, #b91c1c);
+
   transform: translateY(-1px);
+
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 
 .refund-btn:active {
   transform: translateY(1px);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
 .refund-btn:disabled {
-  background: #fca5a5; /* pale red for disabled */
+  background: #fca5a5;
+
   cursor: not-allowed;
+
   box-shadow: none;
-  color: #ffffff;
 }
 
 /* =====================
    LOADING SPINNER
 ===================== */
-
 .loading-spinner {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
   padding: 80px 0;
-  color: #555;
+
+  color: var(--secondary-text);
+
   font-weight: 500;
 }
 
 .spinner {
   border: 4px solid rgba(0, 0, 0, 0.1);
   border-top: 4px solid #367e3a;
+
   border-radius: 50%;
+
   width: 40px;
   height: 40px;
+
   animation: spin 1s linear infinite;
+
   margin-bottom: 12px;
 }
 
-.spinner.dark {
-  border: 4px solid rgba(255, 255, 255, 0.2);
+body[data-theme="dark"] .spinner {
+  border: 4px solid rgba(255, 255, 255, 0.15);
   border-top: 4px solid #fff;
 }
 
@@ -160,13 +261,20 @@
   border: 2px solid transparent;
   border-top: 2px solid #fff;
   border-right: 2px solid #fff;
+
   border-radius: 50%;
+
   width: 16px;
   height: 16px;
+
   animation: spin 0.8s linear infinite;
+
   display: inline-block;
 }
 
+/* =========================
+   FILTER
+========================= */
 .order-filter {
   margin-bottom: 15px;
 }
@@ -176,56 +284,94 @@
   -webkit-appearance: none;
   -moz-appearance: none;
 
-  background-color: #fff;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
+  background-color: var(--card-bg);
+
+  color: var(--text-color);
+
+  border: 1px solid var(--border-color);
+
+  border-radius: 8px;
 
   padding: 8px 12px;
+
   font-size: 14px;
-  color: #111827;
 
   outline: none;
+
   cursor: pointer;
 
-  /* Make dropdown wider */
-  min-width: 160px;  /* increase width from default */
+  min-width: 160px;
   max-width: 100%;
 
-  /* Custom dropdown arrow */
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
+
   background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0L5 6L10 0H0Z' fill='%236B7280'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 10px center;
   background-size: 10px 6px;
 }
 
-/* Focus effect (same as transaction page) */
 .order-filter select:focus {
   border-color: #2563eb;
+
   box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
 }
 
-/* Hide default arrow for IE */
 .order-filter select::-ms-expand {
   display: none;
 }
 
+/* =========================
+   PAGINATION
+========================= */
 .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
+
   gap: 15px;
+
   margin-top: 15px;
 }
 
 .pagination button {
   padding: 6px 12px;
-  border-radius: 6px;
+
+  border-radius: 8px;
+
+  border: 1px solid var(--border-color);
+
+  background: var(--card-bg);
+
+  color: var(--text-color);
+
   cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
 }
 
+.pagination button:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+body[data-theme="dark"] .pagination button:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* =========================
+   STATUS BADGES
+========================= */
 .status-badge {
   padding: 4px 10px;
+
   border-radius: 20px;
+
   font-size: 12px;
   font-weight: 600;
 }
@@ -250,14 +396,8 @@
   color: #383d41;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
 /* =========================
-   NUMBER HISTORY MOBILE STYLING
-   Full responsive, like Transaction History + admin-table buttons
+   MOBILE STYLING
 ========================= */
 @media (max-width: 640px) {
   .order-history-page {
@@ -267,17 +407,18 @@
   .order-history-card {
     width: 100%;
     max-width: 100%;
+
     border-radius: 10px;
+
     padding: 16px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   }
 
-  /* Hide table headers */
   .order-history-table thead {
     display: none;
   }
 
-  /* Make table block on mobile */
   .order-history-table,
   .order-history-table tbody,
   .order-history-table tr,
@@ -287,121 +428,126 @@
   }
 
   .order-history-table tr {
-    background: #fff;
+    background: var(--card-bg);
+
     margin-bottom: 12px;
+
     padding: 12px;
+
     border-radius: 10px;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+
+    border: 1px solid var(--border-color);
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
   }
 
-  /* Flex layout for td to prevent cramped content */
   .order-history-table td {
     display: flex;
+
     justify-content: space-between;
     align-items: center;
+
     text-align: left;
+
     padding: 6px 10px;
+
     font-size: 13px;
+
     border: none;
+
     position: relative;
+
     flex-wrap: wrap;
   }
 
   .order-history-table td::before {
     content: attr(data-label);
+
     font-size: 12px;
     font-weight: 600;
+
     text-transform: uppercase;
-    color: #6b7280;
+
+    color: var(--secondary-text);
+
     min-width: 90px;
+
     margin-right: 10px;
   }
 
-  /* Status badges */
   .status-badge {
     margin-left: 10px;
     margin-top: 3px;
-    float: none;
   }
 
-  /* =========================
-     Action Buttons (Refund / Resend)
-     Styled like admin-table
-  ======================== */
   .order-history-table td[data-label="Action"] {
     display: flex;
+
     justify-content: flex-start;
+
     gap: 6px;
+
     flex-wrap: wrap;
+
     padding-top: 8px;
   }
 
-.refund-btn,
-.resend-btn {
-  padding: 4px 10px;
-  font-size: 12px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  min-width: 80px;
-  text-align: center;
-  white-space: nowrap;
-  flex: 0 0 auto;
-  margin-left: auto; 
-}
-
-  .refund-btn {
-    background: #ef4444; /* red */
-    color: #fff;
-  }
-
-  .refund-btn:hover:not(:disabled) {
-    background: #b91c1c;
-    transform: translateY(-1px);
-  }
-
-  .refund-btn:disabled {
-    background: #fca5a5;
-    cursor: not-allowed;
-  }
-
+  .refund-btn,
   .resend-btn {
-    background: #2563eb; /* blue */
-    color: #fff;
+    padding: 4px 10px;
+
+    font-size: 12px;
+
+    border-radius: 6px;
+
+    min-width: 80px;
+
+    text-align: center;
+
+    white-space: nowrap;
+
+    flex: 0 0 auto;
+
+    margin-left: auto;
   }
 
-  .resend-btn:hover:not(:disabled) {
-    background: #1e40af;
-    transform: translateY(-1px);
-  }
-
-  .resend-btn:disabled {
-    background: #9ca3af;
-    cursor: not-allowed;
-  }
-
-  /* Pagination fixes */
   .pagination {
     flex-direction: row;
+
     justify-content: center;
+
     gap: 6px;
+
     overflow-x: auto;
+
     padding-bottom: 5px;
   }
 
   .pagination button {
-    flex: 0 0 auto; /* prevent shrinking */
+    flex: 0 0 auto;
+
     padding: 4px 8px;
+
     font-size: 13px;
+
     white-space: nowrap;
   }
 
-  /* OTP & status alignment */
   .otp-success,
   .otp-waiting {
     margin-left: 10px;
   }
 }
 
+/* =========================
+   ANIMATIONS
+========================= */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
