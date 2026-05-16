@@ -56,7 +56,7 @@
 
   justify-content: flex-start;
 
-  margin-top: 20px;
+  margin-top: 10px;
 
   border: 1px solid var(--border-color);
 
@@ -272,7 +272,7 @@
 
     overflow-y: auto;
 
-    margin-top: 0;
+    margin-top: 10px;
   }
 
   .login-mobile-logo {
