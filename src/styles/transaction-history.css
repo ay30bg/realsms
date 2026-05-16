@@ -1,96 +1,178 @@
-/* PAGE */
+/* =========================
+   PAGE
+========================= */
 .transaction-page {
   padding: 20px;
+
+  background: var(--bg-color);
+  color: var(--text-color);
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
 }
 
-/* CARD */
+/* =========================
+   CARD
+========================= */
 .transaction-card {
-  background: #ffffff; 
+  background: var(--card-bg);
+
+  color: var(--text-color);
+
   padding: 20px;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+
+  border-radius: 10px;
+
+  border: 1px solid var(--border-color);
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
 }
 
-/* TITLE */
+/* =========================
+   TITLE
+========================= */
 .transaction-title {
   font-size: 22px;
   font-weight: 700;
+
   margin-bottom: 20px;
+
+  color: var(--text-color);
 }
 
-/* FILTER */
+/* =========================
+   FILTER
+========================= */
 .transaction-filter {
   margin-bottom: 15px;
 }
 
-/* .transaction-filter select {
-  padding: 6px 10px;
-  border-radius: 6px;
-} */
-
 .transaction-filter select {
-  appearance: none;          /* Remove default styling */
-  -webkit-appearance: none;  /* Safari & Chrome */
-  -moz-appearance: none;     /* Firefox */
-  background-color: #fff;    /* White background */
-  border: 1px solid #d1d5db;/* Gray border */
-  border-radius: 6px;        /* Rounded corners */
-  padding: 8px 12px;         /* More consistent padding */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  background-color: var(--card-bg);
+
+  color: var(--text-color);
+
+  border: 1px solid var(--border-color);
+
+  border-radius: 8px;
+
+  padding: 8px 12px;
+
   font-size: 14px;
-  color: #111827;
+
   outline: none;
+
   cursor: pointer;
-  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0L5 6L10 0H0Z' fill='%236B7280'/%3E%3C/svg%3E"); /* Custom arrow */
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
+
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0L5 6L10 0H0Z' fill='%236B7280'/%3E%3C/svg%3E");
+
   background-repeat: no-repeat;
+
   background-position: right 10px center;
+
   background-size: 10px 6px;
 }
 
-/* Focus style */
 .transaction-filter select:focus {
   border-color: #2563eb;
+
   box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
 }
 
-/* Optional: hide arrow for IE 10+ */
+/* Hide arrow for IE */
 select::-ms-expand {
   display: none;
 }
 
-/* TABLE */
+/* =========================
+   TABLE
+========================= */
 .transaction-table {
   width: 100%;
+
   border-collapse: collapse;
+
   font-size: 14px;
 }
 
 .transaction-table th {
-  background: #f3f4f6;
+  background: rgba(0, 0, 0, 0.04);
+
   padding: 12px;
+
   text-align: left;
+
   font-size: 13px;
+  font-weight: 600;
+
   text-transform: uppercase;
-  border-bottom: 1px solid #e5e7eb;
+
+  color: var(--secondary-text);
+
+  border-bottom: 1px solid var(--border-color);
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+body[data-theme="dark"] .transaction-table th {
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .transaction-table td {
   padding: 12px;
-  border-bottom: 1px solid #e5e7eb;
+
+  border-bottom: 1px solid var(--border-color);
+
+  color: var(--text-color);
+
+  transition:
+    border-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.transaction-table tbody tr {
+  transition: background 0.2s ease;
 }
 
 .transaction-table tbody tr:hover {
-  background: #f9fafb;
+  background: rgba(0, 0, 0, 0.03);
 }
 
-/* BADGES */
+body[data-theme="dark"] .transaction-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
 
+/* =========================
+   BADGES
+========================= */
 .tx-badge {
   padding: 4px 10px;
+
   border-radius: 20px;
+
   font-size: 12px;
   font-weight: 600;
 }
 
+/* Transaction Types */
 .tx-badge.deposit {
   background: #d1fae5;
   color: #065f46;
@@ -116,66 +198,98 @@ select::-ms-expand {
   color: #065f46;
 }
 
-/* EMPTY */
-.no-transactions {
-  text-align: center;
-  color: #6b7280;
+/* Status */
+.tx-badge.success {
+  background: #16a34a;
+  color: #fff;
 }
 
-/* PAGINATION */
+.tx-badge.pending {
+  background: #f59e0b;
+  color: #fff;
+}
 
+.tx-badge.failed {
+  background: #dc2626;
+  color: #fff;
+}
+
+/* =========================
+   EMPTY STATE
+========================= */
+.no-transactions {
+  text-align: center;
+
+  color: var(--secondary-text);
+}
+
+/* =========================
+   PAGINATION
+========================= */
 .pagination {
   display: flex;
   justify-content: center;
+
   gap: 15px;
+
   margin-top: 15px;
 }
 
 .pagination button {
   padding: 6px 12px;
-  border-radius: 6px;
+
+  border-radius: 8px;
+
+  border: 1px solid var(--border-color);
+
+  background: var(--card-bg);
+
+  color: var(--text-color);
+
   cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
 }
 
-/* ==========================
-   STATUS BADGES
-========================== */
-.tx-badge.success {
-  background: #16a34a; 
-  color: #fff;
+.pagination button:hover {
+  background: rgba(0, 0, 0, 0.04);
 }
 
-.tx-badge.pending {
-  background: #f59e0b; 
-  color: #fff;     
+body[data-theme="dark"] .pagination button:hover {
+  background: rgba(255, 255, 255, 0.05);
 }
 
-.tx-badge.failed {
-  background: #dc2626;
-  color: #fff;   
-}
-
-/* SPINNER */
-
+/* =========================
+   LOADING SPINNER
+========================= */
 .loading-spinner {
   display: flex;
   flex-direction: column;
   align-items: center;
+
   padding: 80px 0;
+
+  color: var(--secondary-text);
 }
 
 .spinner {
-  border: 4px solid rgba(0,0,0,0.1);
+  border: 4px solid rgba(0, 0, 0, 0.1);
   border-top: 4px solid #367e3a;
+
   border-radius: 50%;
+
   width: 40px;
   height: 40px;
+
   animation: spin 1s linear infinite;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg);}
-  100% { transform: rotate(360deg);}
+body[data-theme="dark"] .spinner {
+  border: 4px solid rgba(255, 255, 255, 0.15);
+  border-top: 4px solid #ffffff;
 }
 
 /* =========================
@@ -189,17 +303,20 @@ select::-ms-expand {
   .transaction-card {
     width: 100%;
     max-width: 100%;
+
     border-radius: 10px;
+
     padding: 16px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   }
 
-  /* Hide table headers */
+  /* Hide headers */
   .transaction-table thead {
     display: none;
   }
 
-  /* Make table block on mobile */
+  /* Make table responsive */
   .transaction-table,
   .transaction-table tbody,
   .transaction-table tr,
@@ -209,64 +326,98 @@ select::-ms-expand {
   }
 
   .transaction-table tr {
-    background: #fff;
+    background: var(--card-bg);
+
     margin-bottom: 12px;
+
     padding: 12px;
+
     border-radius: 10px;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+
+    border: 1px solid var(--border-color);
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
   }
 
-  /* Flex layout for td to prevent jampacked content */
   .transaction-table td {
     display: flex;
+
     justify-content: space-between;
     align-items: center;
+
     text-align: left;
+
     padding: 6px 10px;
+
     font-size: 13px;
+
     border: none;
+
     position: relative;
+
     flex-wrap: wrap;
   }
 
   .transaction-table td::before {
     content: attr(data-label);
+
     font-size: 12px;
     font-weight: 600;
+
     text-transform: uppercase;
-    color: #6b7280;
+
+    color: var(--secondary-text);
+
     min-width: 90px;
+
     margin-right: 10px;
   }
 
-  /* Wrap badges properly */
   .tx-badge {
     margin-left: 10px;
     margin-top: 3px;
-    float: none;
   }
 
-  /* Truncate reference */
   .transaction-table td[data-label="Reference"] .value {
     display: inline-block;
+
     max-width: 150px;
+
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  /* Pagination fixes */
   .pagination {
     flex-direction: row;
+
     justify-content: center;
+
     gap: 6px;
+
     overflow-x: auto;
+
     padding-bottom: 5px;
   }
 
   .pagination button {
     padding: 4px 8px;
+
     font-size: 13px;
+
+    white-space: nowrap;
+  }
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
   }
 }
