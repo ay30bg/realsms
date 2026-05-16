@@ -1,33 +1,75 @@
+/* =========================
+   PAGE
+========================= */
 .fund-wallet-page {
   padding: 20px;
+
+  background: var(--bg-color);
+  color: var(--text-color);
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
 }
 
+/* =========================
+   TITLE
+========================= */
 .fund-title {
   font-size: 22px;
   font-weight: 700;
+
   margin-bottom: 20px;
+
+  color: var(--text-color);
 }
 
-/* Main Card */
+/* =========================
+   MAIN CARD
+========================= */
 .fund-wallet-card {
-  background: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  background: var(--card-bg);
+
+  color: var(--text-color);
+
   padding: 20px;
+
+  border-radius: 10px;
+
+  border: 1px solid var(--border-color);
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
 }
 
-/* Payment Option */
+/* =========================
+   PAYMENT OPTION
+========================= */
 .payment-option {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   padding: 16px 18px;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  margin-bottom: 16px;
+
+  border: 1px solid var(--border-color);
+
+  border-radius: 8px;
+
+  margin-bottom: 12px;
+
   cursor: pointer;
-  transition: all 0.25s ease;
-  background: #fff;
+
+  background: var(--card-bg);
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.2s ease;
 }
 
 .payment-option:last-child {
@@ -35,64 +77,129 @@
 }
 
 .payment-option:hover {
-  border-color: #2f6f33;
+  border-color: #367e3a;
 }
 
-/* Left section */
+body[data-theme="dark"] .payment-option:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* =========================
+   LEFT SECTION
+========================= */
 .payment-left {
   display: flex;
   align-items: center;
+
   gap: 14px;
 }
 
-/* Icon */
+/* =========================
+   ICON
+========================= */
 .payment-icon {
   width: 42px;
   height: 42px;
+
   border-radius: 50%;
+
   object-fit: contain;
-  background: #f9fafb;
+
+  background: rgba(0, 0, 0, 0.04);
+
   padding: 6px;
+
+  transition: background 0.3s ease;
 }
 
-/* Text */
+body[data-theme="dark"] .payment-icon {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* =========================
+   TEXT
+========================= */
 .payment-text h4 {
   font-size: 16px;
   font-weight: 600;
+
   margin: 0;
-  color: #111827;
+
+  color: var(--text-color);
+
+  transition: color 0.3s ease;
 }
 
 .payment-text span {
   font-size: 13px;
-  color: #6b7280;
+
+  color: var(--secondary-text);
+
+  transition: color 0.3s ease;
 }
 
-/* Arrow */
+/* =========================
+   ARROW
+========================= */
 .payment-arrow {
   font-size: 20px;
-  color: #9ca3af;
+
+  color: var(--secondary-text);
+
+  transition: color 0.3s ease;
 }
 
-/* ----------------- Mobile View ----------------- */
+/* =========================
+   STATES
+========================= */
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+body[data-theme="dark"] .clickable:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
+
+  pointer-events: none;
+}
+
+/* =========================
+   MOBILE VIEW
+========================= */
 @media (max-width: 600px) {
   .fund-wallet-page {
-    padding: 1px;
+    padding: 0;
   }
 
   .fund-title {
     font-size: 18px;
+
     margin-bottom: 14px;
   }
 
   .fund-wallet-card {
+    width: 100%;
+    max-width: 100%;
+
     padding: 14px;
-    border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+
+    border-radius: 10px;
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   }
 
   .payment-option {
     padding: 14px;
+
     margin-bottom: 12px;
   }
 
@@ -103,6 +210,7 @@
   .payment-icon {
     width: 36px;
     height: 36px;
+
     padding: 5px;
   }
 
@@ -118,51 +226,3 @@
     font-size: 18px;
   }
 }
-
-.payment-option {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px;
-  border-radius: 8px;
-  margin-bottom: 12px;
-  transition: all 0.3s ease;
-}
-
-.clickable {
-  cursor: pointer;
-}
-
-.clickable:hover {
-  background: rgba(0, 0, 0, 0.05);
-}
-
-.disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  pointer-events: none; /* 🚫 disables click */
-}
-
-.payment-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.payment-icon {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-}
-
-.payment-text h4 {
-  margin: 0;
-  font-size: 16px;
-}
-
-.payment-text span {
-  font-size: 13px;
-  color: #777;
-}
-
-
