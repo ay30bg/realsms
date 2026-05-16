@@ -1,24 +1,34 @@
 .dashboard {
   padding: 20px;
-  transition: background 0.3s, color 0.3s;
+  background: var(--bg-color);
+  color: var(--text-color);
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
 }
 
-.dashboard.dark {
-  background-color: #121212;
-  color: #f9fafb;
-}
-
-/* Welcome card */
+/* =========================
+   WELCOME CARD
+========================= */
 .welcome-card {
   background: linear-gradient(90deg, #4f46e5, #3b82f6);
+
   color: #fff;
+
   padding: 25px;
-  border-radius: 8px;
+
+  border-radius: 12px;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   margin-bottom: 30px;
+
   flex-wrap: wrap;
+
+  gap: 20px;
 }
 
 .welcome-card h2 {
@@ -34,45 +44,74 @@
 
 .welcome-card button {
   background-color: #367e3a;
+
   color: #fff;
+
   font-weight: 600;
+
   padding: 10px 20px;
-  border-radius: 6px;
+
+  border-radius: 8px;
+
   border: none;
+
   cursor: pointer;
-  transition: transform 0.2s;
+
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
 }
 
 .welcome-card button:hover {
-  transform: scale(1.05);
+  transform: scale(1.04);
+  opacity: 0.95;
 }
 
-/* Stat cards layout */
+/* =========================
+   STATS GRID
+========================= */
 .stats-container {
   display: grid;
+
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+
   gap: 20px;
 }
 
-/* Stat card */
+/* =========================
+   STAT CARD
+========================= */
 .stat-card {
-  background-color: #fff;
+  background: var(--card-bg);
+
+  color: var(--text-color);
+
+  border: 1px solid var(--border-color);
+
   padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+
+  border-radius: 14px;
+
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+
   display: flex;
   flex-direction: column;
   gap: 10px;
-  transition: transform 0.2s, background 0.3s, color 0.3s;
-  cursor: default;
+
+  transition:
+    transform 0.2s ease,
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
 }
 
-.stat-card.dark {
-  background-color: #1e1e1e;
-  color: #f9fafb;
+.stat-card:hover {
+  transform: translateY(-2px);
 }
 
-/* Stat card header with icon */
+/* =========================
+   STAT CARD HEADER
+========================= */
 .stat-card-header {
   display: flex;
   align-items: center;
@@ -82,82 +121,36 @@
 .stat-icon {
   width: 40px;
   height: 40px;
-  border-radius: 8px;
+
+  border-radius: 10px;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   color: #fff;
+
   font-size: 18px;
 }
 
-/* Stat value */
+/* =========================
+   STAT VALUE
+========================= */
 .stat-value {
   font-size: 18px;
   font-weight: 700;
+  color: var(--text-color);
 }
 
-/* ----------------- Mobile View ----------------- */
-@media (max-width: 640px) {
-  .dashboard {
-    padding: 1px;
-  }
-
-  /* Welcome card */
-  .welcome-card {
-    padding: 18px;
-    gap: 14px;
-    text-align: left;
-  }
-
-  .welcome-card h2 {
-    font-size: 18px;
-  }
-
-  .welcome-card p {
-    font-size: 13px;
-  }
-
-  .welcome-card button {
-    width: 100%;
-    padding: 12px;
-    font-size: 14px;
-  }
-
-  /* Stats grid */
-  .stats-container {
-    grid-template-columns: 1fr;
-    gap: 14px;
-  }
-
-  /* Stat card */
-  .stat-card {
-    padding: 16px;
-  }
-
-  .stat-card-header {
-    gap: 8px;
-  }
-
-  .stat-icon {
-    width: 34px;
-    height: 34px;
-    font-size: 16px;
-  }
-
-  .stat-value {
-    font-size: 16px;
-  }
-}
-
-/* =============================== */
-/* Notification Blur Modal Styles */
-/* =============================== */
-
+/* =========================
+   NOTICE OVERLAY
+========================= */
 .notice-overlay {
   position: fixed;
-  inset: 0; /* same as top:0 left:0 width:100% height:100% */
+  inset: 0;
 
   background: rgba(0, 0, 0, 0.45);
+
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
 
@@ -166,35 +159,56 @@
   align-items: center;
 
   z-index: 9999;
+
   padding: 20px;
 }
 
+/* =========================
+   NOTICE MODAL
+========================= */
 .notice-modal {
   position: relative;
+
   width: 100%;
   max-width: 520px;
 
-  background: #f9fafb;
-  border-radius: 16px;
+  background: var(--card-bg);
+
+  color: var(--text-color);
+
+  border: 1px solid var(--border-color);
+
+  border-radius: 18px;
+
   padding: 28px 24px;
 
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 
   animation: noticeFadeIn 0.25s ease-in-out;
+
   text-align: center;
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .notice-modal h2 {
   font-size: 20px;
   font-weight: 600;
+
   margin-bottom: 16px;
-  color: #111827;
+
+  color: var(--text-color);
 }
 
 .notice-modal p {
   font-size: 14px;
   line-height: 1.6;
-  color: #4b5563;
+
+  color: var(--secondary-text);
+
   margin-bottom: 14px;
 }
 
@@ -205,6 +219,7 @@
 
 .notice-close {
   position: absolute;
+
   top: 14px;
   right: 14px;
 
@@ -218,22 +233,30 @@
   color: #fff;
 
   font-size: 18px;
+
   cursor: pointer;
 
   display: flex;
   align-items: center;
   justify-content: center;
+
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
 }
 
 .notice-close:hover {
-  opacity: 0.85;
+  opacity: 0.9;
   transform: scale(1.05);
 }
 
 .notice-link {
   color: #2563eb;
+
   font-weight: 500;
+
   text-decoration: none;
+
   word-break: break-word;
 }
 
@@ -241,50 +264,122 @@
   text-decoration: underline;
 }
 
-/* =====================
+/* =========================
    LOADING SPINNER
-===================== */
-
+========================= */
 .loading-spinner {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
   padding: 100px 0;
-  color: #555;
+
+  color: var(--secondary-text);
+
   font-weight: 500;
 }
 
 .spinner {
   border: 4px solid rgba(0, 0, 0, 0.1);
+
   border-top: 4px solid #367e3a;
+
   border-radius: 50%;
+
   width: 40px;
   height: 40px;
+
   animation: spin 1s linear infinite;
+
   margin-bottom: 12px;
 }
 
-.spinner.dark {
-  border: 4px solid rgba(255, 255, 255, 0.2);
-  border-top: 4px solid #fff;
+/* Dark spinner */
+body[data-theme="dark"] .spinner {
+  border: 4px solid rgba(255, 255, 255, 0.15);
+  border-top: 4px solid #ffffff;
 }
 
+/* =========================
+   MOBILE VIEW
+========================= */
+@media (max-width: 640px) {
+  .dashboard {
+    padding: 10px;
+  }
+
+  .welcome-card {
+    padding: 18px;
+
+    gap: 14px;
+
+    text-align: left;
+  }
+
+  .welcome-card h2 {
+    font-size: 18px;
+  }
+
+  .welcome-card p {
+    font-size: 13px;
+  }
+
+  .welcome-card button {
+    width: 100%;
+
+    padding: 12px;
+
+    font-size: 14px;
+  }
+
+  .stats-container {
+    grid-template-columns: 1fr;
+
+    gap: 14px;
+  }
+
+  .stat-card {
+    padding: 16px;
+  }
+
+  .stat-card-header {
+    gap: 8px;
+  }
+
+  .stat-icon {
+    width: 34px;
+    height: 34px;
+
+    font-size: 16px;
+  }
+
+  .stat-value {
+    font-size: 16px;
+  }
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
-/* Smooth fade animation */
 @keyframes noticeFadeIn {
   from {
     opacity: 0;
     transform: scale(0.92);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
   }
 }
-
-
