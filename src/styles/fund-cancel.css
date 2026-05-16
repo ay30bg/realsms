@@ -1,82 +1,161 @@
-/* Page wrapper */
+/* =========================
+   PAGE
+========================= */
 .fund-status-page {
   min-height: 100vh;
+
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding: 20px;
-  box-sizing: border-box;
+  align-items: flex-start;
+
+  padding: 20px 10px;
+
+  background: var(--bg-color);
+  color: var(--text-color);
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
 }
 
-/* Card */
+/* =========================
+   CARD
+========================= */
 .fund-status-card {
-  background: #ffffff;
   width: 100%;
   max-width: 420px;
-  padding: 40px 30px;
+
+  background: var(--card-bg);
+  color: var(--text-color);
+
   border-radius: 12px;
+
+  border: 1px solid var(--border-color);
+
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+
   text-align: center;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+
+  position: relative;
+
+  overflow: hidden;
+
+  margin-top: 20px;
+
+  padding: 40px 30px;
+
   animation: fadeIn 0.5s ease-in-out;
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
 }
 
-/* Cancel state */
+/* =========================
+   CANCEL STATE
+========================= */
 .fund-status-card.cancel {
-  border-top: 6px solid #ef4444;
+  border-top: 4px solid #ef4444;
 }
 
-/* Icon */
+/* =========================
+   BACK BUTTON (if used)
+========================= */
+.back-btn {
+  position: absolute;
+
+  top: 16px;
+  left: 16px;
+
+  background: transparent;
+
+  border: none;
+
+  font-size: 16px;
+
+  padding: 8px;
+
+  cursor: pointer;
+
+  color: var(--text-color);
+}
+
+/* =========================
+   ICON
+========================= */
 .status-icon {
   font-size: 80px;
+
   margin-bottom: 20px;
 }
 
-/* Red icon */
 .cancel-icon {
   color: #ef4444;
 }
 
-/* Title */
+/* =========================
+   TITLE
+========================= */
 .fund-status-card h2 {
-  font-size: 24px;
+  font-size: 22px;
+  font-weight: 600;
+
   margin-bottom: 10px;
-  color: #111827;
+
+  color: var(--text-color);
 }
 
-/* Message */
+/* =========================
+   MESSAGE
+========================= */
 .fund-status-card p {
-  font-size: 15px;
-  color: #6b7280;
+  font-size: 14px;
+
+  color: var(--secondary-text);
+
   margin-bottom: 30px;
+
   line-height: 1.5;
 }
 
-/* Button */
-.back-btn {
+/* =========================
+   BUTTON
+========================= */
+.back-btn-action {
   background: #ef4444;
   color: #ffffff;
+
   border: none;
   outline: none;
+
   padding: 12px 22px;
+
   font-size: 15px;
-  font-weight: 500;
-  border-radius: 8px;
+  font-weight: 600;
+
+  border-radius: 60px;
+
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    background 0.2s ease;
 }
 
-/* Button hover */
-.back-btn:hover {
+.back-btn-action:hover {
   background: #dc2626;
   transform: translateY(-1px);
 }
 
-/* Button active */
-.back-btn:active {
+.back-btn-action:active {
   transform: translateY(0);
 }
 
-/* Fade animation */
+/* =========================
+   LOADER / ANIMATION
+========================= */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -88,10 +167,36 @@
   }
 }
 
-/* Mobile */
+/* =========================
+   DARK MODE EXTRA
+========================= */
+body[data-theme="dark"] .cancel-icon {
+  color: #ff6b6b;
+}
+
+/* =========================
+   MOBILE
+========================= */
 @media (max-width: 480px) {
+  .fund-status-page {
+    padding: 20px 5px;
+
+    justify-content: flex-start;
+
+    min-height: auto;
+  }
+
   .fund-status-card {
+    width: 100%;
+    max-width: 460px;
+
+    margin: 0 auto;
+
+    border-radius: 8px;
+
     padding: 30px 20px;
+
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
   }
 
   .status-icon {
@@ -100,5 +205,15 @@
 
   .fund-status-card h2 {
     font-size: 20px;
+  }
+
+  .fund-status-card p {
+    font-size: 13px;
+  }
+
+  .back-btn-action {
+    padding: 12px 18px;
+    font-size: 14px;
+    border-radius: 50px;
   }
 }
