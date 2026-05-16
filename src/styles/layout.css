@@ -33,10 +33,6 @@
 
 /* Mobile */
 @media (max-width: 768px) {
-.main-content {
-   margin-top: 300px;
-}
-  
   .page-content {
     padding: 12px;
   }
