@@ -1,181 +1,333 @@
+/* =========================
+   PAGE
+========================= */
 .user-support-page {
   padding: 20px;
+
+  background: var(--bg-color);
+  color: var(--text-color);
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
 }
 
-/* ================= MAIN CONTAINER ================= */
+/* =========================
+   MAIN CONTAINER
+========================= */
 .user-support-container {
   display: flex;
   flex-direction: column;
+
   height: 100vh;
+
   max-width: 100%;
+
   margin: 0 auto;
-  background: #fff;
-  border-radius: 6px;
+
+  background: var(--card-bg);
+
+  border-radius: 10px;
+
+  border: 1px solid var(--border-color);
+
   overflow: hidden;
+
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease;
 }
 
-/* ================= HEADER ================= */
+/* =========================
+   HEADER
+========================= */
 .user-support-header {
   padding: 18px 22px;
-  background: #f9fafb;
-  border-bottom: 1px solid #e5e7eb;
+
+  background: rgba(0, 0, 0, 0.03);
+
+  border-bottom: 1px solid var(--border-color);
+
   flex-shrink: 0;
-}
-.user-support-header h3 {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-}
-.user-support-header span {
-  font-size: 13px;
-  color: #6b7280;
+
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease;
 }
 
-/* ================= CHAT BODY ================= */
+body[data-theme="dark"] .user-support-header {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.user-support-header h3 {
+  margin: 0;
+
+  font-size: 18px;
+  font-weight: 600;
+
+  color: var(--text-color);
+}
+
+.user-support-header span {
+  font-size: 13px;
+
+  color: var(--secondary-text);
+}
+
+/* =========================
+   CHAT BODY
+========================= */
 .user-support-body {
   flex: 1;
+
   padding: 20px;
-  background: #f8fafc;
+
+  background: rgba(0, 0, 0, 0.02);
+
   overflow-y: auto;
+
   display: flex;
   flex-direction: column;
+
+  transition: background 0.3s ease;
+}
+
+body[data-theme="dark"] .user-support-body {
+  background: rgba(255, 255, 255, 0.02);
 }
 
 /* Scrollbar */
 .user-support-body::-webkit-scrollbar {
   width: 6px;
 }
+
 .user-support-body::-webkit-scrollbar-thumb {
-  background: rgba(0,0,0,0.08);
+  background: rgba(0, 0, 0, 0.12);
+
   border-radius: 10px;
 }
 
-/* ================= MESSAGES ================= */
+body[data-theme="dark"] .user-support-body::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* =========================
+   MESSAGES
+========================= */
 .chat-message {
   display: flex;
+
   margin-bottom: 12px;
 }
 
 .chat-message.user {
   justify-content: flex-end;
 }
+
 .chat-message.support {
   justify-content: flex-start;
 }
 
 .bubble {
   max-width: 70%;
+
   padding: 12px 16px;
+
   border-radius: 18px;
+
   font-size: 14px;
+
   line-height: 1.4;
+
   position: relative;
+
   word-wrap: break-word;
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
 }
 
-/* Bubble colors */
+/* User bubble */
 .chat-message.user .bubble {
   background: #2563eb;
+
   color: #fff;
+
   border-bottom-right-radius: 4px;
 }
+
+/* Support bubble */
 .chat-message.support .bubble {
   background: #e5e7eb;
-  color: #111;
+
+  color: #111827;
+
   border-bottom-left-radius: 4px;
+}
+
+body[data-theme="dark"] .chat-message.support .bubble {
+  background: #1f2937;
+
+  color: #f9fafb;
 }
 
 .bubble span {
   display: block;
+
   font-size: 11px;
+
   margin-top: 6px;
-  opacity: 0.6;
+
+  opacity: 0.7;
 }
 
 .chat-date {
   text-align: center;
+
   font-size: 12px;
-  color: #888;
+
+  color: var(--secondary-text);
+
   margin: 10px 0;
 }
 
-/* ================= INPUT ================= */
+/* =========================
+   INPUT
+========================= */
 .user-support-input {
   display: flex;
+
   padding: 14px 18px;
-  border-top: 1px solid #e5e7eb;
-  background: #fff;
+
+  border-top: 1px solid var(--border-color);
+
+  background: var(--card-bg);
+
   flex-shrink: 0;
+
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease;
 }
+
 .user-support-input input {
   flex: 1;
+
   padding: 10px 16px;
+
   border-radius: 25px;
-  border: 1px solid #e5e7eb;
+
+  border: 1px solid var(--border-color);
+
+  background: var(--bg-color);
+
+  color: var(--text-color);
+
   outline: none;
+
   font-size: 14px;
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
 }
+
 .user-support-input input:focus {
   border-color: #2563eb;
 }
+
 .user-support-input button {
   margin-left: 10px;
+
   padding: 10px 20px;
+
   border-radius: 25px;
+
   border: none;
+
   background: #2563eb;
+
   color: #fff;
+
   font-weight: 500;
+
   cursor: pointer;
+
   transition: 0.2s ease;
 }
+
 .user-support-input button:hover {
   background: #1d4ed8;
 }
 
-/* ================= TELEGRAM FLOAT ================= */
+/* =========================
+   TELEGRAM FLOAT
+========================= */
 .telegram-float {
   position: fixed;
+
   bottom: 80px;
   right: 20px;
+
   background-color: #0088cc;
+
   color: white;
+
   font-size: 24px;
+
   width: 55px;
   height: 55px;
+
   border-radius: 50%;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   text-decoration: none;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+
   z-index: 999;
+
   transition: 0.2s ease;
 }
+
 .telegram-float:hover {
   transform: scale(1.1);
+
   background-color: #0077b5;
 }
 
-/* ================= RESPONSIVE ================= */
+/* =========================
+   RESPONSIVE
+========================= */
 @media (max-width: 768px) {
-.user-support-page {
-    padding: 0; /* remove side padding */
+  .user-support-page {
+    padding: 0;
   }
-.user-support-container {
+
+  .user-support-container {
     height: 100vh;
+
     margin: 0;
+
     width: 100%;
     max-width: 100%;
-    border-radius: 8px; 
+
+    border-radius: 8px;
   }
+
   .bubble {
     max-width: 85%;
   }
- .telegram-float {
-    bottom: 100px; /* move it up to avoid overlapping send input */
+
+  .telegram-float {
+    bottom: 100px;
     right: 20px;
   }
 }
-
