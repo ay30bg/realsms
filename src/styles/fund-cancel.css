@@ -1,202 +1,98 @@
-/* =========================
-   PAGE
-========================= */
+/* Page wrapper */
 .fund-status-page {
   min-height: 100vh;
-
   display: flex;
+  align-items: center;
   justify-content: center;
-  align-items: flex-start;
-
-  padding: 20px 10px;
-
-  background: var(--bg-color);
-  color: var(--text-color);
-
-  transition:
-    background 0.3s ease,
-    color 0.3s ease;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
-/* =========================
-   CARD
-========================= */
+/* Card */
 .fund-status-card {
+  background: #ffffff;
   width: 100%;
   max-width: 420px;
-
-  background: var(--card-bg);
-  color: var(--text-color);
-
-  border-radius: 12px;
-
-  border: 1px solid var(--border-color);
-
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-
-  text-align: center;
-
-  position: relative;
-
-  overflow: hidden;
-
-  margin-top: 20px;
-
   padding: 40px 30px;
-
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   animation: fadeIn 0.5s ease-in-out;
-
-  transition:
-    background 0.3s ease,
-    color 0.3s ease,
-    border-color 0.3s ease;
 }
 
-/* =========================
-   CANCEL STATE
-========================= */
+/* Cancel state */
 .fund-status-card.cancel {
-  border-top: 4px solid #ef4444;
+  border-top: 6px solid #ef4444;
 }
 
-/* =========================
-   BACK BUTTON (if used)
-========================= */
-.back-btn {
-  position: absolute;
-
-  top: 16px;
-  left: 16px;
-
-  background: transparent;
-
-  border: none;
-
-  font-size: 16px;
-
-  padding: 8px;
-
-  cursor: pointer;
-
-  color: var(--text-color);
-}
-
-/* =========================
-   ICON
-========================= */
+/* Icon */
 .status-icon {
   font-size: 80px;
-
   margin-bottom: 20px;
 }
 
+/* Red icon */
 .cancel-icon {
   color: #ef4444;
 }
 
-/* =========================
-   TITLE
-========================= */
+/* Title */
 .fund-status-card h2 {
-  font-size: 22px;
-  font-weight: 600;
-
+  font-size: 24px;
   margin-bottom: 10px;
-
-  color: var(--text-color);
+  color: #111827;
 }
 
-/* =========================
-   MESSAGE
-========================= */
+/* Message */
 .fund-status-card p {
-  font-size: 14px;
-
-  color: var(--secondary-text);
-
+  font-size: 15px;
+  color: #6b7280;
   margin-bottom: 30px;
-
   line-height: 1.5;
 }
 
-/* =========================
-   BUTTON
-========================= */
-.back-btn-action {
+/* Button */
+.back-btn {
   background: #ef4444;
   color: #ffffff;
-
   border: none;
   outline: none;
-
   padding: 12px 22px;
-
   font-size: 15px;
-  font-weight: 600;
-
-  border-radius: 60px;
-
+  font-weight: 500;
+  border-radius: 8px;
   cursor: pointer;
-
-  transition:
-    opacity 0.2s ease,
-    transform 0.2s ease,
-    background 0.2s ease;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
-.back-btn-action:hover {
+/* Button hover */
+.back-btn:hover {
   background: #dc2626;
   transform: translateY(-1px);
 }
 
-.back-btn-action:active {
+/* Button active */
+.back-btn:active {
   transform: translateY(0);
 }
 
-/* =========================
-   LOADER / ANIMATION
-========================= */
+/* Fade animation */
 @keyframes fadeIn {
   from {
     opacity: 0;
     transform: translateY(15px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-/* =========================
-   DARK MODE EXTRA
-========================= */
-body[data-theme="dark"] .cancel-icon {
-  color: #ff6b6b;
-}
-
-/* =========================
-   MOBILE
-========================= */
+/* Mobile */
 @media (max-width: 480px) {
-  .fund-status-page {
-    padding: 20px 5px;
-
-    justify-content: flex-start;
-
-    min-height: auto;
-  }
-
   .fund-status-card {
-    width: 100%;
-    max-width: 460px;
-
-    margin: 0 auto;
-
-    border-radius: 8px;
-
     padding: 30px 20px;
-
-    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
   }
 
   .status-icon {
@@ -205,15 +101,5 @@ body[data-theme="dark"] .cancel-icon {
 
   .fund-status-card h2 {
     font-size: 20px;
-  }
-
-  .fund-status-card p {
-    font-size: 13px;
-  }
-
-  .back-btn-action {
-    padding: 12px 18px;
-    font-size: 14px;
-    border-radius: 50px;
   }
 }
