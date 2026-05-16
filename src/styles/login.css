@@ -23,6 +23,7 @@ body {
 .login-wrapper {
   min-height: 100vh;
   display: grid;
+  background: var(--bg-color);
   grid-template-columns: 1.1fr 1fr;
   padding: 40px;
   gap: 40px;
