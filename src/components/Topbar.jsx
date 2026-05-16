@@ -1,3 +1,169 @@
+// // import React, { useState, useEffect, useRef } from "react";
+// // import {
+// //   FiCreditCard,
+// //   FiChevronDown,
+// //   FiSettings,
+// //   FiLogOut,
+// //   FiMenu,
+// // } from "react-icons/fi";
+// // import { useNavigate } from "react-router-dom";
+// // import { useBalance } from "../context/BalanceContext";
+// // import "../styles/topbar.css";
+
+// // const Topbar = ({ toggleSidebar }) => {
+// //   const [dropdownOpen, setDropdownOpen] = useState(false);
+// //   const [userName, setUserName] = useState("");
+// //   const [avatarUrl, setAvatarUrl] = useState("");
+// //   const { balance, loading, fetchBalance } = useBalance();
+
+// //   const navigate = useNavigate();
+// //   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
+
+// //   // For animated balance
+// //   const [displayBalance, setDisplayBalance] = useState(0);
+// //   const previousBalance = useRef(0);
+
+// //   // Animate balance whenever it changes
+// //   useEffect(() => {
+// //     if (loading) return;
+
+// //     let start = previousBalance.current;
+// //     const end = balance;
+// //     const duration = 800; // animation duration in ms
+// //     const incrementTime = 20; // ms per step
+// //     const steps = duration / incrementTime;
+// //     const increment = (end - start) / steps;
+
+// //     let current = start;
+// //     const counter = setInterval(() => {
+// //       current += increment;
+// //       if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
+// //         current = end;
+// //         clearInterval(counter);
+// //       }
+// //       setDisplayBalance(Math.floor(current));
+// //     }, incrementTime);
+
+// //     previousBalance.current = end;
+
+// //     return () => clearInterval(counter);
+// //   }, [balance, loading]);
+
+// //   // Logout handler
+// //   const handleLogout = () => {
+// //     localStorage.removeItem("token");
+// //     setDropdownOpen(false);
+// //     navigate("/");
+// //   };
+
+// //   // Fetch user info once
+// //   useEffect(() => {
+// //     const fetchUser = async () => {
+// //       try {
+// //         const token = localStorage.getItem("token");
+// //         if (!token) return;
+
+// //         const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/me`, {
+// //           headers: { Authorization: `Bearer ${token}` },
+// //         });
+
+// //         const data = await res.json();
+// //         if (data.success && data.user) {
+// //           const user = data.user;
+// //           setUserName(`${user.firstName} ${user.lastName}`);
+
+// //           // Generate avatar with DiceBear
+// //           setAvatarUrl(
+// //             `https://api.dicebear.com/6.x/initials/svg?seed=${encodeURIComponent(
+// //               user.email
+// //             )}`
+// //           );
+// //         }
+// //       } catch (err) {
+// //         console.error("Failed to fetch user:", err);
+// //       }
+// //     };
+
+// //     fetchUser();
+// //     fetchBalance(); // refresh balance on load
+// //   }, [fetchBalance]);
+
+// //   return (
+// //     <div className="topbar">
+// //       {/* Left: Hamburger */}
+// //       <div className="topbar-left">
+// //         <div className="hamburger" onClick={toggleSidebar}>
+// //           <FiMenu size={24} />
+// //         </div>
+// //       </div>
+
+// //       {/* Right: Balance + Profile */}
+// //       <div className="topbar-right">
+// //         {/* Wallet Balance */}
+// //         <div className="balance">
+// //           <FiCreditCard className="balance-icon" />
+// //           <div className="balance-text">
+// //             <span>Balance</span>
+// //             <strong>
+// //               {loading ? "₦..." : `₦${displayBalance.toLocaleString()}`}
+// //             </strong>
+// //           </div>
+// //         </div>
+
+// //         {/* Profile Dropdown */}
+// //         <div
+// //           className="profile"
+// //           onClick={toggleDropdown}
+// //           style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+// //         >
+// //           <img
+// //             src={avatarUrl || "https://i.pravatar.cc/40"} // fallback
+// //             alt="User Avatar"
+// //             style={{
+// //               width: "32px",
+// //               height: "32px",
+// //               borderRadius: "50%",
+// //               marginRight: "5px",
+// //             }}
+// //           />
+
+// //           <div style={{ display: "inline-flex", alignItems: "center", margin: 0 }}>
+// //             <span className="username-text">{userName || "Loading..."}</span>
+// //             <FiChevronDown
+// //               className="username-arrow"
+// //               size={16}
+// //               style={{
+// //                 marginLeft: "5px",
+// //                 position: "relative",
+// //                 top: "2px",
+// //                 transition: "transform 0.3s",
+// //                 transform: dropdownOpen ? "rotate(180deg)" : "rotate(0deg)",
+// //               }}
+// //             />
+// //           </div>
+
+// //           {dropdownOpen && (
+// //             <div className="dropdown-menu">
+// //               <p style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+// //                 <FiSettings /> ACCOUNT
+// //               </p>
+// //               <p
+// //                 className="logout"
+// //                 onClick={handleLogout}
+// //                 style={{ display: "flex", alignItems: "center", gap: "5px" }}
+// //               >
+// //                 <FiLogOut /> LOGOUT
+// //               </p>
+// //             </div>
+// //           )}
+// //         </div>
+// //       </div>
+// //     </div>
+// //   );
+// // };
+
+// // export default Topbar;
+
 // import React, { useState, useEffect, useRef } from "react";
 // import {
 //   FiCreditCard,
@@ -5,6 +171,8 @@
 //   FiSettings,
 //   FiLogOut,
 //   FiMenu,
+//   FiMoon,
+//   FiSun,
 // } from "react-icons/fi";
 // import { useNavigate } from "react-router-dom";
 // import { useBalance } from "../context/BalanceContext";
@@ -14,33 +182,62 @@
 //   const [dropdownOpen, setDropdownOpen] = useState(false);
 //   const [userName, setUserName] = useState("");
 //   const [avatarUrl, setAvatarUrl] = useState("");
+//   const [darkMode, setDarkMode] = useState(
+//     localStorage.getItem("theme") === "dark"
+//   );
+
 //   const { balance, loading, fetchBalance } = useBalance();
 
 //   const navigate = useNavigate();
 //   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
 
-//   // For animated balance
+//   // =========================
+//   // DARK MODE
+//   // =========================
+//   useEffect(() => {
+//     if (darkMode) {
+//       document.body.classList.add("dark-mode");
+//       localStorage.setItem("theme", "dark");
+//     } else {
+//       document.body.classList.remove("dark-mode");
+//       localStorage.setItem("theme", "light");
+//     }
+//   }, [darkMode]);
+
+//   const toggleDarkMode = (e) => {
+//     e.stopPropagation();
+//     setDarkMode((prev) => !prev);
+//   };
+
+//   // =========================
+//   // BALANCE ANIMATION
+//   // =========================
 //   const [displayBalance, setDisplayBalance] = useState(0);
 //   const previousBalance = useRef(0);
 
-//   // Animate balance whenever it changes
 //   useEffect(() => {
 //     if (loading) return;
 
 //     let start = previousBalance.current;
 //     const end = balance;
-//     const duration = 800; // animation duration in ms
-//     const incrementTime = 20; // ms per step
+//     const duration = 800;
+//     const incrementTime = 20;
 //     const steps = duration / incrementTime;
 //     const increment = (end - start) / steps;
 
 //     let current = start;
+
 //     const counter = setInterval(() => {
 //       current += increment;
-//       if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
+
+//       if (
+//         (increment > 0 && current >= end) ||
+//         (increment < 0 && current <= end)
+//       ) {
 //         current = end;
 //         clearInterval(counter);
 //       }
+
 //       setDisplayBalance(Math.floor(current));
 //     }, incrementTime);
 
@@ -49,30 +246,41 @@
 //     return () => clearInterval(counter);
 //   }, [balance, loading]);
 
-//   // Logout handler
+//   // =========================
+//   // LOGOUT
+//   // =========================
 //   const handleLogout = () => {
 //     localStorage.removeItem("token");
 //     setDropdownOpen(false);
 //     navigate("/");
 //   };
 
-//   // Fetch user info once
+//   // =========================
+//   // FETCH USER
+//   // =========================
 //   useEffect(() => {
 //     const fetchUser = async () => {
 //       try {
 //         const token = localStorage.getItem("token");
+
 //         if (!token) return;
 
-//         const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/me`, {
-//           headers: { Authorization: `Bearer ${token}` },
-//         });
+//         const res = await fetch(
+//           `${process.env.REACT_APP_API_URL}/api/auth/me`,
+//           {
+//             headers: {
+//               Authorization: `Bearer ${token}`,
+//             },
+//           }
+//         );
 
 //         const data = await res.json();
+
 //         if (data.success && data.user) {
 //           const user = data.user;
+
 //           setUserName(`${user.firstName} ${user.lastName}`);
 
-//           // Generate avatar with DiceBear
 //           setAvatarUrl(
 //             `https://api.dicebear.com/6.x/initials/svg?seed=${encodeURIComponent(
 //               user.email
@@ -85,39 +293,50 @@
 //     };
 
 //     fetchUser();
-//     fetchBalance(); // refresh balance on load
+//     fetchBalance();
 //   }, [fetchBalance]);
 
 //   return (
 //     <div className="topbar">
-//       {/* Left: Hamburger */}
+//       {/* LEFT */}
 //       <div className="topbar-left">
 //         <div className="hamburger" onClick={toggleSidebar}>
 //           <FiMenu size={24} />
 //         </div>
 //       </div>
 
-//       {/* Right: Balance + Profile */}
+//       {/* RIGHT */}
 //       <div className="topbar-right">
-//         {/* Wallet Balance */}
+//         {/* DARK MODE BUTTON */}
+//         <button className="theme-toggle" onClick={toggleDarkMode}>
+//           {darkMode ? <FiSun size={18} /> : <FiMoon size={18} />}
+//         </button>
+
+//         {/* BALANCE */}
 //         <div className="balance">
 //           <FiCreditCard className="balance-icon" />
+
 //           <div className="balance-text">
 //             <span>Balance</span>
+
 //             <strong>
 //               {loading ? "₦..." : `₦${displayBalance.toLocaleString()}`}
 //             </strong>
 //           </div>
 //         </div>
 
-//         {/* Profile Dropdown */}
+//         {/* PROFILE */}
 //         <div
 //           className="profile"
 //           onClick={toggleDropdown}
-//           style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+//           style={{
+//             cursor: "pointer",
+//             display: "flex",
+//             alignItems: "center",
+//           }}
 //         >
 //           <img
-//             src={avatarUrl || "https://i.pravatar.cc/40"} // fallback
+//             src={avatarUrl || "https://i.pravatar.cc/40"}
 //             alt="User Avatar"
 //             style={{
 //               width: "32px",
@@ -127,8 +346,17 @@
 //             }}
 //           />
 
-//           <div style={{ display: "inline-flex", alignItems: "center", margin: 0 }}>
-//             <span className="username-text">{userName || "Loading..."}</span>
+//           <div
+//             style={{
+//               display: "inline-flex",
+//               alignItems: "center",
+//               margin: 0,
+//             }}
+//           >
+//             <span className="username-text">
+//               {userName || "Loading..."}
+//             </span>
+
 //             <FiChevronDown
 //               className="username-arrow"
 //               size={16}
@@ -137,20 +365,33 @@
 //                 position: "relative",
 //                 top: "2px",
 //                 transition: "transform 0.3s",
-//                 transform: dropdownOpen ? "rotate(180deg)" : "rotate(0deg)",
+//                 transform: dropdownOpen
+//                   ? "rotate(180deg)"
+//                   : "rotate(0deg)",
 //               }}
 //             />
 //           </div>
 
 //           {dropdownOpen && (
 //             <div className="dropdown-menu">
-//               <p style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+//               <p
+//                 style={{
+//                   display: "flex",
+//                   alignItems: "center",
+//                   gap: "5px",
+//                 }}
+//               >
 //                 <FiSettings /> ACCOUNT
 //               </p>
+
 //               <p
 //                 className="logout"
 //                 onClick={handleLogout}
-//                 style={{ display: "flex", alignItems: "center", gap: "5px" }}
+//                 style={{
+//                   display: "flex",
+//                   alignItems: "center",
+//                   gap: "5px",
+//                 }}
 //               >
 //                 <FiLogOut /> LOGOUT
 //               </p>
@@ -174,44 +415,27 @@ import {
   FiMoon,
   FiSun,
 } from "react-icons/fi";
+
 import { useNavigate } from "react-router-dom";
 import { useBalance } from "../context/BalanceContext";
+import { useTheme } from "../context/ThemeContext";
+
 import "../styles/topbar.css";
 
 const Topbar = ({ toggleSidebar }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [userName, setUserName] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
-  const [darkMode, setDarkMode] = useState(
-    localStorage.getItem("theme") === "dark"
-  );
 
   const { balance, loading, fetchBalance } = useBalance();
 
+  const { darkMode, toggleTheme } = useTheme();
+
   const navigate = useNavigate();
+
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
 
-  // =========================
-  // DARK MODE
-  // =========================
-  useEffect(() => {
-    if (darkMode) {
-      document.body.classList.add("dark-mode");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.body.classList.remove("dark-mode");
-      localStorage.setItem("theme", "light");
-    }
-  }, [darkMode]);
-
-  const toggleDarkMode = (e) => {
-    e.stopPropagation();
-    setDarkMode((prev) => !prev);
-  };
-
-  // =========================
-  // BALANCE ANIMATION
-  // =========================
+  // Animated balance
   const [displayBalance, setDisplayBalance] = useState(0);
   const previousBalance = useRef(0);
 
@@ -220,9 +444,11 @@ const Topbar = ({ toggleSidebar }) => {
 
     let start = previousBalance.current;
     const end = balance;
+
     const duration = 800;
     const incrementTime = 20;
     const steps = duration / incrementTime;
+
     const increment = (end - start) / steps;
 
     let current = start;
@@ -246,18 +472,14 @@ const Topbar = ({ toggleSidebar }) => {
     return () => clearInterval(counter);
   }, [balance, loading]);
 
-  // =========================
-  // LOGOUT
-  // =========================
+  // Logout
   const handleLogout = () => {
     localStorage.removeItem("token");
     setDropdownOpen(false);
     navigate("/");
   };
 
-  // =========================
-  // FETCH USER
-  // =========================
+  // Fetch user
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -298,21 +520,21 @@ const Topbar = ({ toggleSidebar }) => {
 
   return (
     <div className="topbar">
-      {/* LEFT */}
+      {/* Left */}
       <div className="topbar-left">
         <div className="hamburger" onClick={toggleSidebar}>
           <FiMenu size={24} />
         </div>
       </div>
 
-      {/* RIGHT */}
+      {/* Right */}
       <div className="topbar-right">
-        {/* DARK MODE BUTTON */}
-        <button className="theme-toggle" onClick={toggleDarkMode}>
+        {/* Theme Toggle */}
+        <button className="theme-toggle" onClick={toggleTheme}>
           {darkMode ? <FiSun size={18} /> : <FiMoon size={18} />}
         </button>
 
-        {/* BALANCE */}
+        {/* Balance */}
         <div className="balance">
           <FiCreditCard className="balance-icon" />
 
@@ -325,7 +547,7 @@ const Topbar = ({ toggleSidebar }) => {
           </div>
         </div>
 
-        {/* PROFILE */}
+        {/* Profile */}
         <div
           className="profile"
           onClick={toggleDropdown}
