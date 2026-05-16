@@ -1,31 +1,15 @@
-/* =====================
-   GLOBAL RESET
-===================== */
-html,
-body,
-#root {
-  margin: 0;
-  padding: 0;
-
-  width: 100%;
-  min-height: 100%;
-
-  background: var(--bg-color);
-
- 
-}
-
 * {
   box-sizing: border-box;
 }
 
-body {
+/* body {
+   
   color: var(--text-color);
 
   transition:
     background 0.3s ease,
     color 0.3s ease;
-}
+} */
 
 /* =====================
    WRAPPER
