@@ -263,7 +263,7 @@
   }
 
   .login-card {
-    margin: 0 auto;
+   margin: 20px auto 0;
     padding: 18px;
 
     border-radius: 6px;
@@ -271,8 +271,6 @@
     max-height: calc(100vh - 20px);
 
     overflow-y: auto;
-
-    margin-top: 20px;
   }
 
   .login-mobile-logo {
