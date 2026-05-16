@@ -31,3 +31,11 @@
     color 0.3s ease;
 }
 
+/* Mobile */
+@media (max-width: 768px) {
+  .page-content {
+    padding: 12px;
+  }
+}
+
+
