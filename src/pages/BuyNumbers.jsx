@@ -14,7 +14,7 @@ const BuyNumbers = ({ darkMode }) => {
   const [activeOrder, setActiveOrder] = useState(null);
   const [orderStatus, setOrderStatus] = useState("idle");
   const [otp, setOtp] = useState(null);
-  const [timeLeft, setTimeLeft] = useState(300);
+  const [timeLeft, setTimeLeft] = useState(600);
   const [search, setSearch] = useState("");
   const [loadingServices, setLoadingServices] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -134,6 +134,8 @@ const BuyNumbers = ({ darkMode }) => {
     fetchServices();
   }, [selectedCountry, token, API_URL]);
 
+
+   // ---------------- COUNTRY CHANGE ----------------
   const handleCountryChange = (e) => {
     const countryId = e.target.value;
     const country =
@@ -143,7 +145,7 @@ const BuyNumbers = ({ darkMode }) => {
     setActiveOrder(null);
     setOrderStatus("idle");
     setOtp(null);
-    setTimeLeft(300);
+    setTimeLeft(600);
     setSearch("");
     setCopied(false);
     setServices([]);
@@ -152,67 +154,7 @@ const BuyNumbers = ({ darkMode }) => {
     if (pollOtp.current) clearInterval(pollOtp.current);
   };
 
-  // const handleBuy = async (service) => {
-  //   if (!selectedCountry)
-  //     return alert("Please select a country first!");
-  //   if (!service.price)
-  //     return alert("Service not available for this country!");
-  //   if (balance < service.price)
-  //     return alert("Insufficient balance");
-  //   if (orderStatus === "waiting")
-  //     return alert("You already have an active order!");
-
-  //   setOrderStatus("waiting");
-  //   setOtp(null);
-  //   setTimeLeft(300);
-  //   setCopied(false);
-
-  //   try {
-  //     const res = await axios.post(
-  //       `${API_URL}/api/smspool/buy`,
-  //       { country: selectedCountry.ID, service: service.ID },
-  //       { headers: { Authorization: `Bearer ${token}` } }
-  //     );
-
-  //     if (res.data.success === 0) {
-  //       setOrderStatus("idle");
-  //       return alert(res.data.message);
-  //     }
-
-  //     const { number, orderid } = res.data.data;
-  //     const expiryTime = Date.now() + 300000;
-
-  //     localStorage.setItem(
-  //       "activeOrder",
-  //       JSON.stringify({ service, number, orderid, expiryTime })
-  //     );
-
-  //     setActiveOrder({ ...service, number, orderid });
-
-  //     if (pollOtp.current) clearInterval(pollOtp.current);
-
-  //     pollOtp.current = setInterval(async () => {
-  //       try {
-  //         const otpRes = await axios.post(
-  //           `${API_URL}/api/smspool/otp`,
-  //           { orderid },
-  //           { headers: { Authorization: `Bearer ${token}` } }
-  //         );
-
-  //         if (otpRes.data?.otp) {
-  //           setOtp(otpRes.data.otp);
-  //           setOrderStatus("received");
-  //           clearInterval(pollOtp.current);
-  //           localStorage.removeItem("activeOrder");
-  //         }
-  //       } catch {}
-  //     }, 2000);
-  //   } catch (err) {
-  //     setOrderStatus("idle");
-  //     alert(err.response?.data?.message || err.message);
-  //   }
-  // };
-
+ // ---------------- HANDLE BUY ----------------
   const handleBuy = async (service) => {
   if (!selectedCountry)
     return alert("Please select a country first!");
@@ -231,7 +173,7 @@ const BuyNumbers = ({ darkMode }) => {
 
   setOrderStatus("waiting");
   setOtp(null);
-  setTimeLeft(300);
+  setTimeLeft(600);
   setCopied(false);
 
   try {
@@ -246,7 +188,7 @@ const BuyNumbers = ({ darkMode }) => {
     }
 
     const { number, orderid } = res.data.data;
-    const expiryTime = Date.now() + 300000;
+    const expiryTime = Date.now() + 600000;
 
     localStorage.setItem(
       "activeOrder",
