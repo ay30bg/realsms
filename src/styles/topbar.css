@@ -82,51 +82,141 @@
   transform: scale(1.05);
 }
 
-/* ======================= */
-/* BALANCE DISPLAY */
-/* ======================= */
-.balance {
+/* =========================
+   MODERN NOTIFICATION ICON
+========================= */
+
+.notification-icon {
+  position: relative;
+
+  width: 46px;
+  height: 46px;
+
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
 
-  padding: 7px 14px;
+  border-radius: 16px;
 
-  border-radius: 10px;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.08),
+    rgba(255, 255, 255, 0.02)
+  );
 
-  background: var(--card-bg);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 
-  border: 1px solid var(--border-color);
-
-  font-weight: 600;
-  font-size: 14px;
+  backdrop-filter: blur(10px);
 
   color: var(--text-color);
 
-  transition:
-    background 0.3s ease,
-    border-color 0.3s ease,
-    color 0.3s ease;
+  cursor: pointer;
+
+  overflow: hidden;
+
+  transition: all 0.35s ease;
 }
 
-.balance-icon {
-  font-size: 18px;
-  color: #10b981;
+/* Glow effect */
+.notification-icon::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background: radial-gradient(
+    circle at top left,
+    rgba(59, 130, 246, 0.18),
+    transparent 60%
+  );
+
+  opacity: 0;
+
+  transition: opacity 0.35s ease;
 }
 
-.balance-text {
+.notification-icon:hover::before {
+  opacity: 1;
+}
+
+.notification-icon:hover {
+  transform: translateY(-3px) scale(1.03);
+
+  border-color: rgba(59, 130, 246, 0.25);
+
+  box-shadow:
+    0 10px 25px rgba(59, 130, 246, 0.15),
+    0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* Bell icon */
+.notification-icon svg {
+  position: relative;
+  z-index: 2;
+
+  transition: transform 0.3s ease;
+}
+
+.notification-icon:hover svg {
+  transform: rotate(-10deg);
+}
+
+/* Notification badge */
+.notification-badge {
+  position: absolute;
+
+  top: 6px;
+  right: 6px;
+
+  min-width: 18px;
+  height: 18px;
+
+  padding: 0 5px;
+
+  border-radius: 999px;
+
+  background: linear-gradient(
+    135deg,
+    #ff4d6d,
+    #ef4444
+  );
+
+  color: #fff;
+
+  font-size: 10px;
+  font-weight: 700;
+
   display: flex;
-  flex-direction: column;
-  line-height: 1.1;
+  align-items: center;
+  justify-content: center;
+
+  border: 2px solid var(--card-bg);
+
+  z-index: 3;
+
+  box-shadow:
+    0 4px 10px rgba(239, 68, 68, 0.35);
+
+  animation: pulseBadge 2s infinite;
 }
 
-.balance-text span {
-  font-size: 11px;
-  color: var(--secondary-text);
-}
+/* Pulse animation */
+@keyframes pulseBadge {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5);
+  }
 
-.balance-text strong {
-  color: var(--text-color);
+  70% {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+  }
+
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
 }
 
 /* ======================= */
