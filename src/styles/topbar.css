@@ -310,6 +310,58 @@
   white-space: nowrap;
 }
 
+/* =========================
+   MOBILE STYLING
+========================= */
+@media (max-width: 768px) {
+  .notification-dropdown {
+    position: fixed;
+    top: auto;
+    right: 0;
+    left: 0;
+    bottom: 0;
+
+    width: 100%;
+    max-height: 75vh;
+
+    border-radius: 18px 18px 0 0;
+
+    padding: 14px;
+
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.25);
+
+    animation: slideUp 0.25s ease;
+  }
+
+  /* Optional: make items more touch-friendly */
+  .notif-item {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .notif-item span {
+    font-size: 14px;
+  }
+
+  .notif-title {
+    font-size: 12px;
+  }
+
+  /* Optional: improve scrolling feel */
+  .notification-dropdown {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Slide-up animation for mobile */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
 
 /* =========================
    MOBILE STYLING
