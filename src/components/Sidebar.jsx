@@ -279,7 +279,7 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
           <div className="user-name">{userName || "Loading..."}</div>
 
           <div className="user-balance">
-            Balance: <span>${balance.toFixed(2)}</span>
+            Balance: <span>₦{balance.toFixed(2)}</span>
           </div>
         </div>
 
