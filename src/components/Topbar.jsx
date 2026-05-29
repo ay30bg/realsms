@@ -107,8 +107,6 @@ const Topbar = ({ toggleSidebar }) => {
             src={avatarUrl || "https://i.pravatar.cc/40"}
             alt="User Avatar"
             style={{
-              width: "38px",
-              height: "38px",
               borderRadius: "50%",
               marginRight: "8px",
               objectFit: "cover",
