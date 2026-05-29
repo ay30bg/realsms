@@ -284,12 +284,7 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
 
         {/* ================= USER HEADER ================= */}
         <div className="sidebar-user-card">
-          <div className="user-avatar">
-            <img
-              src={avatarUrl || "https://i.pravatar.cc/40"}
-              alt="user"
-            />
-          </div>
+         
 
           <div className="user-name">
             {userName || "Loading..."}
