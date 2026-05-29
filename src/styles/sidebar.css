@@ -46,6 +46,31 @@
   height: auto;
 }
 
+.sidebar-logo {
+  display: flex;
+  justify-content: center;
+
+  padding: 10px 0 20px;
+  margin-top: -25px;
+}
+
+/* =========================
+   MOBILE STYLING
+========================= */
+@media (max-width: 768px) {
+  .sidebar-logo {
+    margin-top: 0; /* remove negative spacing on mobile */
+    padding: 12px 0;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+  .sidebar-logo {
+    padding: 10px 0;
+  }
+}
+
 /* =======================
    SIDEBAR NAVIGATION
 ======================= */
