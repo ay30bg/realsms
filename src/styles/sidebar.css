@@ -195,8 +195,8 @@
   margin: 15px 0 20px;
   padding: 14px;
 
-  background: linear-gradient(135deg, #111, #1a1a1a);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
 
   border-radius: 12px;
 
@@ -204,14 +204,13 @@
   flex-direction: column;
   gap: 6px;
 
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--shadow);
 }
 
 .sidebar-user-card .user-name {
   font-size: 14px;
   font-weight: 600;
   color: var(--text-color);
-  opacity: 0.9;
 }
 
 .sidebar-user-card .user-balance {
@@ -220,7 +219,7 @@
 }
 
 .sidebar-user-card .user-balance span {
-  color: #22c55e; /* green balance like fintech apps */
+  color: var(--success-color);
   font-weight: 600;
 }
 
