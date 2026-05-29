@@ -208,8 +208,6 @@
 
 // export default UserSidebar;
 
-components/UserSidebar.jsx
-// components/UserSidebar.jsx
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { FiHome, FiShoppingCart, FiMessageCircle, FiClock, FiCreditCard, FiPlusCircle, FiHeadphones } from "react-icons/fi";
