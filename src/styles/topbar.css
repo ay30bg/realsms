@@ -409,6 +409,8 @@
 }
 
 .profile img {
+  height: 38px;
+  width: 38px;
   border: 2px solid var(--border-color);
   transition: border-color 0.3s ease;
   border-radius: 50%;
