@@ -429,6 +429,8 @@
 }
 
 .username-arrow {
+  margin-top: 2px;
+  margin-left: 5px,
   color: var(--secondary-text);
 }
 
