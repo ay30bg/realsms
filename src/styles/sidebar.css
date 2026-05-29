@@ -192,7 +192,7 @@
    USER INFO CARD (NEW)
 ======================= */
 .sidebar-user-card {
-  margin: 6px 0 10px;
+  margin: -6px 0 10px;
   padding: 14px;
 
   background: var(--card-bg);
