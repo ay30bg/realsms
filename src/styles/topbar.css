@@ -83,91 +83,57 @@
 }
 
 /* =========================
-   MODERN NOTIFICATION ICON
+   MODERATE NOTIFICATION ICON
 ========================= */
 
 .notification-icon {
   position: relative;
 
-  width: 46px;
-  height: 46px;
+  width: 42px;
+  height: 42px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border-radius: 16px;
+  border-radius: 12px;
 
-  background: linear-gradient(
-    145deg,
-    rgba(255, 255, 255, 0.08),
-    rgba(255, 255, 255, 0.02)
-  );
+  background: var(--card-bg);
 
-  border: 1px solid rgba(255, 255, 255, 0.08);
-
-  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-color);
 
   color: var(--text-color);
 
   cursor: pointer;
 
-  overflow: hidden;
-
-  transition: all 0.35s ease;
-}
-
-/* Glow effect */
-.notification-icon::before {
-  content: "";
-
-  position: absolute;
-
-  inset: 0;
-
-  background: radial-gradient(
-    circle at top left,
-    rgba(59, 130, 246, 0.18),
-    transparent 60%
-  );
-
-  opacity: 0;
-
-  transition: opacity 0.35s ease;
-}
-
-.notification-icon:hover::before {
-  opacity: 1;
+  transition: all 0.25s ease;
 }
 
 .notification-icon:hover {
-  transform: translateY(-3px) scale(1.03);
+  transform: translateY(-2px);
 
-  border-color: rgba(59, 130, 246, 0.25);
+  background: rgba(59, 130, 246, 0.08);
 
-  box-shadow:
-    0 10px 25px rgba(59, 130, 246, 0.15),
-    0 4px 10px rgba(0, 0, 0, 0.08);
+  border-color: rgba(59, 130, 246, 0.2);
+
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
 }
 
 /* Bell icon */
 .notification-icon svg {
-  position: relative;
-  z-index: 2;
-
-  transition: transform 0.3s ease;
+  transition: transform 0.25s ease;
 }
 
 .notification-icon:hover svg {
-  transform: rotate(-10deg);
+  transform: rotate(-8deg);
 }
 
-/* Notification badge */
+/* Badge */
 .notification-badge {
   position: absolute;
 
-  top: 6px;
-  right: 6px;
+  top: -4px;
+  right: -4px;
 
   min-width: 18px;
   height: 18px;
@@ -176,16 +142,12 @@
 
   border-radius: 999px;
 
-  background: linear-gradient(
-    135deg,
-    #ff4d6d,
-    #ef4444
-  );
+  background: #ef4444;
 
   color: #fff;
 
   font-size: 10px;
-  font-weight: 700;
+  font-weight: 600;
 
   display: flex;
   align-items: center;
@@ -193,30 +155,7 @@
 
   border: 2px solid var(--card-bg);
 
-  z-index: 3;
-
-  box-shadow:
-    0 4px 10px rgba(239, 68, 68, 0.35);
-
-  animation: pulseBadge 2s infinite;
-}
-
-/* Pulse animation */
-@keyframes pulseBadge {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5);
-  }
-
-  70% {
-    transform: scale(1.08);
-    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
-  }
-
-  100% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
-  }
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);
 }
 
 /* ======================= */
