@@ -134,7 +134,7 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
         </div>
 
         {/* ================= USER CARD ================= */}
-        {/* <div className="sidebar-user-card">
+         <div className="sidebar-user-card">
           <div className="user-name">
             {userName || "Loading..."}
           </div>
@@ -145,33 +145,7 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
               ₦{formatBalance(animatedBalance)}
             </span>
           </div>
-        </div> */}
-
-        {/* ================= USER CARD ================= */}
-<div className="sidebar-user-card">
-  <div className="user-card-top">
-    <div className="user-avatar">
-      {userName
-        ? userName.charAt(0).toUpperCase()
-        : "U"}
-    </div>
-
-    <div className="user-info">
-      <h4>{userName || "Loading..."}</h4>
-      <p>Premium Member</p>
-    </div>
-  </div>
-
-  <div className="balance-card">
-    <span className="balance-label">
-      Available Balance
-    </span>
-
-    <h2 className="balance-amount">
-      ₦{formatBalance(animatedBalance)}
-    </h2>
-  </div>
-</div>
+        </div> 
 
         {/* ================= NAVIGATION ================= */}
         <nav>
