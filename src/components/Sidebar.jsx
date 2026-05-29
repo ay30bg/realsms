@@ -219,9 +219,8 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
   const { unreadMessages } = useUnread();
   const { balance } = useBalance();
 
-  // ✅ NEW: user state (same as Topbar)
+  // user state
   const [userName, setUserName] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("");
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -230,7 +229,7 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // ✅ Fetch user like Topbar
+  // Fetch user (same as Topbar, but only name)
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -250,14 +249,7 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
 
         if (data.success && data.user) {
           const user = data.user;
-
           setUserName(`${user.firstName} ${user.lastName}`);
-
-          setAvatarUrl(
-            `https://api.dicebear.com/6.x/initials/svg?seed=${encodeURIComponent(
-              user.email
-            )}`
-          );
         }
       } catch (err) {
         console.error("Failed to fetch user:", err);
@@ -282,13 +274,9 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
           <img src={logo} alt="RealSMS" />
         </div>
 
-        {/* ================= USER HEADER ================= */}
+        {/* USER HEADER */}
         <div className="sidebar-user-card">
-         
-
-          <div className="user-name">
-            {userName || "Loading..."}
-          </div>
+          <div className="user-name">{userName || "Loading..."}</div>
 
           <div className="user-balance">
             Balance: <span>${balance.toFixed(2)}</span>
