@@ -281,11 +281,16 @@
 /* =========================
    NOTIFICATION ITEMS
 ========================= */
+
 .notif-item {
   display: flex;
+  justify-content: space-between;
   align-items: center;
 
+  gap: 16px;
+
   padding: 10px 12px;
+
   border-radius: 10px;
 
   cursor: pointer;
@@ -299,12 +304,19 @@
 
 .notif-item span {
   flex: 1;
+
+  font-size: 13px;
+  line-height: 1.4;
+
+  color: var(--text-color);
+
+  overflow-wrap: break-word;
 }
 
 .notif-item small {
-  margin-left: auto;
+  flex-shrink: 0;
 
-  text-align: right;
+  margin-left: 12px;
 
   font-size: 11px;
   font-weight: 500;
