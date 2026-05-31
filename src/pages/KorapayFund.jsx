@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import "../styles/fundwallet.css";
 import korapayLogo from "../assets/korapay.png";
 
-const QUICK_AMOUNTS = [200, 500, 1000, 5000, 10000, 50000];
-const MIN_AMOUNT = 200;
+const QUICK_AMOUNTS = [1000, 5000, 10000, 50000];
+const MIN_AMOUNT = 1000;
 const MAX_AMOUNT = 500000;
 
 const KorapayFund = () => {
