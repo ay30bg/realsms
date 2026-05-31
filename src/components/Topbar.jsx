@@ -517,17 +517,36 @@ const Topbar = ({ toggleSidebar }) => {
   // =========================
   // FORMAT DATE
   // =========================
-  const formatNotifDate = (date) => {
-    if (!date) return "";
+  // const formatNotifDate = (date) => {
+  //   if (!date) return "";
 
-    return new Date(date).toLocaleString("en-US", {
-      month: "long",
-      day: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
-  };
+  //   return new Date(date).toLocaleString("en-US", {
+  //     month: "long",
+  //     day: "numeric",
+  //     hour: "numeric",
+  //     minute: "2-digit",
+  //     hour12: true,
+  //   });
+  // };
+
+  const formatNotifDate = (date) => {
+  if (!date) return "";
+
+  const d = new Date(date);
+
+  const datePart = d.toLocaleString("en-US", {
+    month: "long",
+    day: "numeric",
+  });
+
+  const timePart = d.toLocaleString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+
+  return `${datePart}. ${timePart}`;
+};
 
   // =========================
   // NOTIFICATIONS STATE
