@@ -349,11 +349,9 @@
 
 .notif-content {
   width: 100%;
-
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-
+  align-items: center; /* FIX */
   gap: 12px;
 }
 
