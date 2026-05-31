@@ -232,13 +232,13 @@
 }
 
 .sidebar-user-card .user-balance {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--secondary-text);
 }
 
 .sidebar-user-card .user-balance span {
   color: var(--success-color);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 /* =========================
