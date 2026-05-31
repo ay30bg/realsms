@@ -302,6 +302,32 @@
   background: rgba(255, 255, 255, 0.06);
 }
 
+.notif-item span {
+  flex: 1;
+
+  font-size: 13px;
+  line-height: 1.4;
+
+  color: var(--text-color);
+
+  overflow-wrap: break-word;
+}
+
+.notif-item small {
+  flex-shrink: 0;
+
+  margin-left: 12px;
+
+  font-size: 11px;
+  font-weight: 500;
+
+  color: var(--secondary-text);
+
+  white-space: nowrap;
+
+  opacity: 0.8;
+}
+
 .notif-item.unread {
   background: rgba(0, 123, 255, 0.08);
   border-left: 3px solid #007bff;
