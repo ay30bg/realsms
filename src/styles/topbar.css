@@ -284,10 +284,7 @@
 
 .notif-item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-
-  gap: 16px;
 
   padding: 10px 12px;
 
@@ -303,20 +300,16 @@
 }
 
 .notif-item span {
-  flex: 1;
+  flex: 1; /* occupies remaining space */
 
   font-size: 13px;
   line-height: 1.4;
 
   color: var(--text-color);
-
-  overflow-wrap: break-word;
 }
 
 .notif-item small {
-  flex-shrink: 0;
-
-  margin-left: 12px;
+  margin-left: auto; /* pushes to far right */
 
   font-size: 11px;
   font-weight: 500;
@@ -326,6 +319,8 @@
   white-space: nowrap;
 
   opacity: 0.8;
+
+  text-align: right;
 }
 
 .notif-item.unread {
