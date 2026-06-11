@@ -14,7 +14,7 @@ const FundWallet = () => {
   const usdtEnabled = true;
   const paystackEnabled = false;
   const flutterwaveEnabled = true;
-  const korapayEnabled = false; 
+  const korapayEnabled = true; 
 
   useEffect(() => {
     document.title = "Fund Wallet - RealSMS";
