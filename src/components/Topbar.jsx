@@ -521,7 +521,7 @@ const Topbar = ({ toggleSidebar }) => {
     fetchUser();
   }, []);
 
-  // Fetch notifications (restores setNotifications usage)
+  // Fetch notifications
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
@@ -559,7 +559,7 @@ const Topbar = ({ toggleSidebar }) => {
     return () => clearInterval(interval);
   }, []);
 
-  // Outside click
+  // Close notification dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (notifRef.current && !notifRef.current.contains(event.target)) {
@@ -577,13 +577,13 @@ const Topbar = ({ toggleSidebar }) => {
       {/* LEFT */}
       <div className="topbar-left">
         <div className="hamburger" onClick={toggleSidebar}>
-          <FiMenu size={24} />
+          <FiMenu size={22} />
         </div>
       </div>
 
       {/* RIGHT */}
       <div className="topbar-right">
-        {/* Wallet Balance */}
+        {/* Wallet */}
         <div className="wallet-card">
           <div className="wallet-icon">
             <FiCreditCard />
@@ -636,28 +636,37 @@ const Topbar = ({ toggleSidebar }) => {
 
         {/* Profile */}
         <div className="profile" onClick={toggleDropdown}>
+          {/* Option 1: Initials avatar (matches screenshot) */}
+          <div className="avatar-circle">
+            {userName
+              ? userName
+                  .split(" ")
+                  .map((word) => word[0])
+                  .slice(0, 2)
+                  .join("")
+                  .toUpperCase()
+              : "YE"}
+          </div>
+
+          {/* Option 2: Image avatar (if you prefer)
           <img src={avatarUrl || "https://i.pravatar.cc/40"} alt="User" />
+          */}
 
           <div className="profile-info">
             <span>{userName || "Loading..."}</span>
-            <FiChevronDown
-              style={{
-                transform: dropdownOpen
-                  ? "rotate(180deg)"
-                  : "rotate(0deg)",
-                transition: "0.3s",
-              }}
-            />
+            <FiChevronDown className={dropdownOpen ? "rotate" : ""} />
           </div>
 
           {dropdownOpen && (
             <div className="dropdown-menu">
               <p>
-                <FiSettings /> Account
+                <FiSettings />
+                Account
               </p>
 
               <p className="logout" onClick={handleLogout}>
-                <FiLogOut /> Logout
+                <FiLogOut />
+                Logout
               </p>
             </div>
           )}
@@ -668,4 +677,3 @@ const Topbar = ({ toggleSidebar }) => {
 };
 
 export default Topbar;
-
