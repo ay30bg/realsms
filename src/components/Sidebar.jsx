@@ -233,15 +233,6 @@ const Sidebar = () => {
        <img src={logo} alt="RealSMS" />
       </div>
 
-      {/* <div className="user-card">
-        <div className="avatar">YE</div>
-
-        <div>
-          <h4>Olalekan Yekeen</h4>
-          <span>Standard Plan</span>
-        </div>
-      </div> */}
-
       <nav className="sidebar-nav">
         <a className="active">
           <FaHome /> Dashboard
