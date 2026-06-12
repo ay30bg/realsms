@@ -2,5 +2,27 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Manrope", sans-serif;
+}
+
+:root {
+  --bg: #040816;
+  --card: rgba(11, 19, 37, 0.85);
+  --border: rgba(255, 255, 255, 0.08);
+
+  --purple: #7c5cff;
+  --purple-dark: #6d4dff;
+
+  --text: #ffffff;
+  --muted: #9ca3af;
+}
+
+body {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  background: var(--bg);
+  color: white;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
 }
