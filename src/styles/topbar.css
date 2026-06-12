@@ -6,8 +6,8 @@
   top: 0;
   right: 0;
   left: 285px;
-  height: 74px;
-  padding: 0 28px;
+  height: 68px;
+  padding: 0 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -32,49 +32,49 @@
 .topbar-right {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 14px;
 }
 
 /* =========================
    WALLET CARD
 ========================= */
 .wallet-card {
-  height: 56px;
-  padding: 0 22px;
-  border-radius: 16px;
+  height: 48px;
+  padding: 0 18px;
+  border-radius: 12px;
   background: #ffffff;
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
   border: 1px solid #eef2f7;
-  box-shadow: 0 6px 22px rgba(16, 24, 40, 0.04);
+  box-shadow: 0 4px 14px rgba(16, 24, 40, 0.04);
 }
 
 .wallet-icon {
-  width: 38px;
-  height: 38px;
+  width: 32px;
+  height: 32px;
   display: grid;
   place-items: center;
-  border-radius: 12px;
+  border-radius: 10px;
   background: #f4f7ff;
   color: #6673a8;
-  font-size: 18px;
+  font-size: 15px;
 }
 
 .wallet-info {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 2px;
 }
 
 .wallet-info small {
   color: #667085;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 500;
 }
 
 .wallet-info span {
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 700;
   color: #111827;
 }
@@ -87,26 +87,32 @@
 }
 
 .notification-icon {
-  width: 42px;
-  height: 42px;
+  width: 38px;
+  height: 38px;
   display: grid;
   place-items: center;
   cursor: pointer;
   color: #667085;
   position: relative;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.notification-icon:hover {
+  background: #f8fafc;
 }
 
 .notification-badge {
   position: absolute;
   top: -2px;
-  right: -1px;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 5px;
+  right: -2px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
   border-radius: 999px;
   background: #5b3df5;
   color: white;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -120,18 +126,18 @@
 .profile {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   cursor: pointer;
   position: relative;
 }
 
 .avatar-circle {
-  width: 48px;
-  height: 48px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   background: linear-gradient(135deg, #6b46ff, #5b3df5);
   color: white;
-  font-size: 17px;
+  font-size: 14px;
   font-weight: 700;
   display: grid;
   place-items: center;
@@ -140,11 +146,11 @@
 .profile-info {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
 }
 
 .profile-info span {
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 500;
   color: #101828;
 }
@@ -163,26 +169,26 @@
 ========================= */
 .dropdown-menu {
   position: absolute;
-  top: 64px;
+  top: 56px;
   right: 0;
-  width: 200px;
+  width: 180px;
   background: white;
-  border-radius: 16px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
   border: 1px solid #eceef5;
-  padding: 8px;
+  padding: 6px;
 }
 
 .dropdown-menu p {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   margin: 0;
-  padding: 14px;
-  font-size: 14px;
+  padding: 12px;
+  font-size: 13px;
   font-weight: 500;
   color: #344054;
-  border-radius: 12px;
+  border-radius: 10px;
   cursor: pointer;
 }
 
@@ -199,25 +205,28 @@
 ========================= */
 .notification-dropdown {
   position: absolute;
-  top: 58px;
+  top: 52px;
   right: 0;
-  width: 340px;
+  width: 300px;
+  max-height: 400px;
+  overflow-y: auto;
   background: white;
-  border-radius: 18px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+  border-radius: 12px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
   border: 1px solid #eceef5;
-  padding: 16px;
+  padding: 14px;
 }
 
 .notif-header h4 {
-  margin: 0 0 14px;
-  font-size: 15px;
+  margin: 0 0 12px;
+  font-size: 14px;
   color: #111827;
 }
 
 .notif-item {
-  padding: 12px;
-  border-radius: 12px;
+  padding: 10px;
+  border-radius: 10px;
+  transition: 0.3s;
 }
 
 .notif-item:hover {
@@ -226,12 +235,13 @@
 
 .notif-content span {
   display: block;
-  font-size: 14px;
+  font-size: 13px;
   color: #344054;
+  line-height: 1.4;
 }
 
 .notif-content small {
-  font-size: 12px;
+  font-size: 11px;
   color: #98a2b3;
 }
 
@@ -239,10 +249,12 @@
   text-align: center;
   padding: 24px 0;
   color: #98a2b3;
-  font-size: 13px;
+  font-size: 12px;
 }
 
-/* MOBILE */
+/* =========================
+   MOBILE
+========================= */
 @media (max-width: 992px) {
   .topbar {
     left: 0;
@@ -264,16 +276,22 @@
 
 @media (max-width: 576px) {
   .wallet-card {
-    padding: 0 14px;
-    height: 48px;
+    height: 44px;
+    padding: 0 12px;
   }
 
   .wallet-info span {
-    font-size: 14px;
+    font-size: 13px;
+  }
+
+  .avatar-circle {
+    width: 38px;
+    height: 38px;
+    font-size: 12px;
   }
 
   .notification-dropdown {
-    width: 290px;
-    right: -60px;
+    width: 280px;
+    right: -50px;
   }
 }
