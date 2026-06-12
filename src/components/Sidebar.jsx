@@ -327,6 +327,11 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
             <span>Fund Wallet</span>
           </NavLink>
 
+           <NavLink to="/settings" className="sidebar__link">
+            <FiCreditCard />
+            <span>Settings</span>
+          </NavLink>
+
           <NavLink
             to="/support"
             className="sidebar__link sidebar__link--badge"
