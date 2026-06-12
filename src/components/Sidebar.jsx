@@ -212,73 +212,68 @@
 
 // export default UserSidebar;
 
+import { NavLink } from "react-router-dom";
 import {
-  FaHome,
-  FaShoppingCart,
-  FaComments,
-  FaHistory,
-  FaFileAlt,
-  FaWallet,
-  FaHeadset,
-  FaCog,
-} from "react-icons/fa";
-import logo from "../assets/logo.png";
+  FiHome,
+  FiShoppingCart,
+  FiClock,
+  FiList,
+  FiCreditCard,
+  FiPlus,
+  FiLifeBuoy,
+  FiSettings,
+} from "react-icons/fi";
 
-import "../styles/sidebar.css";
+import "./sidebar.css";
 
-const Sidebar = () => {
+export default function Sidebar() {
   return (
     <aside className="sidebar">
-      <div className="logo">
-       <img src={logo} alt="RealSMS" />
+      <div className="sidebar__brand">
+        <div className="logo">/ realsms</div>
       </div>
 
-      <nav className="sidebar-nav">
-        <a className="active">
-          <FaHome /> Dashboard
-        </a>
+      <div className="sidebar__user">
+        <div className="avatar">YE</div>
+        <div>
+          <p className="name">Olalekan Yekeen</p>
+          <span className="plan">Standard Plan</span>
+        </div>
+      </div>
 
-        <a>
-          <FaShoppingCart /> Buy Numbers
-        </a>
+      <nav className="sidebar__nav">
+        <NavLink to="/" className="nav-item">
+          <FiHome /> Dashboard
+        </NavLink>
 
-        <a>
-          <FaComments /> Purchase Logs
-        </a>
+        <NavLink to="/buy" className="nav-item">
+          <FiShoppingCart /> Buy Numbers
+        </NavLink>
 
-        <a>
-          <FaHistory /> Number History
-        </a>
+        <NavLink to="/logs" className="nav-item">
+          <FiClock /> Purchase Logs
+        </NavLink>
 
-        <a>
-          <FaFileAlt /> Logs History
-        </a>
+        <NavLink to="/history" className="nav-item">
+          <FiList /> Number History
+        </NavLink>
 
-        <a>
-          <FaWallet /> Fund Wallet
-        </a>
+        <NavLink to="/transactions" className="nav-item">
+          <FiCreditCard /> Transaction History
+        </NavLink>
 
-        <a>
-          <FaHeadset /> Support
-        </a>
+        <NavLink to="/fund" className="nav-item">
+          <FiPlus /> Fund Wallet
+        </NavLink>
 
-        <a>
-          <FaCog /> Settings
-        </a>
+        <NavLink to="/support" className="nav-item">
+          <FiLifeBuoy /> Support
+        </NavLink>
+
+        <NavLink to="/settings" className="nav-item">
+          <FiSettings /> Settings
+        </NavLink>
       </nav>
-
-      <div className="upgrade-card">
-        <h4>Upgrade your plan</h4>
-
-        <p>
-          Unlock more features and
-          higher limits.
-        </p>
-
-        <button>Upgrade Now</button>
-      </div>
     </aside>
   );
-};
-
-export default Sidebar;
+}
