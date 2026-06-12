@@ -22,12 +22,13 @@
 .sidebar__brand {
   display: flex;
   align-items: center;
-  margin-bottom: 22px;
+  margin-bottom: 12px;
 }
 
 .sidebar__brand img {
   width: 200px;
   height: auto;
+  margin-right: 20px;
 }
 
 /* =========================
