@@ -182,7 +182,7 @@
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.35);
-  z-index: 998;
+  z-index: 1998;
 }
 
 .sidebar__close {
@@ -193,6 +193,7 @@
   .sidebar {
     transform: translateX(-100%);
     transition: 0.3s ease;
+      z-index: 1999;
   }
 
   .sidebar--open {
