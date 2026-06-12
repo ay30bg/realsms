@@ -9,7 +9,6 @@ import {
   FiPlusCircle,
   FiHeadphones,
   FiFileText,
-  FiSettings,
   FiLogOut,
 } from "react-icons/fi";
 
@@ -113,11 +112,6 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
           <NavLink to="/fund-wallet" className="sidebar__link">
             <FiPlusCircle />
             <span>Fund Wallet</span>
-          </NavLink>
-
-           <NavLink to="/settings" className="sidebar__link">
-            <FiSettings />
-            <span>Settings</span>
           </NavLink>
 
           <NavLink
