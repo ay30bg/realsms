@@ -11,7 +11,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(255, 255, 255, 0.92);
+  background: #fff;
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border-bottom: 1px solid #ececec;
@@ -41,23 +41,21 @@
    WALLET CARD
 ========================= */
 .wallet-card {
-  height: 48px;
+  height: 40px;
   padding: 0 16px;
-  border-radius: 14px;
+  border-radius: 8px;
   background: #ffffff;
   display: flex;
   align-items: center;
   gap: 12px;
-  border: 1px solid #f1f1f1;
+  border: 1px solid #e2e8f0;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.035);
 }
 
 .wallet-icon {
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #6f5eff, #563bff);
-  color: white;
+  width: 30px;
+  height: 30px;
+  color: #e2e8f0;
   display: grid;
   place-items: center;
   font-size: 15px;
@@ -93,7 +91,7 @@
   height: 42px;
   border-radius: 12px;
   background: #ffffff;
-  border: 1px solid #f1f1f1;
+  border: 1px solid #e2e8f0;
   display: grid;
   place-items: center;
   cursor: pointer;
