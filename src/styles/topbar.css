@@ -107,7 +107,7 @@
 /* =========================
    PROFILE
 ========================= */
-.profile {
+/* .profile {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -118,11 +118,11 @@
   border: 1px solid #2b3648;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
   position: relative;
-}
+} */
 
 .profile img {
-  width: 38px;
-  height: 38px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
 }
 
