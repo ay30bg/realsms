@@ -235,20 +235,13 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
 
   const getToken = () => localStorage.getItem("token");
 
-  /* =========================
-     MOBILE DETECT
-  ========================= */
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
     handleResize();
-
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  /* =========================
-     UNREAD MESSAGES
-  ========================= */
   useEffect(() => {
     const fetchUnreadMessages = async () => {
       try {
@@ -258,9 +251,7 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
         const res = await fetch(
           `${process.env.REACT_APP_API_URL}/api/support/user/unread`,
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
 
@@ -269,19 +260,15 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
           setUnreadMessages(data.count || 0);
         }
       } catch (err) {
-        console.error("Error fetching unread messages:", err);
+        console.error(err);
       }
     };
 
     fetchUnreadMessages();
     const interval = setInterval(fetchUnreadMessages, 30000);
-
     return () => clearInterval(interval);
   }, [setUnreadMessages]);
 
-  /* =========================
-     LOGOUT
-  ========================= */
   const handleLogout = () => {
     localStorage.removeItem("token");
     window.location.href = "/login";
@@ -289,13 +276,11 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
 
   return (
     <>
-      {/* Overlay (mobile only) */}
       {isOpen && isMobile && (
         <div className="sidebar-overlay" onClick={toggleSidebar} />
       )}
 
       <aside className={`sidebar ${isOpen ? "sidebar--open" : ""}`}>
-        {/* Close button (mobile) */}
         <button className="sidebar__close" onClick={toggleSidebar}>
           &times;
         </button>
@@ -305,67 +290,39 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
           <img src={logo} alt="RealSMS" />
         </div>
 
-        {/* Navigation */}
+        {/* Nav */}
         <nav className="sidebar__nav">
-          <NavLink
-            to="/dashboard"
-            className="sidebar__link"
-            onClick={toggleSidebar}
-          >
+          <NavLink to="/dashboard" className="sidebar__link">
             <FiHome />
             <span>Dashboard</span>
           </NavLink>
 
-          <NavLink
-            to="/buy-numbers"
-            className="sidebar__link"
-            onClick={toggleSidebar}
-          >
+          <NavLink to="/buy-numbers" className="sidebar__link">
             <FiShoppingCart />
             <span>Buy Numbers</span>
           </NavLink>
 
-          <NavLink
-            to="/purchase-logs"
-            className="sidebar__link"
-            onClick={toggleSidebar}
-          >
+          <NavLink to="/purchase-logs" className="sidebar__link">
             <FiMessageCircle />
             <span>Purchase Logs</span>
           </NavLink>
 
-          <NavLink
-            to="/order-history"
-            className="sidebar__link"
-            onClick={toggleSidebar}
-          >
+          <NavLink to="/order-history" className="sidebar__link">
             <FiClock />
             <span>Number History</span>
           </NavLink>
 
-          <NavLink
-            to="/logs-history"
-            className="sidebar__link"
-            onClick={toggleSidebar}
-          >
+          <NavLink to="/logs-history" className="sidebar__link">
             <FiClock />
             <span>Logs History</span>
           </NavLink>
 
-          <NavLink
-            to="/transaction-history"
-            className="sidebar__link"
-            onClick={toggleSidebar}
-          >
+          <NavLink to="/transaction-history" className="sidebar__link">
             <FiCreditCard />
             <span>Transaction History</span>
           </NavLink>
 
-          <NavLink
-            to="/fund-wallet"
-            className="sidebar__link"
-            onClick={toggleSidebar}
-          >
+          <NavLink to="/fund-wallet" className="sidebar__link">
             <FiPlusCircle />
             <span>Fund Wallet</span>
           </NavLink>
@@ -373,7 +330,6 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
           <NavLink
             to="/support"
             className="sidebar__link sidebar__link--badge"
-            onClick={toggleSidebar}
           >
             <FiHeadphones />
             <span>Support</span>
@@ -384,9 +340,9 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
           </NavLink>
         </nav>
 
-        {/* Sign Out */}
-        <div className="sidebar__logout-card">
-          <button className="sidebar__logout-btn" onClick={handleLogout}>
+        {/* Bottom Signout Card */}
+        <div className="sidebar__bottom">
+          <button className="sidebar__signout" onClick={handleLogout}>
             <FiLogOut />
             <span>Sign Out</span>
           </button>
