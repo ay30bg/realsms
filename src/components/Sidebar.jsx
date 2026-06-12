@@ -4,7 +4,7 @@
 //   FiHome,
 //   FiShoppingCart,
 //   FiMessageCircle,
-//   FiClock,
+//   FiClock, 
 //   FiCreditCard,
 //   FiPlusCircle,
 //   FiHeadphones,
