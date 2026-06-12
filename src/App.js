@@ -30,6 +30,7 @@ import PaystackFund from "./pages/PaystackFund";
 import KorapayFund from "./pages/KorapayFund";
 import FlutterwaveFund from "./pages/FlutterwaveFund";
 import USDTFund from "./pages/FundWalletUSDT";
+import Settings from "./pages/Settings";
 
 // Context for unread messages
 import { UnreadProvider } from "./context/UnreadContext";
@@ -64,6 +65,7 @@ function App() {
                     <Route path="/active-orders" element={<ActiveOrder />} />
                     <Route path="/order-history" element={<OrderHistory />} />
                     <Route path="/logs-history" element={<LogsHistory />} />
+                    <Route path="/settings" element={<Settings />} />
                     <Route
                       path="/transaction-history"
                       element={<TransactionHistory />}
