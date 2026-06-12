@@ -26,7 +26,8 @@
 }
 
 .sidebar__brand img {
-  height: 38px;
+  width: 200px;
+  height: auto;
 }
 
 /* =========================
