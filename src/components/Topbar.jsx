@@ -436,7 +436,6 @@ const Topbar = ({ toggleSidebar }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [userName, setUserName] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("");
 
   const navigate = useNavigate();
   const notifRef = useRef(null);
@@ -478,8 +477,8 @@ const Topbar = ({ toggleSidebar }) => {
     notifications.activity.filter((n) => !n.read).length +
     notifications.admin.filter((n) => !n.read).length;
 
-  const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
-  const toggleNotifications = () => setNotifOpen(!notifOpen);
+  const toggleDropdown = () => setDropdownOpen((prev) => !prev);
+  const toggleNotifications = () => setNotifOpen((prev) => !prev);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -487,7 +486,6 @@ const Topbar = ({ toggleSidebar }) => {
     navigate("/");
   };
 
-  // Fetch user
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -497,20 +495,17 @@ const Topbar = ({ toggleSidebar }) => {
         const res = await fetch(
           `${process.env.REACT_APP_API_URL}/api/auth/me`,
           {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
 
         const data = await res.json();
 
         if (data.success && data.user) {
-          const user = data.user;
-          setUserName(`${user.firstName} ${user.lastName}`);
-
-          setAvatarUrl(
-            `https://api.dicebear.com/6.x/initials/svg?seed=${encodeURIComponent(
-              user.email
-            )}`
+          setUserName(
+            `${data.user.firstName} ${data.user.lastName}`
           );
         }
       } catch (err) {
@@ -521,7 +516,6 @@ const Topbar = ({ toggleSidebar }) => {
     fetchUser();
   }, []);
 
-  // Fetch notifications
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
@@ -529,13 +523,20 @@ const Topbar = ({ toggleSidebar }) => {
         if (!token) return;
 
         const [supportRes, activityRes] = await Promise.all([
-          fetch(`${process.env.REACT_APP_API_URL}/api/support/notifications`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
+          fetch(
+            `${process.env.REACT_APP_API_URL}/api/support/notifications`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          ),
           fetch(
             `${process.env.REACT_APP_API_URL}/api/transactions/notifications`,
             {
-              headers: { Authorization: `Bearer ${token}` },
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
             }
           ),
         ]);
@@ -559,17 +560,23 @@ const Topbar = ({ toggleSidebar }) => {
     return () => clearInterval(interval);
   }, []);
 
-  // Close notification dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (notifRef.current && !notifRef.current.contains(event.target)) {
+      if (
+        notifRef.current &&
+        !notifRef.current.contains(event.target)
+      ) {
         setNotifOpen(false);
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
+
     return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside
+      );
   }, []);
 
   return (
@@ -597,10 +604,15 @@ const Topbar = ({ toggleSidebar }) => {
 
         {/* Notifications */}
         <div className="notification-wrapper" ref={notifRef}>
-          <div className="notification-icon" onClick={toggleNotifications}>
+          <div
+            className="notification-icon"
+            onClick={toggleNotifications}
+          >
             <FiBell size={20} />
             {unreadCount > 0 && (
-              <span className="notification-badge">{unreadCount}</span>
+              <span className="notification-badge">
+                {unreadCount}
+              </span>
             )}
           </div>
 
@@ -636,7 +648,6 @@ const Topbar = ({ toggleSidebar }) => {
 
         {/* Profile */}
         <div className="profile" onClick={toggleDropdown}>
-          {/* Option 1: Initials avatar (matches screenshot) */}
           <div className="avatar-circle">
             {userName
               ? userName
@@ -648,13 +659,11 @@ const Topbar = ({ toggleSidebar }) => {
               : "YE"}
           </div>
 
-          {/* Option 2: Image avatar (if you prefer)
-          <img src={avatarUrl || "https://i.pravatar.cc/40"} alt="User" />
-          */}
-
           <div className="profile-info">
             <span>{userName || "Loading..."}</span>
-            <FiChevronDown className={dropdownOpen ? "rotate" : ""} />
+            <FiChevronDown
+              className={dropdownOpen ? "rotate" : ""}
+            />
           </div>
 
           {dropdownOpen && (
