@@ -159,7 +159,7 @@
   position: relative;
 }
 
-.avatar-circle {
+/* .avatar-circle {
   width: 42px;
   height: 42px;
   border-radius: 50%;
@@ -169,7 +169,7 @@
   font-weight: 700;
   display: grid;
   place-items: center;
-}
+} */
 
 .profile-info {
   display: flex;
