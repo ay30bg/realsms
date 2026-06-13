@@ -186,6 +186,72 @@
 }
 
 /* =========================
+   NAV
+========================= */
+.sidebar__nav {
+.user-details {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sidebar__link {
+  height: 42px;
+  padding: 0 14px;
+.user-name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  border-radius: 10px;
+  color: #475467;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.25s ease;
+  position: relative;
+}
+  gap: 8px;
+
+.sidebar__link svg {
+  font-size: 17px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #101828;
+}
+
+.sidebar__link:hover {
+  background: #f8faff;
+}
+.pro-badge {
+  background: #f2efff;
+  color: #5b3df5;
+
+.sidebar__link.active {
+  background: linear-gradient(90deg, #6f5eff, #563bff);
+  color: white;
+  box-shadow: 0 6px 16px rgba(98, 70, 255, 0.18);
+}
+  font-size: 10px;
+  font-weight: 700;
+
+.sidebar__badge {
+  margin-left: auto;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #ef4444;
+  color: white;
+  display: grid;
+  place-items: center;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+/* =========================
    MOBILE
 ========================= */
 .sidebar-overlay {
