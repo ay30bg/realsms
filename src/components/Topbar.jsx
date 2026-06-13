@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
+  FiMenu,
   FiCreditCard,
 } from "react-icons/fi";
 import {
   FaBell,
-  FaBars,
 } from "react-icons/fa";
 import { useBalance } from "../context/BalanceContext";
 import "../styles/topbar.css";
@@ -149,7 +149,7 @@ const Topbar = ({ toggleSidebar }) => {
       {/* LEFT */}
       <div className="topbar-left">
         <div className="hamburger" onClick={toggleSidebar}>
-          <FaBars size={22} />
+          <FaMenu size={22} />
         </div>
 
         <div className="topbar-greeting">
