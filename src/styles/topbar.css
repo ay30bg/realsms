@@ -320,18 +320,16 @@
 /* Mobile */
 @media (max-width: 576px) {
   .topbar-greeting {
-    font-size: 13px;
+    font-size: 10px;
     gap: 3px;
+    margin-left: 5px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
   }
 
   .greeting-name {
     max-width: 70px;
-  }
-
-   .topbar-greeting {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0;
   }
 
  .wallet-card {
