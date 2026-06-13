@@ -333,16 +333,14 @@
     align-items: flex-start;
     gap: 0;
   }
- }
 
-@media (max-width: 576px) {
-  .wallet-card {
-    height: 44px;
+ .wallet-card {
+    height: 40px;
     padding: 0 12px;
   }
 
   .wallet-info span {
-    font-size: 13px;
+    font-size: 10px;
   }
 
   .avatar-circle {
@@ -355,4 +353,6 @@
     width: 280px;
     right: -50px;
   }
-}
+ }
+
+
