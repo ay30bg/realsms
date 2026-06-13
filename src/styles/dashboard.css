@@ -1,5 +1,5 @@
 .dashboard-page {
-  padding: 24px;
+  padding: 20px;
   min-height: 100vh;
   background: #f8fafc;
 }
@@ -10,7 +10,7 @@
   justify-content: center;
   align-items: center;
   min-height: 70vh;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   color: #6d28d9;
 }
@@ -29,22 +29,23 @@
 
 .notice-modal {
   width: 100%;
-  max-width: 560px;
+  max-width: 520px;
   background: white;
-  border-radius: 24px;
-  padding: 32px;
+  border-radius: 16px;
+  padding: 24px;
   position: relative;
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22);
 }
 
 .notice-modal h2 {
-  margin: 0 0 18px;
-  font-size: 24px;
+  margin: 0 0 16px;
+  font-size: 20px;
 }
 
 .notice-modal p {
-  margin: 12px 0;
+  margin: 10px 0;
   line-height: 1.6;
+  font-size: 14px;
   color: #64748b;
 }
 
@@ -61,51 +62,52 @@
 
 .notice-close {
   position: absolute;
-  top: 16px;
-  right: 18px;
+  top: 14px;
+  right: 16px;
   border: none;
   background: transparent;
-  font-size: 26px;
+  font-size: 22px;
   cursor: pointer;
 }
 
 /* Hero Banner */
 .hero-banner {
   position: relative;
-  min-height: 280px;
-  border-radius: 24px;
+  min-height: 240px;
+  border-radius: 16px;
   overflow: hidden;
   background: linear-gradient(135deg, #111827, #4338ca);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 40px;
+  padding: 32px;
   color: white;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 }
 
 .banner-content {
-  max-width: 500px;
+  max-width: 460px;
 }
 
 .banner-content h1 {
-  margin: 0 0 14px;
-  font-size: 42px;
+  margin: 0 0 12px;
+  font-size: 32px;
   font-weight: 800;
 }
 
 .banner-content p {
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.7;
 }
 
 .buy-btn {
-  margin-top: 22px;
+  margin-top: 20px;
   border: none;
   background: white;
   color: #4338ca;
-  padding: 14px 24px;
-  border-radius: 14px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
 }
@@ -113,31 +115,32 @@
 .otp-card {
   background: rgba(255, 255, 255, 0.96);
   color: #111827;
-  border-radius: 20px;
-  padding: 28px;
-  min-width: 250px;
+  border-radius: 14px;
+  padding: 20px;
+  min-width: 230px;
 }
 
 .otp-card p {
   margin: 0;
-  color: #64748b;
-}
-
-.otp-card h2 {
-  margin: 14px 0;
-  font-size: 34px;
-  letter-spacing: 7px;
-  color: #4338ca;
-}
-
-.otp-card span {
   font-size: 13px;
   color: #64748b;
 }
 
+.otp-card h2 {
+  margin: 12px 0;
+  font-size: 28px;
+  letter-spacing: 6px;
+  color: #4338ca;
+}
+
+.otp-card span {
+  font-size: 12px;
+  color: #64748b;
+}
+
 .banner-arrow {
-  width: 48px;
-  height: 48px;
+  width: 42px;
+  height: 42px;
   border: none;
   border-radius: 50%;
   display: grid;
@@ -145,28 +148,28 @@
   cursor: pointer;
   background: rgba(255, 255, 255, 0.15);
   color: white;
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .slider-dots {
   position: absolute;
-  bottom: 18px;
+  bottom: 16px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 
 .dot {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.4);
   cursor: pointer;
 }
 
 .dot.active {
-  width: 28px;
+  width: 24px;
   background: white;
 }
 
@@ -174,26 +177,26 @@
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
-  margin-bottom: 28px;
+  gap: 18px;
+  margin-bottom: 24px;
 }
 
 .stat-card {
   background: white;
-  border-radius: 22px;
-  padding: 26px;
+  border-radius: 16px;
+  padding: 20px;
   display: flex;
-  gap: 20px;
+  gap: 16px;
   border: 1px solid #e2e8f0;
 }
 
 .stat-icon {
-  width: 62px;
-  height: 62px;
-  border-radius: 18px;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
   display: grid;
   place-items: center;
-  font-size: 24px;
+  font-size: 20px;
 }
 
 .purple {
@@ -211,53 +214,82 @@
   color: #2563eb;
 }
 
+.stat-card h3 {
+  margin: 0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.stat-card h2 {
+  margin-top: 8px;
+  font-size: 22px;
+  color: #111827;
+}
+
 /* Bottom */
 .bottom-grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: 24px;
+  gap: 20px;
 }
 
 .activities-card,
 .overview-card {
   background: white;
-  border-radius: 24px;
-  padding: 28px;
+  border-radius: 16px;
+  padding: 22px;
   border: 1px solid #e2e8f0;
+}
+
+.activities-card h3,
+.overview-card h3 {
+  margin: 0 0 16px;
+  font-size: 16px;
 }
 
 .activity-row {
   display: flex;
   justify-content: space-between;
-  padding: 18px 0;
+  padding: 14px 0;
   border-bottom: 1px solid #f1f5f9;
 }
 
 .activity-left {
   display: flex;
-  gap: 16px;
+  gap: 14px;
   align-items: center;
 }
 
 .activity-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 14px;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
   background: #ede9fe;
   display: grid;
   place-items: center;
 }
 
+.activity-left h4 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.activity-left p {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #64748b;
+}
+
 .activity-right {
   display: flex;
-  gap: 14px;
+  gap: 12px;
   align-items: center;
 }
 
 .status {
-  padding: 6px 14px;
+  padding: 5px 12px;
   border-radius: 999px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
 }
 
@@ -275,22 +307,33 @@
 .overview-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+  gap: 14px;
 }
 
 .overview-box {
   background: #f8fafc;
-  border-radius: 18px;
-  padding: 20px;
+  border-radius: 12px;
+  padding: 16px;
 }
 
 .overview-box svg {
-  font-size: 28px;
+  font-size: 22px;
   color: #7c3aed;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
-/* Mobile */
+.overview-box h4 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.overview-box p {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* Tablet */
 @media (max-width: 1100px) {
   .stats-grid,
   .bottom-grid {
@@ -299,18 +342,27 @@
 
   .hero-banner {
     flex-direction: column;
-    gap: 30px;
+    gap: 24px;
     text-align: center;
   }
 }
 
+/* Mobile */
 @media (max-width: 768px) {
   .dashboard-page {
     padding: 16px;
   }
 
+  .hero-banner {
+    padding: 22px;
+  }
+
   .banner-content h1 {
-    font-size: 28px;
+    font-size: 24px;
+  }
+
+  .banner-content p {
+    font-size: 13px;
   }
 
   .overview-grid {
@@ -319,5 +371,9 @@
 
   .banner-arrow {
     display: none;
+  }
+
+  .otp-card {
+    min-width: 100%;
   }
 }
