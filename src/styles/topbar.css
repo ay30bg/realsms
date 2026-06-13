@@ -245,8 +245,8 @@
   padding: 14px;
 }
 
-.notification-icon{
-   background: #000;
+.notification-icon svg{
+   color: #000;
 }
 
 .notif-header h4 {
