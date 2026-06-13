@@ -31,6 +31,7 @@ import KorapayFund from "./pages/KorapayFund";
 import FlutterwaveFund from "./pages/FlutterwaveFund";
 import USDTFund from "./pages/FundWalletUSDT";
 import Settings from "./pages/Settings";
+import Appearance from "./pages/Appearance";
 
 // Context for unread messages
 import { UnreadProvider } from "./context/UnreadContext";
@@ -66,14 +67,9 @@ function App() {
                     <Route path="/order-history" element={<OrderHistory />} />
                     <Route path="/logs-history" element={<LogsHistory />} />
                     <Route path="/settings" element={<Settings />} />
-                    <Route
-                      path="/transaction-history"
-                      element={<TransactionHistory />}
-                    />
-                    <Route
-                      path="/fund-wallet"
-                      element={<FundWallet />}
-                    />
+                    <Route path="/settings/appearance" element={<Appearance />} />
+                    <Route path="/transaction-history" element={<TransactionHistory />} />
+                    <Route path="/fund-wallet" element={<FundWallet />} />
                     <Route
                       path="/fund-wallet/paystack"
                       element={<PaystackFund />}
