@@ -2,9 +2,6 @@
    SIDEBAR
 ========================= */
 .sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
   width: 285px;
   height: 100vh;
   padding: 18px;
