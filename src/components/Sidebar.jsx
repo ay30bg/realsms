@@ -11,7 +11,6 @@ import {
   FiHeadphones,
   FiFileText,
   FiLogOut,
-  FiUser,
   FiChevronDown,
   FiSettings,
 } from "react-icons/fi";
