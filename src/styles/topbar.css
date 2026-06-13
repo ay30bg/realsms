@@ -37,24 +37,15 @@
   color: var(--text-color);
 }
 
-/* “Good Morning / Afternoon / Evening” */
 .greeting-text {
-  background: linear-gradient(135deg, #4f46e5, #06b6d4);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: 600;
-  letter-spacing: 0.2px;
+  color: var(--text-color); 
+  font-weight: 500;
 }
 
 /* User name */
 .greeting-name {
   font-weight: 700;
-  color: #111827; /* dark modern slate */
-}
-
-/* Optional dark mode support */
-.dark .greeting-name {
-  color: #f9fafb;
+  color: var(--text-color); 
 }
 
 /* RIGHT */
