@@ -150,13 +150,8 @@ const Topbar = ({ toggleSidebar }) => {
           <FiMenu size={22} />
         </div>
 
-        {/* GREETING */}
-        {/* <div className="topbar-greeting">
-          {getGreeting()}, <span>{firstName}</span>
-        </div> */}
-
         <div className="topbar-greeting">
-  <span className="greeting-text">{getGreeting()}</span>
+  <span className="greeting-text">{getGreeting()},</span>
   <span className="greeting-name">{firstName}</span>
 </div>
       </div>
