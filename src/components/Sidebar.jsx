@@ -402,349 +402,205 @@ import "../styles/sidebar.css";
 import logo from "../assets/logo.png";
 import { useUnread } from "../context/UnreadContext";
 
-const UserSidebar = ({
-  isOpen,
-  toggleSidebar,
-}) => {
-  const [isMobile, setIsMobile] =
-    useState(false);
+const UserSidebar = ({ isOpen, toggleSidebar }) => {
+  const [isMobile, setIsMobile] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
 
-  const [showMenu, setShowMenu] =
-    useState(false);
+  const [displayName, setDisplayName] = useState("User");
+  const [email, setEmail] = useState("");
 
-  const {
-    unreadMessages,
-    setUnreadMessages,
-  } = useUnread();
-
+  const { unreadMessages, setUnreadMessages } = useUnread();
   const navigate = useNavigate();
 
-  const getToken = () =>
-    localStorage.getItem("token");
+  const getToken = () => localStorage.getItem("token");
 
+  // RESPONSIVE CHECK
   useEffect(() => {
     const handleResize = () =>
-      setIsMobile(
-        window.innerWidth <= 768
-      );
+      setIsMobile(window.innerWidth <= 768);
 
     handleResize();
-
-    window.addEventListener(
-      "resize",
-      handleResize
-    );
+    window.addEventListener("resize", handleResize);
 
     return () =>
-      window.removeEventListener(
-        "resize",
-        handleResize
-      );
+      window.removeEventListener("resize", handleResize);
   }, []);
 
+  // FETCH USER (FIX APPLIED HERE)
   useEffect(() => {
-    const fetchUnreadMessages =
-      async () => {
-        try {
-          const token =
-            getToken();
+    const fetchUser = async () => {
+      try {
+        const token = getToken();
+        if (!token) return;
 
-          if (!token) return;
-
-          const res = await fetch(
-            `${process.env.REACT_APP_API_URL}/api/support/user/unread`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-
-          if (res.ok) {
-            const data =
-              await res.json();
-
-            setUnreadMessages(
-              data.count || 0
-            );
+        const res = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/auth/me`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
-        } catch (err) {
-          console.error(err);
+        );
+
+        const data = await res.json();
+
+        if (data.success && data.user) {
+          setDisplayName(
+            `${data.user.firstName} ${data.user.lastName}`
+          );
+          setEmail(data.user.email || "");
         }
-      };
+      } catch (err) {
+        console.error("Sidebar user fetch error:", err);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  // UNREAD MESSAGES
+  useEffect(() => {
+    const fetchUnreadMessages = async () => {
+      try {
+        const token = getToken();
+        if (!token) return;
+
+        const res = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/support/user/unread`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (res.ok) {
+          const data = await res.json();
+          setUnreadMessages(data.count || 0);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
 
     fetchUnreadMessages();
 
-    const interval =
-      setInterval(
-        fetchUnreadMessages,
-        30000
-      );
-
-    return () =>
-      clearInterval(interval);
+    const interval = setInterval(fetchUnreadMessages, 30000);
+    return () => clearInterval(interval);
   }, [setUnreadMessages]);
 
+  // LOGOUT
   const handleLogout = () => {
-    localStorage.removeItem(
-      "token"
-    );
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
 
-    localStorage.removeItem(
-      "user"
-    );
-
-    window.location.href =
-      "/login";
+    window.location.href = "/login";
   };
 
   const handleNavClick = () => {
-    if (isMobile) {
-      toggleSidebar();
-    }
+    if (isMobile) toggleSidebar();
   };
 
-  const handleNavigate = (
-    path
-  ) => {
+  const handleNavigate = (path) => {
     navigate(path);
-
-    if (isMobile) {
-      toggleSidebar();
-    }
-
+    if (isMobile) toggleSidebar();
     setShowMenu(false);
   };
 
-  const userData =
-    JSON.parse(
-      localStorage.getItem(
-        "user"
-      )
-    ) || {};
-
-  const displayName =
-    userData?.firstName &&
-    userData?.lastName
-      ? `${userData.firstName} ${userData.lastName}`
-      : userData?.displayName ||
-        userData?.name ||
-        userData?.username ||
-        "User";
-
+  // INITIALS
   const initials =
     displayName
-      .split(" ")
-      .map(
-        (word) => word[0]
-      )
+      ?.split(" ")
+      .map((word) => word?.[0] || "")
       .join("")
       .slice(0, 2)
-      .toUpperCase();
+      .toUpperCase() || "U";
 
   return (
     <>
-      {isOpen &&
-        isMobile && (
-          <div
-            className="sidebar-overlay"
-            onClick={
-              toggleSidebar
-            }
-          />
-        )}
+      {isOpen && isMobile && (
+        <div className="sidebar-overlay" onClick={toggleSidebar} />
+      )}
 
-      <aside
-        className={`sidebar ${
-          isOpen
-            ? "sidebar--open"
-            : ""
-        }`}
-      >
-        {/* Mobile Close */}
-        <button
-          className="sidebar__close"
-          onClick={
-            toggleSidebar
-          }
-        >
+      <aside className={`sidebar ${isOpen ? "sidebar--open" : ""}`}>
+        {/* CLOSE */}
+        <button className="sidebar__close" onClick={toggleSidebar}>
           &times;
         </button>
 
-        {/* Logo */}
+        {/* LOGO */}
         <div className="sidebar__brand">
-          <img
-            src={logo}
-            alt="RealSMS"
-          />
+          <img src={logo} alt="RealSMS" />
         </div>
 
-        {/* Navigation */}
+        {/* NAVIGATION */}
         <nav className="sidebar__nav">
-          <NavLink
-            to="/dashboard"
-            className={({
-              isActive,
-            }) =>
-              isActive
-                ? "sidebar__link active"
-                : "sidebar__link"
-            }
-            onClick={
-              handleNavClick
-            }
-          >
+          <NavLink to="/dashboard" className={({ isActive }) =>
+            isActive ? "sidebar__link active" : "sidebar__link"
+          } onClick={handleNavClick}>
             <FiHome />
-            <span>
-              Dashboard
-            </span>
+            <span>Dashboard</span>
           </NavLink>
 
-          <NavLink
-            to="/buy-numbers"
-            className={({
-              isActive,
-            }) =>
-              isActive
-                ? "sidebar__link active"
-                : "sidebar__link"
-            }
-            onClick={
-              handleNavClick
-            }
-          >
+          <NavLink to="/buy-numbers" className={({ isActive }) =>
+            isActive ? "sidebar__link active" : "sidebar__link"
+          } onClick={handleNavClick}>
             <FiShoppingCart />
-            <span>
-              Buy Numbers
-            </span>
+            <span>Buy Numbers</span>
           </NavLink>
 
-          <NavLink
-            to="/purchase-logs"
-            className={({
-              isActive,
-            }) =>
-              isActive
-                ? "sidebar__link active"
-                : "sidebar__link"
-            }
-            onClick={
-              handleNavClick
-            }
-          >
+          <NavLink to="/purchase-logs" className={({ isActive }) =>
+            isActive ? "sidebar__link active" : "sidebar__link"
+          } onClick={handleNavClick}>
             <FiMessageCircle />
-            <span>
-              Purchase Logs
-            </span>
+            <span>Purchase Logs</span>
           </NavLink>
 
-          <NavLink
-            to="/order-history"
-            className={({
-              isActive,
-            }) =>
-              isActive
-                ? "sidebar__link active"
-                : "sidebar__link"
-            }
-            onClick={
-              handleNavClick
-            }
-          >
+          <NavLink to="/order-history" className={({ isActive }) =>
+            isActive ? "sidebar__link active" : "sidebar__link"
+          } onClick={handleNavClick}>
             <FiClock />
-            <span>
-              Number History
-            </span>
+            <span>Number History</span>
           </NavLink>
 
-          <NavLink
-            to="/logs-history"
-            className={({
-              isActive,
-            }) =>
-              isActive
-                ? "sidebar__link active"
-                : "sidebar__link"
-            }
-            onClick={
-              handleNavClick
-            }
-          >
+          <NavLink to="/logs-history" className={({ isActive }) =>
+            isActive ? "sidebar__link active" : "sidebar__link"
+          } onClick={handleNavClick}>
             <FiFileText />
-            <span>
-              Logs History
-            </span>
+            <span>Logs History</span>
           </NavLink>
 
-          <NavLink
-            to="/transaction-history"
-            className={({
-              isActive,
-            }) =>
-              isActive
-                ? "sidebar__link active"
-                : "sidebar__link"
-            }
-            onClick={
-              handleNavClick
-            }
-          >
+          <NavLink to="/transaction-history" className={({ isActive }) =>
+            isActive ? "sidebar__link active" : "sidebar__link"
+          } onClick={handleNavClick}>
             <FiCreditCard />
-            <span>
-              Transaction
-              History
-            </span>
+            <span>Transaction History</span>
           </NavLink>
 
-          <NavLink
-            to="/fund-wallet"
-            className={({
-              isActive,
-            }) =>
-              isActive
-                ? "sidebar__link active"
-                : "sidebar__link"
-            }
-            onClick={
-              handleNavClick
-            }
-          >
+          <NavLink to="/fund-wallet" className={({ isActive }) =>
+            isActive ? "sidebar__link active" : "sidebar__link"
+          } onClick={handleNavClick}>
             <FiPlusCircle />
-            <span>
-              Fund Wallet
-            </span>
+            <span>Fund Wallet</span>
           </NavLink>
 
-          <NavLink
-            to="/support"
-            className={({
-              isActive,
-            }) =>
-              isActive
-                ? "sidebar__link active sidebar__link--badge"
-                : "sidebar__link sidebar__link--badge"
-            }
-            onClick={
-              handleNavClick
-            }
-          >
+          <NavLink to="/support" className={({ isActive }) =>
+            isActive
+              ? "sidebar__link active sidebar__link--badge"
+              : "sidebar__link sidebar__link--badge"
+          } onClick={handleNavClick}>
             <FiHeadphones />
-            <span>
-              Support
-            </span>
+            <span>Support</span>
 
-            {unreadMessages >
-              0 && (
+            {unreadMessages > 0 && (
               <span className="sidebar__badge">
-                {
-                  unreadMessages
-                }
+                {unreadMessages}
               </span>
             )}
           </NavLink>
         </nav>
 
-        {/* User Section */}
+        {/* USER SECTION */}
         <div className="sidebar-user">
           <div className="user-info">
             <div className="avatar-circle">
@@ -753,35 +609,19 @@ const UserSidebar = ({
 
             <div className="user-details">
               <div className="display-name">
-                {
-                  displayName
-                }
-
-                <span className="pro-badge">
-                  Pro
-                </span>
+                {displayName}
+                <span className="pro-badge">Pro</span>
               </div>
 
-              <p>
-                {userData?.email ||
-                  "user@realsms.com"}
-              </p>
+              <p>{email || "user@realsms.com"}</p>
             </div>
 
             <button
               className="user-settings"
-              onClick={() =>
-                setShowMenu(
-                  !showMenu
-                )
-              }
+              onClick={() => setShowMenu(!showMenu)}
             >
               <FiChevronDown
-                className={
-                  showMenu
-                    ? "chevron-open"
-                    : ""
-                }
+                className={showMenu ? "chevron-open" : ""}
               />
             </button>
           </div>
@@ -790,11 +630,7 @@ const UserSidebar = ({
             <div className="account-menu">
               <button
                 className="account-item"
-                onClick={() =>
-                  handleNavigate(
-                    "/settings"
-                  )
-                }
+                onClick={() => handleNavigate("/settings")}
               >
                 <FiSettings />
                 Settings
@@ -802,9 +638,7 @@ const UserSidebar = ({
 
               <button
                 className="account-item signout"
-                onClick={
-                  handleLogout
-                }
+                onClick={handleLogout}
               >
                 <FiLogOut />
                 Sign Out
