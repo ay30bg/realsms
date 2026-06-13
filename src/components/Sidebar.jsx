@@ -608,7 +608,7 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
             </div>
 
             <div className="user-details">
-              <div className="display-name">
+              <div className="user-name">
                 {displayName}
                 <span className="pro-badge">Pro</span>
               </div>
