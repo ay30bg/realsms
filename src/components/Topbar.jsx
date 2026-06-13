@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
-  FiMenu,
-  FiBell,
   FiCreditCard,
 } from "react-icons/fi";
+import {
+  FaBell,
+  FaBars,
+} from "react-icons/fa";
 import { useBalance } from "../context/BalanceContext";
 import "../styles/topbar.css";
 
@@ -147,7 +149,7 @@ const Topbar = ({ toggleSidebar }) => {
       {/* LEFT */}
       <div className="topbar-left">
         <div className="hamburger" onClick={toggleSidebar}>
-          <FiMenu size={22} />
+          <FaBars size={22} />
         </div>
 
         <div className="topbar-greeting">
@@ -176,7 +178,7 @@ const Topbar = ({ toggleSidebar }) => {
             className="notification-icon"
             onClick={toggleNotifications}
           >
-            <FiBell size={20} />
+            <FaBell size={20} />
             {unreadCount > 0 && (
               <span className="notification-badge">
                 {unreadCount}
