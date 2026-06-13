@@ -56,36 +56,6 @@
   white-space: nowrap;
 }
 
-/* Tablet */
-@media (max-width: 768px) {
-  .topbar-greeting {
-    font-size: 14px;
-    gap: 4px;
-  }
-
-  .greeting-name {
-    max-width: 90px;
-  }
-}
-
-/* Mobile */
-@media (max-width: 576px) {
-  .topbar-greeting {
-    font-size: 13px;
-    gap: 3px;
-  }
-
-  .greeting-name {
-    max-width: 70px;
-  }
-
-   .topbar-greeting {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0;
-  }
- }
-
 /* RIGHT */
 .topbar-right {
   display: flex;
@@ -313,73 +283,76 @@
 /* =========================
    MOBILE TOPBAR IMPROVEMENTS
 ========================= */
-@media (max-width: 576px) {
+/* =========================
+   MOBILE
+========================= */
+@media (max-width: 992px) {
   .topbar {
-    height: 60px;
-    padding: 0 12px;
+    left: 0;
+    padding: 0 16px;
   }
 
-  .topbar-left {
-    gap: 10px;
+  .hamburger {
+    display: block;
   }
 
-  /* Greeting */
+  .wallet-info small {
+    display: none;
+  }
+
+  .profile-info span {
+    display: none;
+  }
+}
+
+/* Tablet */
+@media (max-width: 768px) {
   .topbar-greeting {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0;
-    line-height: 1.1;
-  }
-
-  .greeting-text {
-    font-size: 11px;
-    color: #667085;
+    font-size: 14px;
+    gap: 4px;
   }
 
   .greeting-name {
-    font-size: 14px;
-    max-width: 85px;
+    max-width: 90px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+  .topbar-greeting {
+    font-size: 13px;
+    gap: 3px;
   }
 
-  /* Wallet */
+  .greeting-name {
+    max-width: 70px;
+  }
+
+   .topbar-greeting {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+ }
+
+@media (max-width: 576px) {
   .wallet-card {
-    height: 40px;
-    padding: 0 10px;
-    border-radius: 10px;
-    gap: 8px;
-  }
-
-  .wallet-icon {
-    width: 26px;
-    height: 26px;
-    font-size: 12px;
-    border-radius: 8px;
+    height: 44px;
+    padding: 0 12px;
   }
 
   .wallet-info span {
     font-size: 13px;
-    font-weight: 700;
   }
 
-  /* Notification */
-  .notification-icon {
-    width: 34px;
-    height: 34px;
-  }
-
-  /* Avatar */
   .avatar-circle {
-    width: 34px;
-    height: 34px;
-    font-size: 11px;
-  }
-
-  .topbar-right {
-    gap: 8px;
+    width: 38px;
+    height: 38px;
+    font-size: 12px;
   }
 
   .notification-dropdown {
     width: 280px;
-    right: -40px;
+    right: -50px;
   }
 }
