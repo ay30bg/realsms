@@ -245,6 +245,10 @@
   padding: 14px;
 }
 
+.notification-icon{
+   background: #000;
+}
+
 .notif-header h4 {
   margin: 0 0 12px;
   font-size: 14px;
@@ -280,9 +284,6 @@
   font-size: 12px;
 }
 
-/* =========================
-   MOBILE TOPBAR IMPROVEMENTS
-========================= */
 /* =========================
    MOBILE
 ========================= */
