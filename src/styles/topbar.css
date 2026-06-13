@@ -34,18 +34,18 @@
   gap: 8px;
   font-size: 15px;
   font-weight: 500;
-  color: var(--text-color);
+  color: #000;
 }
 
 .greeting-text {
-  color: var(--text-color); 
+  color: #000; 
   font-weight: 500;
 }
 
 /* User name */
 .greeting-name {
   font-weight: 700;
-  color: var(--text-color); 
+  color: #000; 
 }
 
 /* RIGHT */
