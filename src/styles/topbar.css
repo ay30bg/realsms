@@ -79,15 +79,13 @@
     max-width: 70px;
   }
 
-  /* optional: stack greeting */
-  /*
-  .topbar-greeting {
+   .topbar-greeting {
     flex-direction: column;
     align-items: flex-start;
     gap: 0;
   }
-  */
-}
+ }
+
 /* RIGHT */
 .topbar-right {
   display: flex;
