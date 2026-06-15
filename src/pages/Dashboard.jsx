@@ -184,7 +184,7 @@
 
 
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
   FiChevronLeft,
@@ -236,7 +236,7 @@ const activities = [
 ];
 
 const Dashboard = ({ darkMode }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { balance, loading } = useBalance();
 
   const [transactionStats, setTransactionStats] = useState({
