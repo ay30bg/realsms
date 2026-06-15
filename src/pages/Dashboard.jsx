@@ -359,12 +359,15 @@ const Dashboard = ({ darkMode }) => {
 
      {/* Hero Carousel */}
 <div className="hero-banner">
-  <div
-    className="hero-bg"
-    style={{
-      backgroundImage: `url(${current.image})`,
-    }}
-  />
+ <img
+  src={current.image}
+  alt="banner"
+  style={{
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+  }}
+/>
 
   <button
     className="banner-arrow left"
