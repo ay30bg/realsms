@@ -310,28 +310,12 @@
 /* Mobile */
 @media (max-width: 768px) {
   .dashboard-page {
-    padding: 16px;
+    padding: 10px;
   }
-
-  /* .hero-banner {
-    padding: 22px;
-  }
-
-  .banner-content h1 {
-    font-size: 24px;
-  }
-
-  .banner-content p {
-    font-size: 13px;
-  } */
 
   .overview-grid {
     grid-template-columns: 1fr;
   }
-
-  /* .banner-arrow {
-    display: none;
-  } */
 
   .otp-card {
     min-width: 100%;
