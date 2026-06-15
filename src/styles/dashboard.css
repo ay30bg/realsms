@@ -73,72 +73,44 @@
 /* Hero Banner */
 .hero-banner {
   position: relative;
-  min-height: 240px;
-  border-radius: 16px;
+  width: 100%;
+  height: 260px; /* adjust as needed */
+  border-radius: 24px;
   overflow: hidden;
-  background: linear-gradient(135deg, #111827, #4338ca);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 32px;
-  color: white;
-  margin-bottom: 24px;
+  margin-bottom: 1.5rem;
 }
 
-.banner-content {
-  max-width: 460px;
-}
-
-.banner-content h1 {
-  margin: 0 0 12px;
-  font-size: 32px;
-  font-weight: 800;
-}
-
-.banner-content p {
-  font-size: 14px;
-  line-height: 1.7;
-}
-
-.buy-btn {
-  margin-top: 20px;
-  border: none;
-  background: white;
-  color: #4338ca;
-  padding: 12px 20px;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.otp-card {
-  background: rgba(255, 255, 255, 0.96);
-  color: #111827;
-  border-radius: 14px;
-  padding: 20px;
-  min-width: 230px;
-}
-
-.otp-card p {
-  margin: 0;
-  font-size: 13px;
-  color: #64748b;
-}
-
-.otp-card h2 {
-  margin: 12px 0;
-  font-size: 28px;
-  letter-spacing: 6px;
-  color: #4338ca;
-}
-
-.otp-card span {
-  font-size: 12px;
-  color: #64748b;
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* fills entire banner */
+  display: block;
 }
 
 .banner-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+}
+
+.banner-arrow.left {
+  left: 20px;
+}
+
+.banner-arrow.right {
+  right: 20px;
+}
+
+.slider-dots {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+/* .banner-arrow {
   width: 42px;
   height: 42px;
   border: none;
@@ -171,7 +143,7 @@
 .dot.active {
   width: 24px;
   background: white;
-}
+} */
 
 /* Stats */
 .stats-grid {
