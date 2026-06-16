@@ -131,7 +131,7 @@
   height: 42px;
   border-radius: 10px;
 
-  background: rgba(124, 58, 237, 0.12);
+  background: var(--primary-soft);
   color: var(--primary);
 
   display: flex;
