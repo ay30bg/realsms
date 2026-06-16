@@ -286,7 +286,7 @@ const Dashboard = ({ darkMode }) => {
                 >
                   {activity.status}
                 </span>
-                <small>{activity.time}</small>
+                <small className="activity-time">{activity.time}</small>
               </div>
             </div>
           ))}
