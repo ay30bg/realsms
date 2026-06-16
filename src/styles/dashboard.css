@@ -258,14 +258,14 @@
   color: #16a34a;
 }
 
-.activity-left h4 {
+/* .activity-left h4 {
   margin: 0;
   font-size: 14px;
-}
+} */
 
 .activity-left p {
   margin: 4px 0 0;
-  font-size: 14px;
+  font-size: 12px;
   color: #64748b;
 }
 
