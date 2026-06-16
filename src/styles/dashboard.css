@@ -447,11 +447,30 @@
   font-size: 8px;
 }
 
-  .overview-grid {
+ .overview-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
-  }
+}
+
+.overview-box {
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.overview-box svg {
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.overview-box h2,
+.overview-box h4 {
+  font-size: 13px;
+}
+
+.overview-box p {
+  font-size: 9px;
+}
 
   .otp-card {
     min-width: 100%;
