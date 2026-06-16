@@ -238,19 +238,3 @@
     font-size: 12px;
   }
 }
-
-/* Small phones */
-@media (max-width: 480px) {
-  .settings-header p {
-    font-size: 13px;
-  }
-
-  .setting-info p {
-    display: none;
-  }
-
-  .logout-btn {
-    height: 50px;
-    font-size: 14px;
-  }
-}
