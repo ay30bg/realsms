@@ -192,10 +192,6 @@
    MOBILE
 ========================= */
 @media (max-width: 768px) {
-  .settings-page {
-    padding: 18px;
-  }
-
   .settings-header h2 {
     font-size: 24px;
   }
