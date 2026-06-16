@@ -245,7 +245,7 @@ const Dashboard = ({ darkMode }) => {
     <FiMessageSquare />
   </div>
   <div>
-    <p>Total SMS Received</p>
+    <p>SMS Received</p>
     <h2>1,284</h2>
     <span>All time</span>
   </div>
