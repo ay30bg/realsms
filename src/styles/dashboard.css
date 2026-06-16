@@ -446,9 +446,18 @@
   }
 
   .activity-left p {
-   font-size: 12px;
+   font-size: 11px;
    font-weight: 600;
  }
+
+  .activity-text {
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  .activity-email-inline {
+    font-weight: 600;
+  }
 
   .activity-email {
   font-size: 8px;
