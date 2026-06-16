@@ -49,7 +49,7 @@ const activities = [
     icon: <FiMessageSquare />,
     iconClass: "sms-icon",
     email: "johndoe@gmail.com",
-    text: "Purchased Signal Number from United States",
+    action: "purchased Signal Number from United States",
     status: "Completed",
     time: "20 mins ago",
     success: true,
@@ -58,7 +58,7 @@ const activities = [
     icon: <FiShield />,
     iconClass: "vpn-icon",
     email: "marysmith@yahoo.com",
-    text: "Purchased IP Vanish Logs",
+    action: "purchased IP Vanish Logs",
     status: "Completed",
     time: "30 mins ago",
     success: true,
@@ -67,7 +67,7 @@ const activities = [
     icon: <FiMessageSquare />,
     iconClass: "sms-icon",
     email: "alexbrown@hotmail.com",
-    text: "Purchased WhatsApp Number from United States",
+    action: "purchased WhatsApp Number from United States",
     status: "Completed",
     time: "50 mins ago",
     success: true,
@@ -76,7 +76,7 @@ const activities = [
     icon: <FaWallet />,
     iconClass: "wallet-icon",
     email: "samwilson@gmail.com",
-    text: "Wallet funded successfully",
+    action: "funded wallet successfully",
     status: "Success",
     time: "1 hour ago",
     success: true,
@@ -300,10 +300,12 @@ const Dashboard = ({ darkMode }) => {
                 </div>
                 
                 <div className="activity-content">
-        <p className="activity-text">{activity.text}</p>
-        <small className="activity-email">
-          {maskEmail(activity.email)}
-        </small>
+        <p className="activity-text">
+          <span className="activity-email-inline">
+            {maskEmail(activity.email)}
+          </span>{" "}
+          {activity.action}
+        </p>
       </div>
               </div>
 
