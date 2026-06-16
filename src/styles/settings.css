@@ -3,8 +3,9 @@
 ========================= */
 .settings-page {
   min-height: 100vh;
-  padding: 32px;
-  background: #f6f8fc;
+  padding: 0px;
+  background: var(--bg-color);
+  color: var(--text-color);
 }
 
 /* Header */
