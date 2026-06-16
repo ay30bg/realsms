@@ -78,8 +78,8 @@
 .sidebar__nav {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-   margin-top: -5px;
+  gap: 3px;
+   margin-top: -15px;
 }
 
 .sidebar__link {
