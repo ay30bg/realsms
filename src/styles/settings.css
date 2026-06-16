@@ -55,6 +55,12 @@
   flex-shrink: 0;
 }
 
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .profile-info h3 {
   margin: 0;
   font-size: 18px;
