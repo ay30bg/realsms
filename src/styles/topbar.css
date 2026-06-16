@@ -11,8 +11,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #ffffff;
-  border-bottom: 1px solid #eceef5;
+  background: var(--topbar-bg);
+  border-bottom: 1px solid var(--border-color);
   z-index: 999;
 }
 
@@ -25,31 +25,30 @@
 .hamburger {
   display: none;
   cursor: pointer;
-  color: #111827;
+  color: var(--text-color);
 }
 
 /* =========================
-   GREETING MOBILE FIX
+   GREETING
 ========================= */
-
 .topbar-greeting {
   display: flex;
   align-items: center;
   gap: 6px;
   font-size: 15px;
   font-weight: 500;
-  color: #000;
+  color: var(--text-color);
   white-space: nowrap;
 }
 
 .greeting-text {
-  color: #000;
+  color: var(--text-color);
   font-weight: 500;
 }
 
 .greeting-name {
   font-weight: 700;
-  color: #000;
+  color: var(--text-color);
   max-width: 120px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -70,12 +69,12 @@
   height: 48px;
   padding: 0 18px;
   border-radius: 12px;
-  background: #ffffff;
+  background: var(--card-bg);
   display: flex;
   align-items: center;
   gap: 10px;
-  border: 1px solid #eef2f7;
-  box-shadow: 0 4px 14px rgba(16, 24, 40, 0.04);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
 }
 
 .wallet-icon {
@@ -84,7 +83,7 @@
   display: grid;
   place-items: center;
   border-radius: 10px;
-  background: #f4f7ff;
+  background: var(--hover-bg);
   color: #6673a8;
   font-size: 15px;
 }
@@ -96,7 +95,7 @@
 }
 
 .wallet-info small {
-  color: #667085;
+  color: var(--secondary-text);
   font-size: 10px;
   font-weight: 500;
 }
@@ -104,7 +103,7 @@
 .wallet-info span {
   font-size: 15px;
   font-weight: 700;
-  color: #111827;
+  color: var(--text-color);
 }
 
 /* =========================
@@ -120,14 +119,14 @@
   display: grid;
   place-items: center;
   cursor: pointer;
-  color: #667085;
+  color: var(--secondary-text);
   position: relative;
   border-radius: 50%;
   transition: 0.3s;
 }
 
 .notification-icon:hover {
-  background: #f8fafc;
+  background: var(--hover-bg);
 }
 
 .notification-badge {
@@ -145,7 +144,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid white;
+  border: 2px solid var(--card-bg);
 }
 
 /* =========================
@@ -159,18 +158,6 @@
   position: relative;
 }
 
-/* .avatar-circle {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #6b46ff, #5b3df5);
-  color: white;
-  font-size: 14px;
-  font-weight: 700;
-  display: grid;
-  place-items: center;
-} */
-
 .profile-info {
   display: flex;
   align-items: center;
@@ -180,11 +167,11 @@
 .profile-info span {
   font-size: 15px;
   font-weight: 500;
-  color: #101828;
+  color: var(--text-color);
 }
 
 .profile-info svg {
-  color: #667085;
+  color: var(--secondary-text);
   transition: 0.3s;
 }
 
@@ -200,10 +187,10 @@
   top: 56px;
   right: 0;
   width: 180px;
-  background: white;
+  background: var(--card-bg);
   border-radius: 12px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-  border: 1px solid #eceef5;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border-color);
   padding: 6px;
 }
 
@@ -215,13 +202,13 @@
   padding: 12px;
   font-size: 13px;
   font-weight: 500;
-  color: #344054;
+  color: var(--text-color);
   border-radius: 10px;
   cursor: pointer;
 }
 
 .dropdown-menu p:hover {
-  background: #f5f7ff;
+  background: var(--hover-bg);
 }
 
 .logout {
@@ -238,22 +225,22 @@
   width: 300px;
   max-height: 400px;
   overflow-y: auto;
-  background: white;
+  background: var(--card-bg);
   border-radius: 12px;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
-  border: 1px solid #eceef5;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border-color);
   padding: 14px;
 }
 
-.notification-icon svg{
-   color: #000;
-   font-size: 18px;
+.notification-icon svg {
+  color: var(--text-color);
+  font-size: 18px;
 }
 
 .notif-header h4 {
   margin: 0 0 12px;
   font-size: 14px;
-  color: #111827;
+  color: var(--text-color);
 }
 
 .notif-item {
@@ -263,25 +250,25 @@
 }
 
 .notif-item:hover {
-  background: #f8faff;
+  background: var(--hover-bg);
 }
 
 .notif-content span {
   display: block;
   font-size: 13px;
-  color: #344054;
+  color: var(--text-color);
   line-height: 1.4;
 }
 
 .notif-content small {
   font-size: 11px;
-  color: #98a2b3;
+  color: var(--secondary-text);
 }
 
 .notif-empty {
   text-align: center;
   padding: 24px 0;
-  color: #98a2b3;
+  color: var(--secondary-text);
   font-size: 12px;
 }
 
@@ -307,7 +294,6 @@
   }
 }
 
-/* Tablet */
 @media (max-width: 768px) {
   .topbar-greeting {
     font-size: 14px;
@@ -319,11 +305,9 @@
   }
 }
 
-/* Mobile */
 @media (max-width: 576px) {
   .topbar-greeting {
     font-size: 13px;
-    gap: 3px;
     margin-left: 15px;
     flex-direction: column;
     align-items: flex-start;
@@ -334,7 +318,7 @@
     max-width: 70px;
   }
 
- .wallet-card {
+  .wallet-card {
     height: 40px;
     margin-left: 20px;
     padding: 0 12px;
@@ -350,14 +334,12 @@
     font-size: 12px;
   }
 
-   .notification-icon svg{
-   font-size: 16px;
+  .notification-icon svg {
+    font-size: 16px;
   }
 
   .notification-dropdown {
     width: 280px;
     right: -50px;
   }
- }
-
-
+}
