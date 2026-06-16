@@ -430,6 +430,20 @@
     font-size: 11px;
   }
 
+   .activity-row {
+    gap: 8px;
+  }
+
+  .activity-left {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .activity-right {
+    margin-left: 14px;
+    min-width: 85px;
+  }
+
   .activity-left {
     gap: 10px; 
   }
