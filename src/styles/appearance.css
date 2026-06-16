@@ -8,40 +8,42 @@
   );
 }
 
+/* Header */
 .appearance-header {
   display: flex;
   align-items: center;
   gap: 14px;
-  margin-bottom: 30px;
+  margin-bottom: 24px;
 }
 
 .back-btn {
   border: none;
   background: transparent;
-  font-size: 22px;
+  font-size: 18px;
   cursor: pointer;
   color: #111827;
 }
 
 .appearance-header h1 {
   margin: 0;
-  font-size: 28px;
+  font-size: 22px;
   color: #111827;
 }
 
 .appearance-header p {
   margin: 4px 0 0;
   color: #6b7280;
-  font-size: 14px;
+  font-size: 12px;
 }
 
+/* Cards */
 .appearance-card {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(10px);
   border: 1px solid #e5e7eb;
-  border-radius: 24px;
-  padding: 24px;
-  margin-bottom: 18px;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -49,17 +51,17 @@
 
 .setting-content h4 {
   margin: 0;
-  font-size: 16px;
+  font-size: 14px;
   color: #111827;
 }
 
 .setting-content p {
   margin-top: 6px;
-  font-size: 14px;
+  font-size: 12px;
   color: #6b7280;
 }
 
-/* Theme Buttons */
+/* Theme Selector */
 .theme-selector {
   display: flex;
   gap: 10px;
@@ -67,15 +69,16 @@
 
 .theme-selector button {
   border: none;
-  padding: 12px 18px;
-  border-radius: 14px;
+  padding: 10px 14px;
+  border-radius: 10px;
   background: #eef2ff;
   color: #6b7280;
   display: flex;
-  gap: 8px;
+  gap: 6px;
   align-items: center;
   cursor: pointer;
   font-weight: 500;
+  font-size: 13px;
 }
 
 .theme-selector button.active {
@@ -90,8 +93,8 @@
 /* Switch */
 .switch {
   position: relative;
-  width: 56px;
-  height: 30px;
+  width: 50px;
+  height: 26px;
 }
 
 .switch input {
@@ -102,17 +105,17 @@
   position: absolute;
   inset: 0;
   background: #d1d5db;
-  border-radius: 50px;
+  border-radius: 30px;
   cursor: pointer;
 }
 
 .slider::before {
   content: "";
   position: absolute;
-  width: 22px;
-  height: 22px;
-  left: 4px;
-  top: 4px;
+  width: 20px;
+  height: 20px;
+  left: 3px;
+  top: 3px;
   background: white;
   border-radius: 50%;
   transition: 0.3s;
@@ -123,18 +126,20 @@
 }
 
 .switch input:checked + .slider::before {
-  transform: translateX(26px);
+  transform: translateX(24px);
 }
 
+/* Mobile */
 @media (max-width: 768px) {
   .appearance-page {
-    padding: 18px;
+    padding: 16px;
   }
 
   .appearance-card {
     flex-direction: column;
     align-items: flex-start;
-    gap: 18px;
+    gap: 14px;
+    border-radius: 14px;
   }
 
   .theme-selector {
