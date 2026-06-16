@@ -28,15 +28,6 @@ body {
 /* =========================
    LIGHT THEME
 ========================= */
-/* :root {
-  --bg-color: #f5f6fa;
-  --card-bg: #ffffff;
-  --text-color: #111827;
-  --secondary-text: #6b7280;
-  --border-color: #e5e7eb;
-  --topbar-bg: #ffffff;
-} */
-
 :root,
 body[data-theme="light"] {
   /* Backgrounds */
@@ -60,15 +51,6 @@ body[data-theme="light"] {
 /* =========================
    DARK THEME
 ========================= */
-/* body[data-theme="dark"] {
-  --bg-color: #0f172a;
-  --card-bg: #1e293b;
-  --text-color: #f8fafc;
-  --secondary-text: #94a3b8;
-  --border-color: #334155;
-  --topbar-bg: #111827;
-} */
-
 body[data-theme="dark"] {
   /* Backgrounds */
   --bg-color: #020617;        
