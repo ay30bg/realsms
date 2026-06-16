@@ -242,6 +242,21 @@
   place-items: center;
 }
 
+.vpn-icon {
+  background: #ede9fe;
+  color: #7c3aed;
+}
+
+.sms-icon {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.wallet-icon {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
 .activity-left h4 {
   margin: 0;
   font-size: 14px;
