@@ -8,7 +8,10 @@ import {
   FiMessageSquare,
   FiSmartphone,
   FiGlobe,
+  FiShield,
   FiTrendingUp,
+  FiDollarSign,
+  FiSmartphone,
   FiZap,
 } from "react-icons/fi";
 import { FaWallet } from "react-icons/fa";
@@ -31,30 +34,35 @@ const slides = [
 
 const activities = [
   {
+    icon: <FiShield />,
     text: "Purchased Express VPN logs",
     status: "Completed",
     time: "2 mins ago",
     success: true,
   },
   {
+    icon: <FiMessageSquare />,
     text: "Purchased Signal Number from United States",
     status: "Completed",
     time: "20 mins ago",
     success: true,
   },
   {
-    text: "Purchased IP Vanish Logs ",
+    icon: <FiShield />,
+    text: "Purchased IP Vanish Logs",
     status: "Completed",
     time: "30 mins ago",
     success: true,
   },
   {
+    icon: <FiMessageSquare />,
     text: "Purchased WhatsApp number from United States",
     status: "Completed",
     time: "50 mins ago",
     success: true,
   },
   {
+    icon: <FiDollarSign />,
     text: "Wallet funded successfully",
     status: "Success",
     time: "1 hour ago",
@@ -274,7 +282,7 @@ const Dashboard = ({ darkMode }) => {
           {activities.map((activity, index) => (
             <div key={index} className="activity-row">
               <div className="activity-left">
-                <div className="activity-icon">✈</div>
+                <div className="activity-icon">{activity.icon}</div>
                 <p>{activity.text}</p>
               </div>
 
