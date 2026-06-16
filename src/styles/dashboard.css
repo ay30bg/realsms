@@ -196,10 +196,11 @@
 
 .activities-card,
 .overview-card {
-  background: white;
+  background: var(--card-bg);
   border-radius: 16px;
   padding: 22px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
 }
 
 .activities-card h3,
@@ -212,13 +213,19 @@
   display: flex;
   justify-content: space-between;
   padding: 14px 0;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .activity-left {
   display: flex;
   gap: 14px;
   align-items: center;
+}
+
+.activity-left p {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--secondary-text);
 }
 
 .activity-icon {
@@ -231,26 +238,9 @@
   font-size: 13px;  
 }
 
-.vpn-icon {
-  background: #ede9fe;
-  color: #7c3aed;
-}
-
-.sms-icon {
-  background: #dbeafe;
-  color: #2563eb;
-}
-
-.wallet-icon {
-  background: #dcfce7;
-  color: #16a34a;
-}
-
-.activity-left p {
-  margin: 4px 0 0;
-  font-size: 12px;
-  color: #64748b;
-}
+.vpn-icon { background: #ede9fe; color: var(--primary); }
+.sms-icon { background: #dbeafe; color: var(--info); }
+.wallet-icon { background: #dcfce7; color: var(--success); }
 
 .activity-right {
   display: flex;
@@ -271,7 +261,7 @@
 
 .activity-time {
   font-size: 11px;
-  color: #64748b;
+  color: var(--secondary-text);
   letter-spacing: 0.2px;
   text-align: center;
 }
@@ -283,7 +273,7 @@
 
 .failed {
   background: #fee2e2;
-  color: #dc2626;
+  color: var(--danger);
 }
 
 /* Overview */
