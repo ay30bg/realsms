@@ -417,6 +417,7 @@
   .activity-left {
     flex: 1;
     min-width: 0;
+    gap: 10px; 
   }
 
   .activity-right {
@@ -424,12 +425,9 @@
     min-width: 85px;
   }
 
-  .activity-left {
-    gap: 10px; 
-  }
-
   .activity-left p {
    font-size: 12px;
+   font-weight: 600;
  }
 
   .status {
