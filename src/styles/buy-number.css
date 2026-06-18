@@ -185,7 +185,7 @@
 }
 
 .otp-panel h3{
-  margin: 8px 0;
+  margin-bottom: 8px;
 }
 
 .otp-empty {
@@ -282,7 +282,6 @@
   font-size: 13px;
 }
 
-/* SERVICE CARD */
 .service-card {
   display: flex;
   align-items: center;
