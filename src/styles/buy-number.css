@@ -160,10 +160,10 @@
   font-weight: 600;
 }
 
-.services-panel {
+/* .services-panel {
   max-width: 720px;
   margin: 0 auto;
-}
+} */
 
 .service-card {
   display: flex;
