@@ -130,11 +130,7 @@
 
 /* Mobile */
 @media (max-width: 768px) {
-  .appearance-page {
-    padding: 16px;
-  }
-
-  .appearance-card {
+   .appearance-card {
     flex-direction: column;
     align-items: flex-start;
     gap: 14px;
