@@ -24,11 +24,6 @@ const ServiceCard = ({ service, onBuy, disabled = false }) => {
     }
   };
 
-  const stock = service.stock ?? 0;
-
-  const stockClass =
-    stock > 20 ? "high" : stock > 5 ? "medium" : "low";
-
   return (
     <div className={`service-card ${isDisabled ? "disabled" : ""}`}>
       {/* Left */}
@@ -47,10 +42,6 @@ const ServiceCard = ({ service, onBuy, disabled = false }) => {
 
         <div className="service-info">
           <h4>{service.name}</h4>
-
-          <span className={`stock-badge ${stockClass}`}>
-            {stock} available
-          </span>
         </div>
       </div>
 
