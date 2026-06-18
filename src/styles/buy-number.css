@@ -184,7 +184,10 @@
   height: fit-content;
 }
 
-/* OTP EMPTY STATE */
+.otp-panel h3{
+  margin: 8px 0;
+}
+
 .otp-empty {
   display: flex;
   flex-direction: column;
