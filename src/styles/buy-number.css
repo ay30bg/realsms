@@ -86,7 +86,9 @@
 .services-grid {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
+  width: 100%;
+  padding-bottom: 40px;
 }
 
 .otp-panel {
@@ -158,6 +160,11 @@
   font-weight: 600;
 }
 
+.services-panel {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
 .service-card {
   display: flex;
   flex-direction: column;
@@ -169,6 +176,7 @@
   background: #111827;
   border: 1px solid rgba(255, 255, 255, 0.06);
   transition: all 0.25s ease;
+  width: 100%;
 } 
 
 .service-card:hover {
