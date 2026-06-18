@@ -151,15 +151,73 @@ const Dashboard = ({ darkMode }) => {
     );
 
 
+  // if (loading || loadingStats) {
+  //   return (
+  //     <div className={`dashboard ${darkMode ? "dark" : ""}`}>
+  //       <div className={`spinner ${darkMode ? "dark" : ""}`}>
+  //         Loading dashboard...
+  //       </div>
+  //     </div>
+  //   );
+  // }
+
   if (loading || loadingStats) {
-    return (
-      <div className={`dashboard ${darkMode ? "dark" : ""}`}>
-        <div className={`spinner ${darkMode ? "dark" : ""}`}>
-          Loading dashboard...
+  return (
+    <div className={`dashboard-page ${darkMode ? "dark" : ""}`}>
+      {/* Hero */}
+      <div className="sk-banner shimmer"></div>
+
+      {/* Stats */}
+      <div className="stats-grid">
+        {[1, 2, 3, 4].map((item) => (
+          <div className="stat-card" key={item}>
+            <div className="sk-icon shimmer"></div>
+
+            <div className="sk-content">
+              <div className="sk-line small shimmer"></div>
+              <div className="sk-line large shimmer"></div>
+              <div className="sk-line tiny shimmer"></div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Bottom Grid */}
+      <div className="bottom-grid">
+        <div className="activities-card">
+          <div className="sk-title shimmer"></div>
+
+          {[1, 2, 3, 4].map((item) => (
+            <div className="activity-row" key={item}>
+              <div className="activity-left">
+                <div className="sk-avatar shimmer"></div>
+
+                <div className="activity-content">
+                  <div className="sk-line large shimmer"></div>
+                  <div className="sk-line small shimmer"></div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="overview-card">
+          <div className="sk-title shimmer"></div>
+
+          <div className="overview-grid">
+            {[1, 2, 3, 4].map((item) => (
+              <div className="overview-box" key={item}>
+                <div className="sk-overview-icon shimmer"></div>
+                <div className="sk-line medium shimmer"></div>
+                <div className="sk-line tiny shimmer"></div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   const current = slides[currentSlide];
 
