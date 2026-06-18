@@ -1,5 +1,5 @@
 .dashboard-page {
-  padding: 0px;
+  padding: 0;
   min-height: 100vh;
   background: var(--bg-color);
   color: var(--text-color);
