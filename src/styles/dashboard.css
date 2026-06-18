@@ -63,7 +63,7 @@
 /* Hero */
 .hero-banner.skeleton-block {
   height: 260px;
-  border-radius: inherit;
+  border-radius: 24px;
 }
 
 /* Stats */
