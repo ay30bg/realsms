@@ -414,7 +414,7 @@ const BuyNumbers = ({ darkMode }) => {
         <div className="services-panel">
           {search === "" && selectedCountry && (
             <div className="popular-label">
-              Showing popular services
+               Popular services
             </div>
           )}
 
