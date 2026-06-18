@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { FiSearch, FiCopy } from "react-icons/fi";
+import { FiSearch, FiCopy , FiInfo} from "react-icons/fi";
 import ServiceCard from "../components/ServiceCard";
 import { useBalance } from "../context/BalanceContext";
 import "../styles/buy-number.css";
@@ -431,6 +431,17 @@ const BuyNumbers = ({ darkMode }) => {
                 />
               ))}
             </div>
+
+      {search === "" && (
+      <div className="notice">
+        <FiInfo />
+        <span>
+          Search for other available services
+        </span>
+      </div>
+    )}
+  </>
+) : (
           ) : (
             <div className="empty-state">
               <h3>No services found</h3>
