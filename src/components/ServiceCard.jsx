@@ -64,7 +64,6 @@
 // export default ServiceCard;
 
 import React, { useState } from "react";
-import "../styles/service-card.css";
 
 // Format price in Naira
 const formatNaira = (amount) => {
