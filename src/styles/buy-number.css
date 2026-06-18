@@ -286,10 +286,6 @@
 }
 
 @media (max-width: 768px) {
-  .buy-page {
-    padding: 14px;
-  }
-
   /* HEADER */
   .buy-header h1 {
     font-size: 22px;
