@@ -1,63 +1,60 @@
 import React, { useState } from "react";
+import "../styles/service-card.css";
 
-// Helper to format price in Naira
 const formatNaira = (amount) => {
-  if (amount === null || amount === undefined) return "Price N/A";
+  if (amount == null) return "N/A";
   return `₦${Number(amount).toLocaleString()}`;
 };
 
 const ServiceCard = ({ service, onBuy, disabled }) => {
   const [buying, setBuying] = useState(false);
 
-  const handleBuyClick = () => {
-    if (disabled || buying || service.price == null) return;
+  const unavailable = service.price == null;
+  const isDisabled = disabled || unavailable || buying;
+
+  const handleBuyClick = async () => {
+    if (isDisabled) return;
 
     setBuying(true);
-    onBuy(service, () => setBuying(false));
-  };
 
-  // Disable button if:
-  // 1️⃣ Explicit disabled prop
-  // 2️⃣ Service has no price (N/A)
-  // 3️⃣ Already buying
-  const isDisabled = disabled || service.price == null || buying;
+    try {
+      await onBuy(service);
+    } finally {
+      setBuying(false);
+    }
+  };
 
   return (
     <div className={`service-card ${isDisabled ? "disabled" : ""}`}>
       <div className="service-left">
-        {service.icon && (
-          <img
-            src={service.icon}
-            alt={service.name}
-            style={{ width: "42px", height: "42px", objectFit: "contain" }}
-          />
+        {service.icon ? (
+          <img src={service.icon} alt={service.name} className="service-icon" />
+        ) : (
+          <div className="service-icon-placeholder">
+            {service.name?.charAt(0)}
+          </div>
         )}
-        <div>
+
+        <div className="service-info">
           <h4>{service.name}</h4>
+
           {service.stock !== undefined && (
-            <span className="stock">{service.stock} Stocks</span>
+            <span className="stock-badge">
+              {service.stock} available
+            </span>
           )}
         </div>
       </div>
 
       <div className="service-right">
-        {/* Formatted price */}
         <span className="price">{formatNaira(service.price)}</span>
 
         <button
           onClick={handleBuyClick}
           disabled={isDisabled}
-          className={isDisabled ? "disabled-btn" : ""}
+          className="buy-btn"
         >
-          {buying ? (
-            <div className="button-spinner"></div>
-          ) : service.price == null ? (
-            "Not Available"
-          ) : isDisabled ? (
-            "Insufficient Balance"
-          ) : (
-            "Buy Number"
-          )}
+          {buying ? "..." : unavailable ? "N/A" : "Buy"}
         </button>
       </div>
     </div>
@@ -65,5 +62,3 @@ const ServiceCard = ({ service, onBuy, disabled }) => {
 };
 
 export default ServiceCard;
-
-
