@@ -453,7 +453,7 @@ const BuyNumbers = ({ darkMode }) => {
 
         {/* OTP PANEL */}
         <div className="otp-panel">
-          <h3>Active Number</h3>
+          <h3>Inbox</h3>
 
           {!activeOrder ? (
             <div className="otp-empty">
