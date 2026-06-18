@@ -175,7 +175,7 @@ const Dashboard = ({ darkMode }) => {
       <div className="bottom-grid">
         <div className="activities-card">
           <div className="section-header">
-            <div className="skeleton-line heading overview-heading"></div>
+            <div className="skeleton-line heading"></div>
           </div>
 
           {[1, 2, 3, 4].map((item) => (
@@ -199,7 +199,7 @@ const Dashboard = ({ darkMode }) => {
 
         <div className="overview-card">
           <div className="section-header">
-            <div className="skeleton-line heading"></div>
+            <div className="skeleton-line heading overview-heading"></div>
           </div>
 
           <div className="overview-grid">
