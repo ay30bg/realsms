@@ -132,6 +132,9 @@
 }
 
 /* Overview */
+.overview-heading{
+  margin-bottom: 1opx;
+}
 
 .skeleton-overview-icon {
   width: 42px;
