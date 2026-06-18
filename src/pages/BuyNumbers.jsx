@@ -414,25 +414,24 @@ const BuyNumbers = ({ darkMode }) => {
             </div>
           )}
 
-          {loadingServices ? (
-            <div className="loading-state">
-              <div className="spinner"></div>
-              <p>Loading services...</p>
-            </div>
-          ) : filteredServices.length > 0 ? (
-            <div className="services-grid">
-              {filteredServices.map((service) => (
-                <ServiceCard
-                  key={
-                    service.ID || service.id
-                  }
-                  service={service}
-                  onBuy={handleBuy}
-                />
-              ))}
-            </div>
+{loadingServices ? (
+  <div className="loading-state">
+    <div className="spinner"></div>
+    <p>Loading services...</p>
+  </div>
+) : filteredServices.length > 0 ? (
+  <>
+    <div className="services-grid">
+      {filteredServices.map((service) => (
+        <ServiceCard
+          key={service.ID || service.id}
+          service={service}
+          onBuy={handleBuy}
+        />
+      ))}
+    </div>
 
-      {search === "" && (
+    {search === "" && (
       <div className="notice">
         <FiInfo />
         <span>
@@ -442,16 +441,15 @@ const BuyNumbers = ({ darkMode }) => {
     )}
   </>
 ) : (
-          ) : (
-            <div className="empty-state">
-              <h3>No services found</h3>
-              <p>
-                {search
-                  ? "Try another service name"
-                  : "Select a country to continue"}
-              </p>
-            </div>
-          )}
+  <div className="empty-state">
+    <h3>No services found</h3>
+    <p>
+      {search
+        ? "Try another service name"
+        : "Select a country to continue"}
+    </p>
+  </div>
+)}
         </div>
 
         {/* OTP PANEL */}
