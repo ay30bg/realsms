@@ -762,6 +762,7 @@ const BuyNumbers = ({ darkMode }) => {
     </div>
   </div>
 );
+};
 
 export default BuyNumbers;
 
