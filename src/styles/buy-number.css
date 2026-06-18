@@ -181,11 +181,10 @@
 .otp-panel {
   position: sticky;
   height: fit-content;
-  padding: 8px;
 }
 
 .otp-panel h3{
-  margin-bottom: 8px;
+  margin: 5px 0 10px 0;
 }
 
 .otp-empty {
