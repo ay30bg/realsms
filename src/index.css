@@ -55,6 +55,9 @@ body[data-theme="light"] {
 
   --primary-soft: rgba(124, 58, 237, 0.12);
   --danger-soft: rgba(220, 38, 38, 0.12);
+
+  --skeleton-bg: #edf2f7;
+  --skeleton-shimmer: rgba(255,255,255,0.7);
 }
 
 /* =========================
@@ -87,6 +90,9 @@ body[data-theme="dark"] {
 
   --primary-soft: rgba(167, 139, 250, 0.18);
   --danger-soft: rgba(239, 68, 68, 0.18);
+
+  --skeleton-bg: #1e293b;
+  --skeleton-shimmer: rgba(255,255,255,0.08);
 }
 
 /* =========================
