@@ -368,6 +368,11 @@
   transform: scale(0.98);
 }
 
+.action-btn.done {
+  background: #22c55e;
+  color: white;
+}
+
 .action-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
