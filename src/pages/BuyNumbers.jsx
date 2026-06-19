@@ -17,7 +17,7 @@ const POPULAR_SERVICES = [
   "WhatsApp",
   "Telegram",
   "Plenty Of Fish",
-  "TikTok",
+  "TikTok/Douyin",
   "Instagram",
   "Facebook",
   "Discord",
