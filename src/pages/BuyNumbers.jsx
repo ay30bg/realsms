@@ -14,740 +14,719 @@ import signalLogo from "../assets/signal.png";
 import pofLogo from "../assets/pof.png";
 
 const POPULAR_SERVICES = [
-  "WhatsApp",
-  "Telegram",
-  "Plenty Of Fish",
-  "TikTok/Douyin",
-  "Instagram",
-  "Facebook",
-  "Discord",
-  "Signal",
+    "WhatsApp",
+    "Telegram",
+    "Plenty Of Fish",
+    "TikTok/Douyin",
+    "Instagram",
+    "Facebook",
+    "Discord",
+    "Signal",
 ];
 
 const SERVICE_LOGOS = {
-  whatsapp: whatsappLogo,
-  telegram: telegramLogo,
-  "tiktok/douyin": tiktokLogo,
-  instagram: instagramLogo,
-  facebook: facebookLogo,
-  discord: discordLogo,
-  signal: signalLogo,
-  "plenty of fish": pofLogo,
+    whatsapp: whatsappLogo,
+    telegram: telegramLogo,
+    "tiktok/douyin": tiktokLogo,
+    instagram: instagramLogo,
+    facebook: facebookLogo,
+    discord: discordLogo,
+    signal: signalLogo,
+    "plenty of fish": pofLogo,
 };
 
 
 const BuyNumbers = ({ darkMode }) => {
-  const { balance, setBalance, fetchBalance } = useBalance();
+    const { balance, setBalance, fetchBalance } = useBalance();
 
-  const [countries, setCountries] = useState([]);
-  const [services, setServices] = useState([]);
-  const [selectedCountry, setSelectedCountry] = useState(null);
-  const [activeOrder, setActiveOrder] = useState(null);
-  const [orderStatus, setOrderStatus] = useState("idle");
-  const [otp, setOtp] = useState(null);
-  const [timeLeft, setTimeLeft] = useState(600);
-  const [search, setSearch] = useState("");
-  const [loadingServices, setLoadingServices] = useState(false);
-  const [copied, setCopied] = useState(false);
-  const [actionLoading, setActionLoading] = useState(false);
-  const [autoRefunded, setAutoRefunded] = useState(false);
+    const [countries, setCountries] = useState([]);
+    const [services, setServices] = useState([]);
+    const [selectedCountry, setSelectedCountry] = useState(null);
+    const [activeOrder, setActiveOrder] = useState(null);
+    const [orderStatus, setOrderStatus] = useState("idle");
+    const [otp, setOtp] = useState(null);
+    const [timeLeft, setTimeLeft] = useState(600);
+    const [search, setSearch] = useState("");
+    const [loadingServices, setLoadingServices] = useState(false);
+    const [copied, setCopied] = useState(false);
+    const [actionLoading, setActionLoading] = useState(false);
+    const [autoRefunded, setAutoRefunded] = useState(false);
 
-  const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-  const API_URL =
-    process.env.REACT_APP_API_URL ||
-    "https://realsms-backend.vercel.app";
+    const API_URL =
+        process.env.REACT_APP_API_URL ||
+        "https://realsms-backend.vercel.app";
 
-  const pollOtp = useRef(null);
+    const pollOtp = useRef(null);
 
-  const formatNumber = (num) => {
-    if (!num) return "";
-    return String(num).startsWith("+") ? String(num) : `+${num}`;
-  };
+    const formatNumber = (num) => {
+        if (!num) return "";
+        return String(num).startsWith("+") ? String(num) : `+${num}`;
+    };
 
-  const handleCopyNumber = async () => {
-    if (!activeOrder?.number) return;
+    const handleCopyNumber = async () => {
+        if (!activeOrder?.number) return;
 
-    const fullNumber = formatNumber(activeOrder.number);
+        const fullNumber = formatNumber(activeOrder.number);
 
-    try {
-      await navigator.clipboard.writeText(fullNumber);
-      setCopied(true);
-    } catch (err) {
-      const textArea = document.createElement("textarea");
-      textArea.value = fullNumber;
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand("copy");
-      document.body.removeChild(textArea);
-      setCopied(true);
-    }
-  };
+        try {
+            await navigator.clipboard.writeText(fullNumber);
+            setCopied(true);
+        } catch (err) {
+            const textArea = document.createElement("textarea");
+            textArea.value = fullNumber;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textArea);
+            setCopied(true);
+        }
+    };
 
-  useEffect(() => {
-    document.title = "Buy Numbers - RealSMS";
-  }, []);
+    useEffect(() => {
+        document.title = "Buy Numbers - RealSMS";
+    }, []);
 
-  // ---------------- RESTORE ACTIVE ORDER ----------------
-  useEffect(() => {
-    if (!token) return;
+    // ---------------- RESTORE ACTIVE ORDER ----------------
+    useEffect(() => {
+        if (!token) return;
 
-    const saved = localStorage.getItem("activeOrder");
-    if (!saved) return;
+        const saved = localStorage.getItem("activeOrder");
+        if (!saved) return;
 
-    const parsed = JSON.parse(saved);
-    if (parsed.country) {
-      setSelectedCountry(parsed.country);
+        const parsed = JSON.parse(saved);
+        if (parsed.country) {
+            setSelectedCountry(parsed.country);
 
-      localStorage.setItem(
-        "selectedCountry",
-        JSON.stringify(parsed.country)
-      );
-    }
+            localStorage.setItem(
+                "selectedCountry",
+                JSON.stringify(parsed.country)
+            );
+        }
 
-    const remaining = Math.floor(
-      (parsed.expiryTime - Date.now()) / 1000
-    );
-
-    if (remaining <= 0) {
-      localStorage.removeItem("activeOrder");
-      return;
-    }
-
-    setActiveOrder({
-      ...parsed.service,
-      number: parsed.number,
-      orderid: parsed.orderid,
-    });
-
-    setTimeLeft(remaining);
-    setOrderStatus("waiting");
-
-    if (pollOtp.current) clearInterval(pollOtp.current);
-
-    pollOtp.current = setInterval(async () => {
-      try {
-        const res = await axios.post(
-          `${API_URL}/api/smspool/otp`,
-          { orderid: parsed.orderid },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+        const remaining = Math.floor(
+            (parsed.expiryTime - Date.now()) / 1000
         );
 
-        if (res.data?.otp) {
-          setOtp(res.data.otp);
-          setOrderStatus("received");
-          clearInterval(pollOtp.current);
-          localStorage.removeItem("activeOrder");
+        if (remaining <= 0) {
+            localStorage.removeItem("activeOrder");
+            return;
         }
-      } catch { }
-    }, 2000);
 
-    return () => {
-      if (pollOtp.current) clearInterval(pollOtp.current);
+        setActiveOrder({
+            ...parsed.service,
+            number: parsed.number,
+            orderid: parsed.orderid,
+        });
+
+        setTimeLeft(remaining);
+        setOrderStatus("waiting");
+
+        if (pollOtp.current) clearInterval(pollOtp.current);
+
+        pollOtp.current = setInterval(async () => {
+            try {
+                const res = await axios.post(
+                    `${API_URL}/api/smspool/otp`,
+                    { orderid: parsed.orderid },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+
+                if (res.data?.otp) {
+                    setOtp(res.data.otp);
+                    setOrderStatus("received");
+                    clearInterval(pollOtp.current);
+                    localStorage.removeItem("activeOrder");
+                }
+            } catch { }
+        }, 2000);
+
+        return () => {
+            if (pollOtp.current) clearInterval(pollOtp.current);
+        };
+    }, [token, API_URL]);
+
+
+    // ---------------- HANDLE REFUND ----------------
+    const handleRefund = async () => {
+        if (!activeOrder?.orderid) return;
+
+        try {
+            setActionLoading(true);
+
+            const res = await axios.post(
+                `${API_URL}/api/smspool/cancel`,
+                { orderid: activeOrder.orderid },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            if (res.data.success) {
+                alert(`Refunded ₦${res.data.refundedAmount || ""}`);
+
+                setActiveOrder(null);
+                setOrderStatus("idle");
+                setOtp(null);
+                setTimeLeft(600);
+
+                localStorage.removeItem("activeOrder");
+                fetchBalance();
+            } else {
+                alert(res.data.message || "Refund failed");
+            }
+        } catch (err) {
+            alert("Refund failed");
+        } finally {
+            setActionLoading(false);
+        }
     };
-  }, [token, API_URL]);
 
+    // ---------------- AUTO RESET UI ----------------
+    useEffect(() => {
+        if (orderStatus !== "received") return;
 
-  // ---------------- HANDLE REFUND ----------------
-  const handleRefund = async () => {
-    if (!activeOrder?.orderid) return;
+        const t = setTimeout(() => {
+            setActiveOrder(null);
+            setOrderStatus("idle");
+            setOtp(null);
+            setTimeLeft(600);
+            setCopied(false);
 
-    try {
-      setActionLoading(true);
+            localStorage.removeItem("activeOrder");
+        }, 5000); // 5 seconds to show OTP then reset
 
-      const res = await axios.post(
-        `${API_URL}/api/smspool/cancel`,
-        { orderid: activeOrder.orderid },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        return () => clearTimeout(t);
+    }, [orderStatus]);
+
+    // ---------------- FETCH COUNTRIES ----------------
+    useEffect(() => {
+        if (!token) return;
+
+        const fetchCountries = async () => {
+            try {
+                const res = await axios.get(
+                    `${API_URL}/api/smspool/servers`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+
+                const countryList = Array.isArray(res.data)
+                    ? res.data
+                    : [];
+
+                setCountries(countryList);
+
+                // Restore selected country
+                const savedCountry =
+                    localStorage.getItem("selectedCountry");
+
+                if (savedCountry) {
+                    try {
+                        const parsedCountry =
+                            JSON.parse(savedCountry);
+
+                        const foundCountry =
+                            countryList.find(
+                                (c) =>
+                                    String(c.ID) ===
+                                    String(parsedCountry.ID)
+                            );
+
+                        if (foundCountry) {
+                            setSelectedCountry(foundCountry);
+                        }
+                    } catch (err) {
+                        console.error(err);
+                    }
+                }
+            } catch {
+                setCountries([]);
+            }
+        };
+
+        fetchCountries();
+    }, [token, API_URL]);
+
+    // ---------------- FETCH SERVICES ----------------
+    useEffect(() => {
+        if (!selectedCountry || !token) return;
+
+        const fetchServices = async () => {
+            setLoadingServices(true);
+
+            try {
+                const res = await axios.get(
+                    `${API_URL}/api/smspool/services`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+
+                const data = Array.isArray(res.data)
+                    ? res.data
+                    : [];
+
+                const withPrice = data.map((s) => {
+                    const priceObj = s.pricing?.find(
+                        (p) =>
+                            String(p.countryID) ===
+                            String(selectedCountry.ID)
+                    );
+
+                    const serviceName =
+                        s.name?.toLowerCase();
+
+                    return {
+                        ...s,
+                        price: priceObj?.priceNGN || null,
+
+                        logo:
+                            SERVICE_LOGOS[
+                            serviceName
+                            ] ||
+                            `https://img.logo.dev/search?query=${encodeURIComponent(
+                                s.name || ""
+                            )}&token=${process.env.REACT_APP_LOGO_DEV_KEY
+                            }`,
+
+                        popular:
+                            POPULAR_SERVICES.some(
+                                (name) =>
+                                    name.toLowerCase() ===
+                                    serviceName
+                            ),
+                    };
+                });
+                setServices(withPrice);
+            } catch {
+                setServices([]);
+            } finally {
+                setLoadingServices(false);
+            }
+        };
+
+        fetchServices();
+    }, [selectedCountry, token, API_URL]);
+
+    // ---------------- COUNTRY CHANGE ----------------
+    const handleCountryChange = (e) => {
+        const countryId = e.target.value;
+
+        const country =
+            countries.find(
+                (c) => c.ID.toString() === countryId
+            ) || null;
+
+        setSelectedCountry(country);
+
+        if (country) {
+            localStorage.setItem(
+                "selectedCountry",
+                JSON.stringify(country)
+            );
         }
-      );
 
-      if (res.data.success) {
-        alert(`Refunded ₦${res.data.refundedAmount || ""}`);
+        // Don't clear active order if one exists
+        if (!activeOrder) {
+            setOrderStatus("idle");
+            setOtp(null);
+            setTimeLeft(600);
+            setCopied(false);
+            // setServices([]);
 
-        setActiveOrder(null);
-        setOrderStatus("idle");
+            if (!activeOrder) {
+                setServices([]);
+            }
+
+            if (pollOtp.current) {
+                clearInterval(pollOtp.current);
+            }
+        }
+
+        setSearch("");
+    };
+
+    // ---------------- HANDLE BUY ----------------
+    const handleBuy = async (service) => {
+        if (!selectedCountry)
+            return alert("Please select a country first!");
+
+        if (!service.price)
+            return alert(
+                "Service not available for this country!"
+            );
+
+        if (balance < service.price)
+            return alert("Insufficient balance");
+
+        if (orderStatus === "waiting")
+            return alert(
+                "You already have an active order!"
+            );
+
+        const previousBalance = balance;
+
+        // Instant UI deduction
+        setBalance((prev) => prev - service.price);
+
+        setOrderStatus("waiting");
         setOtp(null);
         setTimeLeft(600);
+        setCopied(false);
 
-        localStorage.removeItem("activeOrder");
-        fetchBalance();
-      } else {
-        alert(res.data.message || "Refund failed");
-      }
-    } catch (err) {
-      alert("Refund failed");
-    } finally {
-      setActionLoading(false);
-    }
-  };
-
-  // ---------------- HANDLE REFUND ----------------
-  const handleResend = async () => {
-    if (!activeOrder?.orderid) return;
-
-    try {
-      setActionLoading(true);
-
-      const res = await axios.post(
-        `${API_URL}/api/smspool/resend`,
-        { orderid: activeOrder.orderid },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-
-      if (res.data.success) {
-        alert("OTP resent successfully!");
-      } else {
-        alert(res.data.message || "Resend failed");
-      }
-    } catch (err) {
-      alert("Resend failed");
-    } finally {
-      setActionLoading(false);
-    }
-  };
-
-  // ---------------- FETCH COUNTRIES ----------------
-  useEffect(() => {
-    if (!token) return;
-
-    const fetchCountries = async () => {
-      try {
-        const res = await axios.get(
-          `${API_URL}/api/smspool/servers`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        const countryList = Array.isArray(res.data)
-          ? res.data
-          : [];
-
-        setCountries(countryList);
-
-        // Restore selected country
-        const savedCountry =
-          localStorage.getItem("selectedCountry");
-
-        if (savedCountry) {
-          try {
-            const parsedCountry =
-              JSON.parse(savedCountry);
-
-            const foundCountry =
-              countryList.find(
-                (c) =>
-                  String(c.ID) ===
-                  String(parsedCountry.ID)
-              );
-
-            if (foundCountry) {
-              setSelectedCountry(foundCountry);
-            }
-          } catch (err) {
-            console.error(err);
-          }
-        }
-      } catch {
-        setCountries([]);
-      }
-    };
-
-    fetchCountries();
-  }, [token, API_URL]);
-
-  // ---------------- FETCH SERVICES ----------------
-  useEffect(() => {
-    if (!selectedCountry || !token) return;
-
-    const fetchServices = async () => {
-      setLoadingServices(true);
-
-      try {
-        const res = await axios.get(
-          `${API_URL}/api/smspool/services`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        const data = Array.isArray(res.data)
-          ? res.data
-          : [];
-
-        const withPrice = data.map((s) => {
-          const priceObj = s.pricing?.find(
-            (p) =>
-              String(p.countryID) ===
-              String(selectedCountry.ID)
-          );
-
-          const serviceName =
-            s.name?.toLowerCase();
-
-          return {
-            ...s,
-            price: priceObj?.priceNGN || null,
-
-            logo:
-              SERVICE_LOGOS[
-              serviceName
-              ] ||
-              `https://img.logo.dev/search?query=${encodeURIComponent(
-                s.name || ""
-              )}&token=${process.env.REACT_APP_LOGO_DEV_KEY
-              }`,
-
-            popular:
-              POPULAR_SERVICES.some(
-                (name) =>
-                  name.toLowerCase() ===
-                  serviceName
-              ),
-          };
-        });
-        setServices(withPrice);
-      } catch {
-        setServices([]);
-      } finally {
-        setLoadingServices(false);
-      }
-    };
-
-    fetchServices();
-  }, [selectedCountry, token, API_URL]);
-
-  // ---------------- COUNTRY CHANGE ----------------
-  const handleCountryChange = (e) => {
-    const countryId = e.target.value;
-
-    const country =
-      countries.find(
-        (c) => c.ID.toString() === countryId
-      ) || null;
-
-    setSelectedCountry(country);
-
-    if (country) {
-      localStorage.setItem(
-        "selectedCountry",
-        JSON.stringify(country)
-      );
-    }
-
-    // Don't clear active order if one exists
-    if (!activeOrder) {
-      setOrderStatus("idle");
-      setOtp(null);
-      setTimeLeft(600);
-      setCopied(false);
-      // setServices([]);
-
-      if (!activeOrder) {
-        setServices([]);
-      }
-
-      if (pollOtp.current) {
-        clearInterval(pollOtp.current);
-      }
-    }
-
-    setSearch("");
-  };
-
-  // ---------------- HANDLE BUY ----------------
-  const handleBuy = async (service) => {
-    if (!selectedCountry)
-      return alert("Please select a country first!");
-
-    if (!service.price)
-      return alert(
-        "Service not available for this country!"
-      );
-
-    if (balance < service.price)
-      return alert("Insufficient balance");
-
-    if (orderStatus === "waiting")
-      return alert(
-        "You already have an active order!"
-      );
-
-    const previousBalance = balance;
-
-    // Instant UI deduction
-    setBalance((prev) => prev - service.price);
-
-    setOrderStatus("waiting");
-    setOtp(null);
-    setTimeLeft(600);
-    setCopied(false);
-
-    try {
-      const res = await axios.post(
-        `${API_URL}/api/smspool/buy`,
-        {
-          country: selectedCountry.ID,
-          service: service.ID,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (res.data.success === 0) {
-        throw new Error(res.data.message);
-      }
-
-      const { number, orderid } = res.data.data;
-      const expiryTime = Date.now() + 600000;
-
-      localStorage.setItem(
-        "activeOrder",
-        JSON.stringify({
-          service,
-          country: selectedCountry,
-          number,
-          orderid,
-          expiryTime,
-        })
-      );
-
-      setActiveOrder({
-        ...service,
-        number,
-        orderid,
-      });
-
-      if (pollOtp.current)
-        clearInterval(pollOtp.current);
-
-      pollOtp.current = setInterval(async () => {
         try {
-          const otpRes = await axios.post(
-            `${API_URL}/api/smspool/otp`,
-            { orderid },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
+            const res = await axios.post(
+                `${API_URL}/api/smspool/buy`,
+                {
+                    country: selectedCountry.ID,
+                    service: service.ID,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            if (res.data.success === 0) {
+                throw new Error(res.data.message);
             }
-          );
 
-          if (otpRes.data?.otp) {
-            setOtp(otpRes.data.otp);
-            setOrderStatus("received");
-            clearInterval(pollOtp.current);
-            localStorage.removeItem("activeOrder");
-          }
-        } catch { }
-      }, 2000);
-    } catch (err) {
-      setBalance(previousBalance);
-      setOrderStatus("idle");
-      fetchBalance();
+            const { number, orderid } = res.data.data;
+            const expiryTime = Date.now() + 600000;
 
-      alert(
-        err.response?.data?.message || err.message
-      );
-    }
-  };
+            localStorage.setItem(
+                "activeOrder",
+                JSON.stringify({
+                    service,
+                    country: selectedCountry,
+                    number,
+                    orderid,
+                    expiryTime,
+                })
+            );
 
-  // ---------------- COUNTDOWN ----------------
-  useEffect(() => {
-    if (orderStatus !== "waiting") return;
+            setActiveOrder({
+                ...service,
+                number,
+                orderid,
+            });
 
-    const timer = setInterval(() => {
-      setTimeLeft((t) => {
-        if (t <= 1) {
-          clearInterval(timer);
-          setOrderStatus("expired");
-          localStorage.removeItem("activeOrder");
+            if (pollOtp.current)
+                clearInterval(pollOtp.current);
 
-          if (pollOtp.current) clearInterval(pollOtp.current);
+            pollOtp.current = setInterval(async () => {
+                try {
+                    const otpRes = await axios.post(
+                        `${API_URL}/api/smspool/otp`,
+                        { orderid },
+                        {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                        }
+                    );
 
-          return 0;
+                    if (otpRes.data?.otp) {
+                        setOtp(otpRes.data.otp);
+                        setOrderStatus("received");
+                        clearInterval(pollOtp.current);
+                        localStorage.removeItem("activeOrder");
+                    }
+                } catch { }
+            }, 2000);
+        } catch (err) {
+            setBalance(previousBalance);
+            setOrderStatus("idle");
+            fetchBalance();
+
+            alert(
+                err.response?.data?.message || err.message
+            );
         }
-        return t - 1;
-      });
-    }, 1000);
+    };
 
-    return () => clearInterval(timer);
-  }, [orderStatus]);
+    // ---------------- COUNTDOWN ----------------
+    useEffect(() => {
+        if (orderStatus !== "waiting") return;
+
+        const timer = setInterval(() => {
+            setTimeLeft((t) => {
+                if (t <= 1) {
+                    clearInterval(timer);
+                    setOrderStatus("expired");
+                    localStorage.removeItem("activeOrder");
+
+                    if (pollOtp.current) clearInterval(pollOtp.current);
+
+                    return 0;
+                }
+                return t - 1;
+            });
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, [orderStatus]);
 
 
-  // ---------------- AUTO REFUND ----------------
- useEffect(() => {
-  if (orderStatus !== "expired") return;
-  if (!activeOrder?.orderid) return;
-  if (autoRefunded) return;
+    // ---------------- AUTO REFUND ----------------
+    useEffect(() => {
+        if (orderStatus !== "expired") return;
+        if (!activeOrder?.orderid) return;
+        if (autoRefunded) return;
 
-  const refund = async () => {
-    try {
-      setAutoRefunded(true);
+        const refund = async () => {
+            try {
+                setAutoRefunded(true);
 
-      await axios.post(
-        `${API_URL}/api/smspool/cancel`,
-        { orderid: activeOrder.orderid },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+                await axios.post(
+                    `${API_URL}/api/smspool/cancel`,
+                    { orderid: activeOrder.orderid },
+                    {
+                        headers: { Authorization: `Bearer ${token}` },
+                    }
+                );
 
-      fetchBalance();
+                fetchBalance();
 
-      setActiveOrder(null);
-      setOtp(null);
-      setTimeLeft(600);
-      setOrderStatus("idle");
-    } catch (err) {
-      console.error("Auto refund failed:", err);
-    }
-  };
+                setActiveOrder(null);
+                setOtp(null);
+                setTimeLeft(600);
+                setOrderStatus("idle");
+            } catch (err) {
+                console.error("Auto refund failed:", err);
+            }
+        };
 
-  refund();
-}, [orderStatus, activeOrder, autoRefunded, token, API_URL, fetchBalance]);
+        refund();
+    }, [orderStatus, activeOrder, autoRefunded, token, API_URL, fetchBalance]);
 
-  // ---------------- COPY RESET ----------------
-  useEffect(() => {
-    if (!copied) return;
+    // ---------------- COPY RESET ----------------
+    useEffect(() => {
+        if (!copied) return;
 
-    const t = setTimeout(
-      () => setCopied(false),
-      2000
-    );
+        const t = setTimeout(
+            () => setCopied(false),
+            2000
+        );
 
-    return () => clearTimeout(t);
-  }, [copied]);
+        return () => clearTimeout(t);
+    }, [copied]);
 
-  // ---------------- FILTER LOGIC ----------------
-  const normalizedSearch =
-    search.trim().toLowerCase();
+    // ---------------- FILTER LOGIC ----------------
+    const normalizedSearch =
+        search.trim().toLowerCase();
 
-  const filteredServices =
-    normalizedSearch === ""
-      ? services.filter((service) => service.popular)
-      : services.filter((service) =>
-        service.name
-          ?.toLowerCase()
-          .includes(normalizedSearch)
-      );
+    const filteredServices =
+        normalizedSearch === ""
+            ? services.filter((service) => service.popular)
+            : services.filter((service) =>
+                service.name
+                    ?.toLowerCase()
+                    .includes(normalizedSearch)
+            );
 
-  return (
-    <div
-      className={`buy-page ${darkMode ? "dark" : ""
-        }`}
-    >
-      {/* HEADER */}
-      <div className="buy-header">
-        <div>
-          <h1>Buy Number</h1>
-          <p>
-            Purchase temporary virtual numbers
-            for SMS verification
-          </p>
-        </div>
-      </div>
-
-      {/* TOOLBAR */}
-      <div className="buy-toolbar">
-        <select
-          className="server-select"
-          value={selectedCountry?.ID || ""}
-          onChange={handleCountryChange}
+    return (
+        <div
+            className={`buy-page ${darkMode ? "dark" : ""
+                }`}
         >
-          <option value="">
-            Select Country
-          </option>
-
-          {countries.map((c) => (
-            <option
-              key={c.ID}
-              value={c.ID}
-            >
-              {c.name}
-            </option>
-          ))}
-        </select>
-
-        <div className="search-container">
-          <FiSearch className="search-icon" />
-
-          <input
-            type="text"
-            placeholder="Search service..."
-            value={search}
-            onChange={(e) =>
-              setSearch(e.target.value)
-            }
-            disabled={
-              !selectedCountry || loadingServices
-            }
-          />
-        </div>
-      </div>
-
-      {/* MAIN GRID */}
-      <div className="buy-layout">
-        {/* SERVICES */}
-        <div className="services-panel">
-          {search === "" && selectedCountry && (
-            <div className="popular-label">
-              <span>Popular services</span>
-
-              <div className="stat-pill">
-                <span>Available Services</span>
-                <strong>{services.filter((s) => s.price).length}</strong>
-              </div>
-            </div>
-          )}
-
-          {loadingServices ? (
-            <div className="loading-state">
-              <div className="spinner"></div>
-            </div>
-          ) : filteredServices.length > 0 ? (
-            <>
-              <div className="services-grid">
-                {filteredServices.map((service) => (
-                  <ServiceCard
-                    key={service.ID || service.id}
-                    service={service}
-                    onBuy={handleBuy}
-                  />
-                ))}
-              </div>
-
-              {search === "" && (
-                <div className="notice">
-                  <FiInfo />
-                  <span>
-                    Search for other available services
-                  </span>
+            {/* HEADER */}
+            <div className="buy-header">
+                <div>
+                    <h1>Buy Number</h1>
+                    <p>
+                        Purchase temporary virtual numbers
+                        for SMS verification
+                    </p>
                 </div>
-              )}
-            </>
-          ) : (
-            <div className="empty-state">
-              <h3>No services found</h3>
-              <p>
-                {search
-                  ? "Try another service name"
-                  : "Select a country to continue"}
-              </p>
             </div>
-          )}
-        </div>
 
-       <div className="otp-panel">
-  <h3>Inbox</h3>
+            {/* TOOLBAR */}
+            <div className="buy-toolbar">
+                <select
+                    className="server-select"
+                    value={selectedCountry?.ID || ""}
+                    onChange={handleCountryChange}
+                >
+                    <option value="">
+                        Select Country
+                    </option>
 
-  {!activeOrder ? (
-    <div className="otp-empty">
-      <p>No active order</p>
-      <span>Buy a number to receive OTP here</span>
-    </div>
-  ) : (
-    <>
-      {/* NUMBER BOX */}
-      <div className="number-box">
-        <span>Phone Number</span>
+                    {countries.map((c) => (
+                        <option
+                            key={c.ID}
+                            value={c.ID}
+                        >
+                            {c.name}
+                        </option>
+                    ))}
+                </select>
 
-        <div className="number-row">
-          <h2 className="phone-number">
-            {formatNumber(activeOrder.number)}
-          </h2>
+                <div className="search-container">
+                    <FiSearch className="search-icon" />
 
-          <button onClick={handleCopyNumber} className="copy-btn">
-            {copied ? "Copied!" : <FiCopy />}
-          </button>
-        </div>
-      </div>
-
-      {/* ⏳ WAITING */}
-      {orderStatus === "waiting" && (
-        <>
-          <div className="otp-status waiting">
-            <h4>Waiting for OTP...</h4>
-
-            <div className="timer-pill">
-              {Math.floor(timeLeft / 60)}:
-              {String(timeLeft % 60).padStart(2, "0")}
+                    <input
+                        type="text"
+                        placeholder="Search service..."
+                        value={search}
+                        onChange={(e) =>
+                            setSearch(e.target.value)
+                        }
+                        disabled={
+                            !selectedCountry || loadingServices
+                        }
+                    />
+                </div>
             </div>
-          </div>
 
-          <div className="otp-actions">
-            <button
-              className="action-btn refund"
-              onClick={handleRefund}
-              disabled={actionLoading}
-            >
-              {actionLoading ? "Processing..." : "Refund"}
-            </button>
-          </div>
-        </>
-      )}
+            {/* MAIN GRID */}
+            <div className="buy-layout">
+                {/* SERVICES */}
+                <div className="services-panel">
+                    {search === "" && selectedCountry && (
+                        <div className="popular-label">
+                            <span>Popular services</span>
 
-      {/* ✅ RECEIVED */}
-      {orderStatus === "received" && (
-        <>
-          <div className="otp-status success">
-            <span>Received OTP</span>
+                            <div className="stat-pill">
+                                <span>Available Services</span>
+                                <strong>{services.filter((s) => s.price).length}</strong>
+                            </div>
+                        </div>
+                    )}
 
-            <h1>{otp}</h1>
+                    {loadingServices ? (
+                        <div className="loading-state">
+                            <div className="spinner"></div>
+                        </div>
+                    ) : filteredServices.length > 0 ? (
+                        <>
+                            <div className="services-grid">
+                                {filteredServices.map((service) => (
+                                    <ServiceCard
+                                        key={service.ID || service.id}
+                                        service={service}
+                                        onBuy={handleBuy}
+                                    />
+                                ))}
+                            </div>
 
-            <button
-              className="copy-otp-btn"
-              onClick={() => {
-                navigator.clipboard.writeText(otp);
-                setCopied(true);
-              }}
-            >
-              Copy OTP
-            </button>
-          </div>
+                            {search === "" && (
+                                <div className="notice">
+                                    <FiInfo />
+                                    <span>
+                                        Search for other available services
+                                    </span>
+                                </div>
+                            )}
+                        </>
+                    ) : (
+                        <div className="empty-state">
+                            <h3>No services found</h3>
+                            <p>
+                                {search
+                                    ? "Try another service name"
+                                    : "Select a country to continue"}
+                            </p>
+                        </div>
+                    )}
+                </div>
 
-          <div className="otp-actions">
-            <button
-              className="action-btn resend"
-              onClick={handleResend}
-              disabled={actionLoading}
-            >
-              {actionLoading ? "Sending..." : "Resend"}
-            </button>
-          </div>
-        </>
-      )}
+                <div className="otp-panel">
+                    <h3>Inbox</h3>
 
-      {/* ❌ EXPIRED */}
-      {orderStatus === "expired" && (
-        <div className="otp-status expired">
-          <p>OTP expired</p>
-          <span>Refunding automatically...</span>
+                    {!activeOrder ? (
+                        <div className="otp-empty">
+                            <p>No active order</p>
+                            <span>Buy a number to receive OTP here</span>
+                        </div>
+                    ) : (
+                        <>
+                            <div className="number-box">
+                                <span>Phone Number</span>
+
+                                <div className="number-row">
+                                    <h2 className="phone-number">
+                                        {formatNumber(activeOrder.number)}
+                                    </h2>
+
+                                    <button onClick={handleCopyNumber} className="copy-btn">
+                                        {copied ? "Copied!" : <FiCopy />}
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* WAITING */}
+                            {orderStatus === "waiting" && (
+                                <div className="otp-status waiting">
+                                    <h4>Waiting for OTP...</h4>
+
+                                    <div className="timer-pill">
+                                        {Math.floor(timeLeft / 60)}:
+                                        {String(timeLeft % 60).padStart(2, "0")}
+                                    </div>
+
+                                    <div className="otp-actions">
+                                        <button
+                                            className="action-btn refund"
+                                            onClick={handleRefund}
+                                            disabled={actionLoading}
+                                        >
+                                            {actionLoading ? "Processing..." : "Refund"}
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* RECEIVED (NO RESEND) */}
+                            {orderStatus === "received" && (
+                                <div className="otp-status success">
+                                    <span>Received OTP</span>
+
+                                    <h1>{otp}</h1>
+
+                                    <button
+                                        className="copy-otp-btn"
+                                        onClick={() => {
+                                            navigator.clipboard.writeText(otp);
+                                            setCopied(true);
+                                        }}
+                                    >
+                                        Copy OTP
+                                    </button>
+
+                                    <p className="hint">
+                                        This session will reset automatically
+                                    </p>
+                                </div>
+                            )}
+
+                            {/* EXPIRED */}
+                            {orderStatus === "expired" && (
+                                <div className="otp-status expired">
+                                    <p>OTP expired</p>
+                                    <span>Refunding automatically...</span>
+                                </div>
+                            )}
+                        </>
+                    )}
+                </div>
+            </div>
         </div>
-      )}
-    </>
-  )}
-</div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default BuyNumbers;
