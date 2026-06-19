@@ -143,23 +143,49 @@ const BuyNumbers = ({ darkMode }) => {
           ? res.data
           : [];
 
-        const withPrice = data.map((s) => {
-          const priceObj = s.pricing?.find(
-            (p) =>
-              String(p.countryID) ===
-              String(selectedCountry.ID)
-          );
+        // const withPrice = data.map((s) => {
+        //   const priceObj = s.pricing?.find(
+        //     (p) =>
+        //       String(p.countryID) ===
+        //       String(selectedCountry.ID)
+        //   );
 
-          return {
-            ...s,
-            price: priceObj?.priceNGN || null,
-            popular: POPULAR_SERVICES.some(
-              (name) =>
-                name.toLowerCase() ===
-                s.name?.toLowerCase()
-            ),
-          };
-        });
+        //   return {
+        //     ...s,
+        //     price: priceObj?.priceNGN || null,
+        //     popular: POPULAR_SERVICES.some(
+        //       (name) =>
+        //         name.toLowerCase() ===
+        //         s.name?.toLowerCase()
+        //     ),
+        //   };
+        // });
+
+        const withPrice = data.map((s) => {
+  const priceObj = s.pricing?.find(
+    (p) =>
+      String(p.countryID) ===
+      String(selectedCountry.ID)
+  );
+
+  return {
+    ...s,
+    price: priceObj?.priceNGN || null,
+
+    // Add logo here
+    logo:
+      `https://logo.clearbit.com/${s.name
+        ?.toLowerCase()
+        ?.replace(/\s+/g, "")
+        .replace(/[^a-z0-9]/g, "")}.com`,
+
+    popular: POPULAR_SERVICES.some(
+      (name) =>
+        name.toLowerCase() ===
+        s.name?.toLowerCase()
+    ),
+  };
+});
 
         setServices(withPrice);
       } catch {
