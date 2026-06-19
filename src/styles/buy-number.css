@@ -404,7 +404,9 @@
 
   .server-select {
     width: 100%;
-    height: 44px;
+    height: 48px;
+    min-height: 48px;
+    border-radius: 10px;
   }
 
   .search-container {
@@ -412,7 +414,7 @@
   height: 48px;
   min-height: 48px;
   padding: 0 12px;
-  border-radius: 14px;
+  border-radius: 10px;
   background: var(--input-bg);
   border: 1px solid var(--border-color);
   display: flex;
