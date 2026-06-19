@@ -4,6 +4,14 @@ import { FiSearch, FiCopy , FiInfo} from "react-icons/fi";
 import ServiceCard from "../components/ServiceCard";
 import { useBalance } from "../context/BalanceContext";
 import "../styles/buy-number.css";
+import whatsappLogo from "../assets/whatsapp.png";
+import telegramLogo from "../assets/telegram.png";
+import tiktokLogo from "../assets/tiktok.png";
+import instagramLogo from "../assets/instagram.png";
+import facebookLogo from "../assets/facebook.png";
+import discordLogo from "../assets/discord.png";
+import signalLogo from "../assets/signal.png";
+import pofLogo from "../assets/pof.png";
 
 const POPULAR_SERVICES = [
   "WhatsApp",
@@ -15,6 +23,17 @@ const POPULAR_SERVICES = [
   "Discord",
   "Signal",
 ];
+
+const SERVICE_LOGOS = {
+  whatsapp: whatsappLogo,
+  telegram: telegramLogo,
+  tiktok: tiktokLogo,
+  instagram: instagramLogo,
+  facebook: facebookLogo,
+  discord: discordLogo,
+  signal: signalLogo,
+  "plenty of fish": pofLogo,
+};
 
 const BuyNumbers = ({ darkMode }) => {
   const { balance, setBalance, fetchBalance } = useBalance();
@@ -161,26 +180,36 @@ const BuyNumbers = ({ darkMode }) => {
         //   };
         // });
 
-        const withPrice = data.map((s) => {
+       const withPrice = data.map((s) => {
   const priceObj = s.pricing?.find(
     (p) =>
       String(p.countryID) ===
       String(selectedCountry.ID)
   );
 
+  const serviceName =
+    s.name?.toLowerCase();
+
   return {
     ...s,
     price: priceObj?.priceNGN || null,
 
-    logo: `https://img.logo.dev/search?query=${encodeURIComponent(
-      s.name || ""
-    )}&token=${process.env.REACT_APP_LOGO_DEV_KEY}`,
+    logo:
+      SERVICE_LOGOS[
+        serviceName
+      ] ||
+      `https://img.logo.dev/search?query=${encodeURIComponent(
+        s.name || ""
+      )}&token=${
+        process.env.REACT_APP_LOGO_DEV_KEY
+      }`,
 
-    popular: POPULAR_SERVICES.some(
-      (name) =>
-        name.toLowerCase() ===
-        s.name?.toLowerCase()
-    ),
+    popular:
+      POPULAR_SERVICES.some(
+        (name) =>
+          name.toLowerCase() ===
+          serviceName
+      ),
   };
 });
         setServices(withPrice);
