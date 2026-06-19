@@ -150,32 +150,6 @@ const BuyNumbers = ({ darkMode }) => {
     };
   }, [token, API_URL]);
 
-  // // ---------------- FETCH COUNTRIES ----------------
-  // useEffect(() => {
-  //   if (!token) return;
-
-  //   const fetchCountries = async () => {
-  //     try {
-  //       const res = await axios.get(
-  //         `${API_URL}/api/smspool/servers`,
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
-
-  //       setCountries(
-  //         Array.isArray(res.data) ? res.data : []
-  //       );
-  //     } catch {
-  //       setCountries([]);
-  //     }
-  //   };
-
-  //   fetchCountries();
-  // }, [token, API_URL]);
-
   // ---------------- FETCH COUNTRIES ----------------
 useEffect(() => {
   if (!token) return;
@@ -292,31 +266,7 @@ useEffect(() => {
     fetchServices();
   }, [selectedCountry, token, API_URL]);
 
-  // // ---------------- COUNTRY CHANGE ----------------
-  // const handleCountryChange = (e) => {
-  //   const countryId = e.target.value;
-
-  //   const country =
-  //     countries.find(
-  //       (c) => c.ID.toString() === countryId
-  //     ) || null;
-
-  //   setSelectedCountry(country);
-  //   setActiveOrder(null);
-  //   setOrderStatus("idle");
-  //   setOtp(null);
-  //   setTimeLeft(600);
-  //   setSearch("");
-  //   setCopied(false);
-  //   setServices([]);
-
-  //   localStorage.removeItem("activeOrder");
-
-  //   if (pollOtp.current)
-  //     clearInterval(pollOtp.current);
-  // };
-
-// ---------------- COUNTRY CHANGE ----------------
+  // ---------------- COUNTRY CHANGE ----------------
 const handleCountryChange = (e) => {
   const countryId = e.target.value;
 
@@ -402,16 +352,6 @@ const handleCountryChange = (e) => {
 
       const { number, orderid } = res.data.data;
       const expiryTime = Date.now() + 600000;
-
-      // localStorage.setItem(
-      //   "activeOrder",
-      //   JSON.stringify({
-      //     service,
-      //     number,
-      //     orderid,
-      //     expiryTime,
-      //   })
-      // );
 
       localStorage.setItem(
   "activeOrder",
