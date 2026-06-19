@@ -172,12 +172,9 @@ const BuyNumbers = ({ darkMode }) => {
     ...s,
     price: priceObj?.priceNGN || null,
 
-    // Add logo here
-    logo:
-      `https://logo.clearbit.com/${s.name
-        ?.toLowerCase()
-        ?.replace(/\s+/g, "")
-        .replace(/[^a-z0-9]/g, "")}.com`,
+    logo: `https://img.logo.dev/search?query=${encodeURIComponent(
+      s.name || ""
+    )}&token=${process.env.REACT_APP_LOGO_DEV_KEY}`,
 
     popular: POPULAR_SERVICES.some(
       (name) =>
@@ -186,7 +183,6 @@ const BuyNumbers = ({ darkMode }) => {
     ),
   };
 });
-
         setServices(withPrice);
       } catch {
         setServices([]);
