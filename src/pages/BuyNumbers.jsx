@@ -94,6 +94,16 @@ const BuyNumbers = ({ darkMode }) => {
     if (!saved) return;
 
     const parsed = JSON.parse(saved);
+    if (parsed.country) {
+  setSelectedCountry(parsed.country);
+
+  localStorage.setItem(
+    "selectedCountry",
+    JSON.stringify(parsed.country)
+  );
+}
+
+    
     const remaining = Math.floor(
       (parsed.expiryTime - Date.now()) / 1000
     );
@@ -140,31 +150,83 @@ const BuyNumbers = ({ darkMode }) => {
     };
   }, [token, API_URL]);
 
+  // // ---------------- FETCH COUNTRIES ----------------
+  // useEffect(() => {
+  //   if (!token) return;
+
+  //   const fetchCountries = async () => {
+  //     try {
+  //       const res = await axios.get(
+  //         `${API_URL}/api/smspool/servers`,
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
+
+  //       setCountries(
+  //         Array.isArray(res.data) ? res.data : []
+  //       );
+  //     } catch {
+  //       setCountries([]);
+  //     }
+  //   };
+
+  //   fetchCountries();
+  // }, [token, API_URL]);
+
   // ---------------- FETCH COUNTRIES ----------------
-  useEffect(() => {
-    if (!token) return;
+useEffect(() => {
+  if (!token) return;
 
-    const fetchCountries = async () => {
-      try {
-        const res = await axios.get(
-          `${API_URL}/api/smspool/servers`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+  const fetchCountries = async () => {
+    try {
+      const res = await axios.get(
+        `${API_URL}/api/smspool/servers`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const countryList = Array.isArray(res.data)
+        ? res.data
+        : [];
+
+      setCountries(countryList);
+
+      // Restore selected country
+      const savedCountry =
+        localStorage.getItem("selectedCountry");
+
+      if (savedCountry) {
+        try {
+          const parsedCountry =
+            JSON.parse(savedCountry);
+
+          const foundCountry =
+            countryList.find(
+              (c) =>
+                String(c.ID) ===
+                String(parsedCountry.ID)
+            );
+
+          if (foundCountry) {
+            setSelectedCountry(foundCountry);
           }
-        );
-
-        setCountries(
-          Array.isArray(res.data) ? res.data : []
-        );
-      } catch {
-        setCountries([]);
+        } catch (err) {
+          console.error(err);
+        }
       }
-    };
+    } catch {
+      setCountries([]);
+    }
+  };
 
-    fetchCountries();
-  }, [token, API_URL]);
+  fetchCountries();
+}, [token, API_URL]);
 
   // ---------------- FETCH SERVICES ----------------
   useEffect(() => {
@@ -230,30 +292,68 @@ const BuyNumbers = ({ darkMode }) => {
     fetchServices();
   }, [selectedCountry, token, API_URL]);
 
-  // ---------------- COUNTRY CHANGE ----------------
-  const handleCountryChange = (e) => {
-    const countryId = e.target.value;
+  // // ---------------- COUNTRY CHANGE ----------------
+  // const handleCountryChange = (e) => {
+  //   const countryId = e.target.value;
 
-    const country =
-      countries.find(
-        (c) => c.ID.toString() === countryId
-      ) || null;
+  //   const country =
+  //     countries.find(
+  //       (c) => c.ID.toString() === countryId
+  //     ) || null;
 
-    setSelectedCountry(country);
-    setActiveOrder(null);
+  //   setSelectedCountry(country);
+  //   setActiveOrder(null);
+  //   setOrderStatus("idle");
+  //   setOtp(null);
+  //   setTimeLeft(600);
+  //   setSearch("");
+  //   setCopied(false);
+  //   setServices([]);
+
+  //   localStorage.removeItem("activeOrder");
+
+  //   if (pollOtp.current)
+  //     clearInterval(pollOtp.current);
+  // };
+
+// ---------------- COUNTRY CHANGE ----------------
+const handleCountryChange = (e) => {
+  const countryId = e.target.value;
+
+  const country =
+    countries.find(
+      (c) => c.ID.toString() === countryId
+    ) || null;
+
+  setSelectedCountry(country);
+
+  if (country) {
+    localStorage.setItem(
+      "selectedCountry",
+      JSON.stringify(country)
+    );
+  }
+
+  // Don't clear active order if one exists
+  if (!activeOrder) {
     setOrderStatus("idle");
     setOtp(null);
     setTimeLeft(600);
-    setSearch("");
     setCopied(false);
-    setServices([]);
+    // setServices([]);
 
-    localStorage.removeItem("activeOrder");
+    if (!activeOrder) {
+  setServices([]);
+}
 
-    if (pollOtp.current)
+    if (pollOtp.current) {
       clearInterval(pollOtp.current);
-  };
+    }
+  }
 
+  setSearch("");
+};
+  
   // ---------------- HANDLE BUY ----------------
   const handleBuy = async (service) => {
     if (!selectedCountry)
@@ -303,15 +403,26 @@ const BuyNumbers = ({ darkMode }) => {
       const { number, orderid } = res.data.data;
       const expiryTime = Date.now() + 600000;
 
+      // localStorage.setItem(
+      //   "activeOrder",
+      //   JSON.stringify({
+      //     service,
+      //     number,
+      //     orderid,
+      //     expiryTime,
+      //   })
+      // );
+
       localStorage.setItem(
-        "activeOrder",
-        JSON.stringify({
-          service,
-          number,
-          orderid,
-          expiryTime,
-        })
-      );
+  "activeOrder",
+  JSON.stringify({
+    service,
+    country: selectedCountry,
+    number,
+    orderid,
+    expiryTime,
+  })
+);
 
       setActiveOrder({
         ...service,
