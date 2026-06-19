@@ -35,28 +35,6 @@ const SERVICE_LOGOS = {
   "plenty of fish": pofLogo,
 };
 
-const handleCopyNumber = async () => {
-  if (!activeOrder?.number) return;
-
-  const fullNumber = activeOrder.number.startsWith("+")
-    ? activeOrder.number
-    : `+${activeOrder.number}`;
-
-  try {
-    await navigator.clipboard.writeText(fullNumber);
-    setCopied(true);
-  } catch (err) {
-    // fallback for older browsers
-    const textArea = document.createElement("textarea");
-    textArea.value = fullNumber;
-    document.body.appendChild(textArea);
-    textArea.select();
-    document.execCommand("copy");
-    document.body.removeChild(textArea);
-
-    setCopied(true);
-  }
-};
 
 const BuyNumbers = ({ darkMode }) => {
   const { balance, setBalance, fetchBalance } = useBalance();
@@ -79,6 +57,29 @@ const BuyNumbers = ({ darkMode }) => {
     "https://realsms-backend.vercel.app";
 
   const pollOtp = useRef(null);
+
+  const handleCopyNumber = async () => {
+  if (!activeOrder?.number) return;
+
+  const fullNumber = activeOrder.number.startsWith("+")
+    ? activeOrder.number
+    : `+${activeOrder.number}`;
+
+  try {
+    await navigator.clipboard.writeText(fullNumber);
+    setCopied(true);
+  } catch (err) {
+    // fallback for older browsers
+    const textArea = document.createElement("textarea");
+    textArea.value = fullNumber;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textArea);
+
+    setCopied(true);
+  }
+};
 
   useEffect(() => {
     document.title = "Buy Numbers - RealSMS";
