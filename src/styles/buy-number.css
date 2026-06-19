@@ -319,6 +319,13 @@
   font-size: 13px;
 }
 
+.otp-actions {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .action-btn {
   width: 100%;
   padding: 12px 14px;
