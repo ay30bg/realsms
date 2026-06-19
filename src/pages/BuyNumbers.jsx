@@ -9,7 +9,7 @@ import telegramLogo from "../assets/telegram.png";
 import tiktokLogo from "../assets/tiktok.png";
 import instagramLogo from "../assets/instagram.png";
 import facebookLogo from "../assets/facebook.png";
-import discordLogo from "../assets/discord.png";
+import discordLogo from "../assets/discord.jpg";
 import signalLogo from "../assets/signal.png";
 import pofLogo from "../assets/pof.png";
 
