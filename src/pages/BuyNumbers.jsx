@@ -58,25 +58,26 @@ const BuyNumbers = ({ darkMode }) => {
 
   const pollOtp = useRef(null);
 
-  const handleCopyNumber = async () => {
+  const formatNumber = (num) => {
+  if (!num) return "";
+  return String(num).startsWith("+") ? String(num) : `+${num}`;
+};
+
+ const handleCopyNumber = async () => {
   if (!activeOrder?.number) return;
 
-  const fullNumber = activeOrder.number.startsWith("+")
-    ? activeOrder.number
-    : `+${activeOrder.number}`;
+  const fullNumber = formatNumber(activeOrder.number);
 
   try {
     await navigator.clipboard.writeText(fullNumber);
     setCopied(true);
   } catch (err) {
-    // fallback for older browsers
     const textArea = document.createElement("textarea");
     textArea.value = fullNumber;
     document.body.appendChild(textArea);
     textArea.select();
     document.execCommand("copy");
     document.body.removeChild(textArea);
-
     setCopied(true);
   }
 };
@@ -526,10 +527,9 @@ const BuyNumbers = ({ darkMode }) => {
                 <span>Phone Number</span>
 
                 <div className="number-row">
-                  <h2 className="phone-number">
-                    <span className="country-code">+</span>
-                    {activeOrder.number}
-                  </h2>
+                 <h2 className="phone-number">
+  {formatNumber(activeOrder.number)}
+</h2>
 
                   <button onClick={handleCopyNumber} className="copy-btn">
   {copied ? "Copied!" : <FiCopy />}
