@@ -508,15 +508,14 @@ const BuyNumbers = ({ darkMode }) => {
                   </h2>
 
                   <button
-                    onClick={() => {
-                      navigator.clipboard.writeText(
-                        activeOrder.number
-                      );
-                      setCopied(true);
-                    }}
-                  >
-                    <FiCopy />
-                  </button>
+  onClick={() => {
+    navigator.clipboard.writeText(getFullNumber(activeOrder.number));
+    setCopied(true);
+  }}
+  className="copy-btn"
+>
+  {copied ? "Copied!" : <FiCopy />}
+</button>
                 </div>
               </div>
 
