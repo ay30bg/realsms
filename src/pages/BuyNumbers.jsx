@@ -189,22 +189,17 @@ const BuyNumbers = ({ darkMode }) => {
         }
     };
 
-    // ---------------- AUTO RESET UI ----------------
-    useEffect(() => {
-        if (orderStatus !== "received") return;
+    // ---------------- HANDLE DONE ----------------
+    const handleDone = () => {
+        setActiveOrder(null);
+        setOrderStatus("idle");
+        setOtp(null);
+        setTimeLeft(600);
+        setCopied(false);
+        setAutoRefunded(false);
 
-        const t = setTimeout(() => {
-            setActiveOrder(null);
-            setOrderStatus("idle");
-            setOtp(null);
-            setTimeLeft(600);
-            setCopied(false);
-
-            localStorage.removeItem("activeOrder");
-        }, 5000); // 5 seconds to show OTP then reset
-
-        return () => clearTimeout(t);
-    }, [orderStatus]);
+        localStorage.removeItem("activeOrder");
+    };
 
     // ---------------- FETCH COUNTRIES ----------------
     useEffect(() => {
@@ -700,29 +695,35 @@ const BuyNumbers = ({ darkMode }) => {
                                 </>
                             )}
 
+
                             {/* SUCCESS */}
                             {orderStatus === "received" && (
-                                <div className="otp-status success">
-                                    <span>Received OTP</span>
+                                <>
+                                    <div className="otp-status success">
+                                        <span>Received OTP</span>
 
-                                    <h1>{otp}</h1>
+                                        <h1>{otp}</h1>
 
-                                    <button
-                                        className="copy-otp-btn"
-                                        onClick={() => {
-                                            navigator.clipboard.writeText(
-                                                otp
-                                            );
-                                            setCopied(true);
-                                        }}
-                                    >
-                                        Copy OTP
-                                    </button>
+                                        <button
+                                            className="copy-otp-btn"
+                                            onClick={() => {
+                                                navigator.clipboard.writeText(otp);
+                                                setCopied(true);
+                                            }}
+                                        >
+                                            Copy OTP
+                                        </button>
+                                    </div>
 
-                                    <p className="hint">
-                                        This session will reset automatically
-                                    </p>
-                                </div>
+                                    <div className="otp-actions">
+                                        <button
+                                            className="action-btn done"
+                                            onClick={handleDone}
+                                        >
+                                            Done
+                                        </button>
+                                    </div>
+                                </>
                             )}
 
                             {/* EXPIRED */}
