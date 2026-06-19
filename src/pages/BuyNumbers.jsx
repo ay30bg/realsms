@@ -516,36 +516,36 @@ const BuyNumbers = ({ darkMode }) => {
 
 
   // ---------------- AUTO REFUND ----------------
-  useEffect(() => {
-    if (orderStatus !== "expired") return;
-    if (!activeOrder?.orderid) return;
-    if (autoRefunded) return;
+ useEffect(() => {
+  if (orderStatus !== "expired") return;
+  if (!activeOrder?.orderid) return;
+  if (autoRefunded) return;
 
-    const refund = async () => {
-      try {
-        setAutoRefunded(true);
+  const refund = async () => {
+    try {
+      setAutoRefunded(true);
 
-        await axios.post(
-          `${API_URL}/api/smspool/cancel`,
-          { orderid: activeOrder.orderid },
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+      await axios.post(
+        `${API_URL}/api/smspool/cancel`,
+        { orderid: activeOrder.orderid },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
-        fetchBalance();
+      fetchBalance();
 
-        setActiveOrder(null);
-        setOtp(null);
-        setTimeLeft(600);
-        setOrderStatus("idle");
-      } catch (err) {
-        console.error("Auto refund failed:", err);
-      }
-    };
+      setActiveOrder(null);
+      setOtp(null);
+      setTimeLeft(600);
+      setOrderStatus("idle");
+    } catch (err) {
+      console.error("Auto refund failed:", err);
+    }
+  };
 
-    refund();
-  }, [orderStatus, activeOrder, autoRefunded, token, API_URL]);
+  refund();
+}, [orderStatus, activeOrder, autoRefunded, token, API_URL, fetchBalance]);
 
   // ---------------- COPY RESET ----------------
   useEffect(() => {
