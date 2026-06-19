@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { FiSearch, FiCopy , FiInfo} from "react-icons/fi";
+import { FiSearch, FiCopy, FiInfo } from "react-icons/fi";
 import ServiceCard from "../components/ServiceCard";
 import { useBalance } from "../context/BalanceContext";
 import "../styles/buy-number.css";
@@ -49,6 +49,8 @@ const BuyNumbers = ({ darkMode }) => {
   const [search, setSearch] = useState("");
   const [loadingServices, setLoadingServices] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false);
+  const [autoRefunded, setAutoRefunded] = useState(false);
 
   const token = localStorage.getItem("token");
 
@@ -59,28 +61,28 @@ const BuyNumbers = ({ darkMode }) => {
   const pollOtp = useRef(null);
 
   const formatNumber = (num) => {
-  if (!num) return "";
-  return String(num).startsWith("+") ? String(num) : `+${num}`;
-};
+    if (!num) return "";
+    return String(num).startsWith("+") ? String(num) : `+${num}`;
+  };
 
- const handleCopyNumber = async () => {
-  if (!activeOrder?.number) return;
+  const handleCopyNumber = async () => {
+    if (!activeOrder?.number) return;
 
-  const fullNumber = formatNumber(activeOrder.number);
+    const fullNumber = formatNumber(activeOrder.number);
 
-  try {
-    await navigator.clipboard.writeText(fullNumber);
-    setCopied(true);
-  } catch (err) {
-    const textArea = document.createElement("textarea");
-    textArea.value = fullNumber;
-    document.body.appendChild(textArea);
-    textArea.select();
-    document.execCommand("copy");
-    document.body.removeChild(textArea);
-    setCopied(true);
-  }
-};
+    try {
+      await navigator.clipboard.writeText(fullNumber);
+      setCopied(true);
+    } catch (err) {
+      const textArea = document.createElement("textarea");
+      textArea.value = fullNumber;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+      setCopied(true);
+    }
+  };
 
   useEffect(() => {
     document.title = "Buy Numbers - RealSMS";
@@ -95,15 +97,14 @@ const BuyNumbers = ({ darkMode }) => {
 
     const parsed = JSON.parse(saved);
     if (parsed.country) {
-  setSelectedCountry(parsed.country);
+      setSelectedCountry(parsed.country);
 
-  localStorage.setItem(
-    "selectedCountry",
-    JSON.stringify(parsed.country)
-  );
-}
+      localStorage.setItem(
+        "selectedCountry",
+        JSON.stringify(parsed.country)
+      );
+    }
 
-    
     const remaining = Math.floor(
       (parsed.expiryTime - Date.now()) / 1000
     );
@@ -142,7 +143,7 @@ const BuyNumbers = ({ darkMode }) => {
           clearInterval(pollOtp.current);
           localStorage.removeItem("activeOrder");
         }
-      } catch {}
+      } catch { }
     }, 2000);
 
     return () => {
@@ -150,14 +151,17 @@ const BuyNumbers = ({ darkMode }) => {
     };
   }, [token, API_URL]);
 
-  // ---------------- FETCH COUNTRIES ----------------
-useEffect(() => {
-  if (!token) return;
 
-  const fetchCountries = async () => {
+  // ---------------- HANDLE REFUND ----------------
+  const handleRefund = async () => {
+    if (!activeOrder?.orderid) return;
+
     try {
-      const res = await axios.get(
-        `${API_URL}/api/smspool/servers`,
+      setActionLoading(true);
+
+      const res = await axios.post(
+        `${API_URL}/api/smspool/cancel`,
+        { orderid: activeOrder.orderid },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -165,42 +169,104 @@ useEffect(() => {
         }
       );
 
-      const countryList = Array.isArray(res.data)
-        ? res.data
-        : [];
+      if (res.data.success) {
+        alert(`Refunded ₦${res.data.refundedAmount || ""}`);
 
-      setCountries(countryList);
+        setActiveOrder(null);
+        setOrderStatus("idle");
+        setOtp(null);
+        setTimeLeft(600);
 
-      // Restore selected country
-      const savedCountry =
-        localStorage.getItem("selectedCountry");
-
-      if (savedCountry) {
-        try {
-          const parsedCountry =
-            JSON.parse(savedCountry);
-
-          const foundCountry =
-            countryList.find(
-              (c) =>
-                String(c.ID) ===
-                String(parsedCountry.ID)
-            );
-
-          if (foundCountry) {
-            setSelectedCountry(foundCountry);
-          }
-        } catch (err) {
-          console.error(err);
-        }
+        localStorage.removeItem("activeOrder");
+        fetchBalance();
+      } else {
+        alert(res.data.message || "Refund failed");
       }
-    } catch {
-      setCountries([]);
+    } catch (err) {
+      alert("Refund failed");
+    } finally {
+      setActionLoading(false);
     }
   };
 
-  fetchCountries();
-}, [token, API_URL]);
+  // ---------------- HANDLE REFUND ----------------
+  const handleResend = async () => {
+    if (!activeOrder?.orderid) return;
+
+    try {
+      setActionLoading(true);
+
+      const res = await axios.post(
+        `${API_URL}/api/smspool/resend`,
+        { orderid: activeOrder.orderid },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (res.data.success) {
+        alert("OTP resent successfully!");
+      } else {
+        alert(res.data.message || "Resend failed");
+      }
+    } catch (err) {
+      alert("Resend failed");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  // ---------------- FETCH COUNTRIES ----------------
+  useEffect(() => {
+    if (!token) return;
+
+    const fetchCountries = async () => {
+      try {
+        const res = await axios.get(
+          `${API_URL}/api/smspool/servers`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const countryList = Array.isArray(res.data)
+          ? res.data
+          : [];
+
+        setCountries(countryList);
+
+        // Restore selected country
+        const savedCountry =
+          localStorage.getItem("selectedCountry");
+
+        if (savedCountry) {
+          try {
+            const parsedCountry =
+              JSON.parse(savedCountry);
+
+            const foundCountry =
+              countryList.find(
+                (c) =>
+                  String(c.ID) ===
+                  String(parsedCountry.ID)
+              );
+
+            if (foundCountry) {
+              setSelectedCountry(foundCountry);
+            }
+          } catch (err) {
+            console.error(err);
+          }
+        }
+      } catch {
+        setCountries([]);
+      }
+    };
+
+    fetchCountries();
+  }, [token, API_URL]);
 
   // ---------------- FETCH SERVICES ----------------
   useEffect(() => {
@@ -223,38 +289,37 @@ useEffect(() => {
           ? res.data
           : [];
 
-       const withPrice = data.map((s) => {
-  const priceObj = s.pricing?.find(
-    (p) =>
-      String(p.countryID) ===
-      String(selectedCountry.ID)
-  );
+        const withPrice = data.map((s) => {
+          const priceObj = s.pricing?.find(
+            (p) =>
+              String(p.countryID) ===
+              String(selectedCountry.ID)
+          );
 
-  const serviceName =
-    s.name?.toLowerCase();
+          const serviceName =
+            s.name?.toLowerCase();
 
-  return {
-    ...s,
-    price: priceObj?.priceNGN || null,
+          return {
+            ...s,
+            price: priceObj?.priceNGN || null,
 
-    logo:
-      SERVICE_LOGOS[
-        serviceName
-      ] ||
-      `https://img.logo.dev/search?query=${encodeURIComponent(
-        s.name || ""
-      )}&token=${
-        process.env.REACT_APP_LOGO_DEV_KEY
-      }`,
+            logo:
+              SERVICE_LOGOS[
+              serviceName
+              ] ||
+              `https://img.logo.dev/search?query=${encodeURIComponent(
+                s.name || ""
+              )}&token=${process.env.REACT_APP_LOGO_DEV_KEY
+              }`,
 
-    popular:
-      POPULAR_SERVICES.some(
-        (name) =>
-          name.toLowerCase() ===
-          serviceName
-      ),
-  };
-});
+            popular:
+              POPULAR_SERVICES.some(
+                (name) =>
+                  name.toLowerCase() ===
+                  serviceName
+              ),
+          };
+        });
         setServices(withPrice);
       } catch {
         setServices([]);
@@ -267,43 +332,43 @@ useEffect(() => {
   }, [selectedCountry, token, API_URL]);
 
   // ---------------- COUNTRY CHANGE ----------------
-const handleCountryChange = (e) => {
-  const countryId = e.target.value;
+  const handleCountryChange = (e) => {
+    const countryId = e.target.value;
 
-  const country =
-    countries.find(
-      (c) => c.ID.toString() === countryId
-    ) || null;
+    const country =
+      countries.find(
+        (c) => c.ID.toString() === countryId
+      ) || null;
 
-  setSelectedCountry(country);
+    setSelectedCountry(country);
 
-  if (country) {
-    localStorage.setItem(
-      "selectedCountry",
-      JSON.stringify(country)
-    );
-  }
-
-  // Don't clear active order if one exists
-  if (!activeOrder) {
-    setOrderStatus("idle");
-    setOtp(null);
-    setTimeLeft(600);
-    setCopied(false);
-    // setServices([]);
-
-    if (!activeOrder) {
-  setServices([]);
-}
-
-    if (pollOtp.current) {
-      clearInterval(pollOtp.current);
+    if (country) {
+      localStorage.setItem(
+        "selectedCountry",
+        JSON.stringify(country)
+      );
     }
-  }
 
-  setSearch("");
-};
-  
+    // Don't clear active order if one exists
+    if (!activeOrder) {
+      setOrderStatus("idle");
+      setOtp(null);
+      setTimeLeft(600);
+      setCopied(false);
+      // setServices([]);
+
+      if (!activeOrder) {
+        setServices([]);
+      }
+
+      if (pollOtp.current) {
+        clearInterval(pollOtp.current);
+      }
+    }
+
+    setSearch("");
+  };
+
   // ---------------- HANDLE BUY ----------------
   const handleBuy = async (service) => {
     if (!selectedCountry)
@@ -354,15 +419,15 @@ const handleCountryChange = (e) => {
       const expiryTime = Date.now() + 600000;
 
       localStorage.setItem(
-  "activeOrder",
-  JSON.stringify({
-    service,
-    country: selectedCountry,
-    number,
-    orderid,
-    expiryTime,
-  })
-);
+        "activeOrder",
+        JSON.stringify({
+          service,
+          country: selectedCountry,
+          number,
+          orderid,
+          expiryTime,
+        })
+      );
 
       setActiveOrder({
         ...service,
@@ -391,7 +456,7 @@ const handleCountryChange = (e) => {
             clearInterval(pollOtp.current);
             localStorage.removeItem("activeOrder");
           }
-        } catch {}
+        } catch { }
       }, 2000);
     } catch (err) {
       setBalance(previousBalance);
@@ -405,6 +470,29 @@ const handleCountryChange = (e) => {
   };
 
   // ---------------- COUNTDOWN ----------------
+  // useEffect(() => {
+  //   if (orderStatus !== "waiting") return;
+
+  //   const timer = setInterval(() => {
+  //     setTimeLeft((t) => {
+  //       if (t <= 1) {
+  //         clearInterval(timer);
+  //         setOrderStatus("expired");
+  //         localStorage.removeItem("activeOrder");
+
+  //         if (pollOtp.current)
+  //           clearInterval(pollOtp.current);
+
+  //         return 0;
+  //       }
+
+  //       return t - 1;
+  //     });
+  //   }, 1000);
+
+  //   return () => clearInterval(timer);
+  // }, [orderStatus]);
+
   useEffect(() => {
     if (orderStatus !== "waiting") return;
 
@@ -415,18 +503,49 @@ const handleCountryChange = (e) => {
           setOrderStatus("expired");
           localStorage.removeItem("activeOrder");
 
-          if (pollOtp.current)
-            clearInterval(pollOtp.current);
+          if (pollOtp.current) clearInterval(pollOtp.current);
 
           return 0;
         }
-
         return t - 1;
       });
     }, 1000);
 
     return () => clearInterval(timer);
   }, [orderStatus]);
+
+
+  // ---------------- AUTO REFUND ----------------
+  useEffect(() => {
+    if (orderStatus !== "expired") return;
+    if (!activeOrder?.orderid) return;
+    if (autoRefunded) return;
+
+    const refund = async () => {
+      try {
+        setAutoRefunded(true);
+
+        await axios.post(
+          `${API_URL}/api/smspool/cancel`,
+          { orderid: activeOrder.orderid },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        fetchBalance();
+
+        setActiveOrder(null);
+        setOtp(null);
+        setTimeLeft(600);
+        setOrderStatus("idle");
+      } catch (err) {
+        console.error("Auto refund failed:", err);
+      }
+    };
+
+    refund();
+  }, [orderStatus, activeOrder, autoRefunded, token, API_URL]);
 
   // ---------------- COPY RESET ----------------
   useEffect(() => {
@@ -448,16 +567,15 @@ const handleCountryChange = (e) => {
     normalizedSearch === ""
       ? services.filter((service) => service.popular)
       : services.filter((service) =>
-          service.name
-            ?.toLowerCase()
-            .includes(normalizedSearch)
-        );
+        service.name
+          ?.toLowerCase()
+          .includes(normalizedSearch)
+      );
 
   return (
     <div
-      className={`buy-page ${
-        darkMode ? "dark" : ""
-      }`}
+      className={`buy-page ${darkMode ? "dark" : ""
+        }`}
     >
       {/* HEADER */}
       <div className="buy-header">
@@ -517,60 +635,56 @@ const handleCountryChange = (e) => {
               <span>Popular services</span>
 
               <div className="stat-pill">
-      <span>Available Services</span>
-      <strong>{services.filter((s) => s.price).length}</strong>
-    </div>
+                <span>Available Services</span>
+                <strong>{services.filter((s) => s.price).length}</strong>
+              </div>
             </div>
           )}
 
-{loadingServices ? (
-  <div className="loading-state">
-    <div className="spinner"></div>
-  </div>
-) : filteredServices.length > 0 ? (
-  <>
-    <div className="services-grid">
-      {filteredServices.map((service) => (
-        <ServiceCard
-          key={service.ID || service.id}
-          service={service}
-          onBuy={handleBuy}
-        />
-      ))}
-    </div>
+          {loadingServices ? (
+            <div className="loading-state">
+              <div className="spinner"></div>
+            </div>
+          ) : filteredServices.length > 0 ? (
+            <>
+              <div className="services-grid">
+                {filteredServices.map((service) => (
+                  <ServiceCard
+                    key={service.ID || service.id}
+                    service={service}
+                    onBuy={handleBuy}
+                  />
+                ))}
+              </div>
 
-    {search === "" && (
-      <div className="notice">
-        <FiInfo />
-        <span>
-          Search for other available services
-        </span>
-      </div>
-    )}
-  </>
-) : (
-  <div className="empty-state">
-    <h3>No services found</h3>
-    <p>
-      {search
-        ? "Try another service name"
-        : "Select a country to continue"}
-    </p>
-  </div>
-)}
+              {search === "" && (
+                <div className="notice">
+                  <FiInfo />
+                  <span>
+                    Search for other available services
+                  </span>
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="empty-state">
+              <h3>No services found</h3>
+              <p>
+                {search
+                  ? "Try another service name"
+                  : "Select a country to continue"}
+              </p>
+            </div>
+          )}
         </div>
 
-        {/* OTP PANEL */}
         <div className="otp-panel">
           <h3>Inbox</h3>
 
           {!activeOrder ? (
             <div className="otp-empty">
               <p>No active order</p>
-              <span>
-                Buy a number to receive OTP
-                here
-              </span>
+              <span>Buy a number to receive OTP here</span>
             </div>
           ) : (
             <>
@@ -578,59 +692,68 @@ const handleCountryChange = (e) => {
                 <span>Phone Number</span>
 
                 <div className="number-row">
-                 <h2 className="phone-number">
-  {formatNumber(activeOrder.number)}
-</h2>
+                  <h2 className="phone-number">
+                    {formatNumber(activeOrder.number)}
+                  </h2>
 
                   <button onClick={handleCopyNumber} className="copy-btn">
-  {copied ? "Copied!" : <FiCopy />}
-</button>
+                    {copied ? "Copied!" : <FiCopy />}
+                  </button>
                 </div>
               </div>
 
+              {/* ⏳ WAITING → Refund button */}
               {orderStatus === "waiting" && (
                 <div className="otp-status waiting">
-                  <h4>
-                    Waiting for OTP...
-                  </h4>
+                  <h4>Waiting for OTP...</h4>
 
                   <div className="timer-pill">
-                    {Math.floor(
-                      timeLeft / 60
-                    )}
-                    :
-                    {String(
-                      timeLeft % 60
-                    ).padStart(2, "0")}
+                    {Math.floor(timeLeft / 60)}:
+                    {String(timeLeft % 60).padStart(2, "0")}
                   </div>
+
+                  <button
+                    className="action-btn refund"
+                    onClick={handleRefund}
+                    disabled={actionLoading}
+                  >
+                    {actionLoading ? "Processing..." : "Refund"}
+                  </button>
                 </div>
               )}
 
+              {/* ✅ RECEIVED → Resend button */}
               {orderStatus === "received" && (
                 <div className="otp-status success">
-                  <span>
-                    Received OTP
-                  </span>
+                  <span>Received OTP</span>
 
                   <h1>{otp}</h1>
 
                   <button
                     className="copy-otp-btn"
                     onClick={() => {
-                      navigator.clipboard.writeText(
-                        otp
-                      );
+                      navigator.clipboard.writeText(otp);
                       setCopied(true);
                     }}
                   >
                     Copy OTP
                   </button>
+
+                  <button
+                    className="action-btn resend"
+                    onClick={handleResend}
+                    disabled={actionLoading}
+                  >
+                    {actionLoading ? "Sending..." : "Resend"}
+                  </button>
                 </div>
               )}
 
+              {/* ❌ EXPIRED → auto refund running */}
               {orderStatus === "expired" && (
                 <div className="otp-status expired">
-                  OTP expired
+                  <p>OTP expired</p>
+                  <span>Refunding automatically...</span>
                 </div>
               )}
             </>
