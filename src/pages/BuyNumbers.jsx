@@ -644,17 +644,19 @@ const BuyNumbers = ({ darkMode }) => {
                         </div>
                     )}
                 </div>
-
                 <div className="otp-panel">
                     <h3>Inbox</h3>
 
                     {!activeOrder ? (
                         <div className="otp-empty">
                             <p>No active order</p>
-                            <span>Buy a number to receive OTP here</span>
+                            <span>
+                                Buy a number to receive OTP here
+                            </span>
                         </div>
                     ) : (
                         <>
+                            {/* PHONE NUMBER */}
                             <div className="number-box">
                                 <span>Phone Number</span>
 
@@ -663,7 +665,10 @@ const BuyNumbers = ({ darkMode }) => {
                                         {formatNumber(activeOrder.number)}
                                     </h2>
 
-                                    <button onClick={handleCopyNumber} className="copy-btn">
+                                    <button
+                                        onClick={handleCopyNumber}
+                                        className="copy-btn"
+                                    >
                                         {copied ? "Copied!" : <FiCopy />}
                                     </button>
                                 </div>
@@ -671,12 +676,14 @@ const BuyNumbers = ({ darkMode }) => {
 
                             {/* WAITING */}
                             {orderStatus === "waiting" && (
-                                <div className="otp-status waiting">
-                                    <h4>Waiting for OTP...</h4>
+                                <>
+                                    <div className="otp-status waiting">
+                                        <h4>Waiting for OTP...</h4>
 
-                                    <div className="timer-pill">
-                                        {Math.floor(timeLeft / 60)}:
-                                        {String(timeLeft % 60).padStart(2, "0")}
+                                        <div className="timer-pill">
+                                            {Math.floor(timeLeft / 60)}:
+                                            {String(timeLeft % 60).padStart(2, "0")}
+                                        </div>
                                     </div>
 
                                     <div className="otp-actions">
@@ -685,13 +692,15 @@ const BuyNumbers = ({ darkMode }) => {
                                             onClick={handleRefund}
                                             disabled={actionLoading}
                                         >
-                                            {actionLoading ? "Processing..." : "Refund"}
+                                            {actionLoading
+                                                ? "Processing..."
+                                                : "Refund"}
                                         </button>
                                     </div>
-                                </div>
+                                </>
                             )}
 
-                            {/* RECEIVED (NO RESEND) */}
+                            {/* SUCCESS */}
                             {orderStatus === "received" && (
                                 <div className="otp-status success">
                                     <span>Received OTP</span>
@@ -701,7 +710,9 @@ const BuyNumbers = ({ darkMode }) => {
                                     <button
                                         className="copy-otp-btn"
                                         onClick={() => {
-                                            navigator.clipboard.writeText(otp);
+                                            navigator.clipboard.writeText(
+                                                otp
+                                            );
                                             setCopied(true);
                                         }}
                                     >
@@ -718,7 +729,10 @@ const BuyNumbers = ({ darkMode }) => {
                             {orderStatus === "expired" && (
                                 <div className="otp-status expired">
                                     <p>OTP expired</p>
-                                    <span>Refunding automatically...</span>
+
+                                    <span>
+                                        Refunding automatically...
+                                    </span>
                                 </div>
                             )}
                         </>
