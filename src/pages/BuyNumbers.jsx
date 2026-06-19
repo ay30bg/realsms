@@ -27,7 +27,7 @@ const POPULAR_SERVICES = [
 const SERVICE_LOGOS = {
   whatsapp: whatsappLogo,
   telegram: telegramLogo,
-  tiktok: tiktokLogo,
+  "tiktok/duoyin": tiktokLogo,
   instagram: instagramLogo,
   facebook: facebookLogo,
   discord: discordLogo,
