@@ -398,7 +398,7 @@
   min-width: 80px;
   padding: 0 18px;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   background: linear-gradient(90deg, #6f5eff, #563bff);
   color: #fff;
   font-weight: 600;
@@ -589,7 +589,7 @@
   height: 36px;
   min-width: 72px;
   padding: 0 14px;
-  border-radius: 10px;
+  border-radius: 6px;
   font-size: 12px;
   font-weight: 600;
 }
