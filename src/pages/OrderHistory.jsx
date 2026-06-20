@@ -122,9 +122,37 @@ const NumberHistory = ({ darkMode }) => {
     // ================================
     // DATE FORMATTER
     // ================================
+    // const formatDate = (date) => {
+    //     if (!date) return "-";
+    //     return new Date(date).toLocaleString();
+    // };
+
     const formatDate = (date) => {
-        if (!date) return "-";
-        return new Date(date).toLocaleString();
+        if (!date) return { formattedDate: "-", relativeTime: "-" };
+
+        const created = new Date(date);
+        const now = new Date();
+
+        const diffMs = now - created;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+
+        let relativeTime = "";
+
+        if (diffMins < 1) {
+            relativeTime = "Just now";
+        } else if (diffMins < 60) {
+            relativeTime = `${diffMins} min${diffMins > 1 ? "s" : ""} ago`;
+        } else if (diffHours < 24) {
+            relativeTime = `${diffHours} hr${diffHours > 1 ? "s" : ""} ago`;
+        } else {
+            relativeTime = `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
+        }
+
+        const formattedDate = created.toLocaleDateString();
+
+        return { formattedDate, relativeTime };
     };
 
     return (
@@ -177,13 +205,13 @@ const NumberHistory = ({ darkMode }) => {
                             <table className="order-history-table">
                                 <thead>
                                     <tr>
-                                            <th>Number</th>
-                                            <th>Service</th>
-                                            <th>Country</th>
-                                            <th>OTP</th>
-                                            <th>Status</th>
-                                            <th>Date & Time</th>
-                                            <th>Action</th>
+                                        <th>Number</th>
+                                        <th>Service</th>
+                                        <th>Country</th>
+                                        <th>OTP</th>
+                                        <th>Status</th>
+                                        <th>Date & Time</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
 
@@ -215,9 +243,15 @@ const NumberHistory = ({ darkMode }) => {
                                             </td>
 
                                             <td data-label="Date">
-                                                {formatDate(order.createdAt)}
+                                                <div className="date-cell">
+                                                    <span className="main-date">
+                                                        {formatDate(order.createdAt).formattedDate}
+                                                    </span>
+                                                    <span className="relative-time">
+                                                        {formatDate(order.createdAt).relativeTime}
+                                                    </span>
+                                                </div>
                                             </td>
-
 
                                             <td data-label="Action">
                                                 {order.status === "waiting" ? (
