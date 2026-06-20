@@ -177,7 +177,6 @@ const NumberHistory = ({ darkMode }) => {
                             <table className="order-history-table">
                                 <thead>
                                     <tr>
-                                        <tr>
                                             <th>Number</th>
                                             <th>Service</th>
                                             <th>Country</th>
@@ -185,7 +184,6 @@ const NumberHistory = ({ darkMode }) => {
                                             <th>Status</th>
                                             <th>Date & Time</th>
                                             <th>Action</th>
-                                        </tr>
                                     </tr>
                                 </thead>
 
