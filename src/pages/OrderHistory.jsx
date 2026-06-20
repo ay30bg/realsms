@@ -247,7 +247,7 @@ return (
                 ))}
               </tbody>
             </table>
-          </div>
+          </div> 
 
           {totalPages > 1 && (
             <div className="pagination">
