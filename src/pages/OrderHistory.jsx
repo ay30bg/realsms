@@ -192,61 +192,60 @@ const NumberHistory = ({ darkMode }) => {
                                 <tbody>
                                     {paginatedOrders.map((order) => (
                                         <tr key={order._id}>
-                                            <td data-label="Number">{order.number}</td>
+  <td data-label="Number">{order.number}</td>
 
-                                            <td data-label="Service">
-                                                {getServiceName(order.service)}
-                                            </td>
+  <td data-label="Service">
+    {getServiceName(order.service)}
+  </td>
 
-                                            <td data-label="Country">
-                                                {order.country?.code || "-"}
-                                            </td>
+  <td data-label="Country">
+    {order.country?.code || "-"}
+  </td>
 
-                                            <td data-label="OTP">
-                                                {order.otp ? (
-                                                    <span className="otp-success">{order.otp}</span>
-                                                ) : (
-                                                    <span className="otp-waiting">—</span>
-                                                )}
-                                            </td>
+  <td data-label="OTP">
+    {order.otp ? (
+      <span className="otp-success">{order.otp}</span>
+    ) : (
+      <span className="otp-waiting">—</span>
+    )}
+  </td>
 
-                                            <td data-label="Status">
-                                                <span className={`status-badge ${order.status}`}>
-                                                    {order.status}
-                                                </span>
-                                            </td>
+  <td data-label="Status">
+    <span className={`status-badge ${order.status}`}>
+      {order.status}
+    </span>
+  </td>
 
-                                            <td data-label="Date">
-                                                {formatDate(order.createdAt)}
-                                            </td>
+  <td data-label="Date">
+    {formatDate(order.createdAt)}
+  </td>
 
-
-                                            <td data-label="Action">
-                                                {order.status === "waiting" ? (
-                                                    <button
-                                                        className="refund-btn"
-                                                        disabled={loadingId === order.orderid}
-                                                        onClick={() => handleRefund(order.orderid)}
-                                                    >
-                                                        {loadingId === order.orderid
-                                                            ? "Processing..."
-                                                            : "Refund"}
-                                                    </button>
-                                                ) : order.status === "received" ? (
-                                                    <button
-                                                        className="resend-btn"
-                                                        disabled={loadingId === order.orderid}
-                                                        onClick={() => handleResend(order.orderid)}
-                                                    >
-                                                        {loadingId === order.orderid
-                                                            ? "Sending..."
-                                                            : "Resend"}
-                                                    </button>
-                                                ) : (
-                                                    "-"
-                                                )}
-                                            </td>
-                                        </tr>
+  <td data-label="Action">
+    {order.status === "waiting" ? (
+      <button
+        className="refund-btn"
+        disabled={loadingId === order.orderid}
+        onClick={() => handleRefund(order.orderid)}
+      >
+        {loadingId === order.orderid
+          ? "Processing..."
+          : "Refund"}
+      </button>
+    ) : order.status === "received" ? (
+      <button
+        className="resend-btn"
+        disabled={loadingId === order.orderid}
+        onClick={() => handleResend(order.orderid)}
+      >
+        {loadingId === order.orderid
+          ? "Sending..."
+          : "Resend"}
+      </button>
+    ) : (
+      "-"
+    )}
+  </td>
+</tr>
                                     ))}
                                 </tbody>
                             </table>
