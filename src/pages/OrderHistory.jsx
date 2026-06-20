@@ -122,13 +122,22 @@
 //     return new Date(date).toLocaleString();
 //   };
 
-//   return (
-//     <div className={`order-history-page ${darkMode ? "dark" : ""}`}>
-//       <div className="order-history-card">
-//         <h2 className="order-history-title">Number History</h2>
+//  return (
+//   <div className={`order-history-page ${darkMode ? "dark" : ""}`}>
+//     <div className="order-history-card">
+//       {/* Header */}
+//       <div className="history-header">
+//         <div>
+//           <h1 className="order-history-title">Number History</h1>
+//           <p className="history-subtitle">
+//             View your purchased numbers and their statuses.
+//           </p>
+//         </div>
+//       </div>
 
-//         {/* FILTER */}
-//         <div className="order-filter">
+//       {/* Toolbar */}
+//       <div className="history-toolbar">
+//         <div className="toolbar-left">
 //           <select
 //             value={filter}
 //             onChange={(e) => {
@@ -136,110 +145,134 @@
 //               setCurrentPage(1);
 //             }}
 //           >
-//             <option value="all">All</option>
+//             <option value="all">All Services</option>
 //             <option value="waiting">Waiting</option>
 //             <option value="received">Received</option>
 //             <option value="refunded">Refunded</option>
 //             <option value="cancelled">Cancelled</option>
 //           </select>
+
+//           <select>
+//             <option>All Time</option>
+//             <option>Today</option>
+//             <option>Last 7 Days</option>
+//           </select>
 //         </div>
 
-//         {loadingPage ? (
-//           <div className="loading-spinner">
-//             <div className={`spinner ${darkMode ? "dark" : ""}`}></div>
-//             <p>Loading history...</p>
-//           </div>
-//         ) : filteredOrders.length === 0 ? (
-//           <p className="no-orders">No orders found.</p>
-//         ) : (
-//           <>
-//             <div className="order-table-scroll">
-//               <table className="order-history-table">
-//                 <thead>
-//                   <tr>
-//                     <th>Date</th>
-//                     <th>Number</th>
-//                     <th>Order ID</th>
-//                     <th>Service</th>
-//                     <th>Country</th>
-//                     <th>Amount</th>
-//                     <th>OTP</th>
-//                     <th>Status</th>
-//                     <th>Action</th>
-//                   </tr>
-//                 </thead>
-
-//                 <tbody>
-//                   {paginatedOrders.map((order) => (
-//                     <tr key={order._id}>
-//                       <td data-label="Date">{formatDate(order.createdAt)}</td>
-//                       <td data-label="Number">{order.number}</td>
-//                       <td data-label="Order ID">{order.orderid}</td>
-//                       <td data-label="Service">{getServiceName(order.service)}</td>
-//                       <td data-label="Country">{order.country?.code}</td>
-//                       <td data-label="Amount">₦{order.priceCharged?.toLocaleString()}</td>
-//                       <td data-label="OTP">
-//                         {order.otp ? (
-//                           <span className="otp-success">{order.otp}</span>
-//                         ) : (
-//                           <span className="otp-waiting">Waiting...</span>
-//                         )}
-//                       </td>
-//                       <td data-label="Status">
-//                         <span className={`status-badge ${order.status}`}>
-//                           {order.status}
-//                         </span>
-//                       </td>
-//                       <td data-label="Action">
-//                         {order.status === "waiting" ? (
-//                           <button
-//                             className="refund-btn"
-//                             disabled={loadingId === order.orderid}
-//                             onClick={() => handleRefund(order.orderid)}
-//                           >
-//                             {loadingId === order.orderid
-//                               ? "Processing..."
-//                               : "Refund"}
-//                           </button>
-//                         ) : order.status === "received" ? (
-//                           <button
-//                             className="resend-btn"
-//                             disabled={loadingId === order.orderid}
-//                             onClick={() => handleResend(order.orderid)}
-//                           >
-//                             {loadingId === order.orderid
-//                               ? "Sending..."
-//                               : "Resend"}
-//                           </button>
-//                         ) : (
-//                           "-"
-//                         )}
-//                       </td>
-//                     </tr>
-//                   ))}
-//                 </tbody>
-//               </table>
-//             </div>
-
-//             {/* PAGINATION */}
-//             {totalPages > 1 && (
-//               <div className="pagination">
-//                 <button onClick={() => changePage(currentPage - 1)} disabled={currentPage === 1}>
-//                   Prev
-//                 </button>
-//                 <span>
-//                   Page {currentPage} of {totalPages || 1}
-//                 </span>
-//                 <button onClick={() => changePage(currentPage + 1)} disabled={currentPage === totalPages}>
-//                   Next
-//                 </button>
-//               </div>
-//             )}
-//           </>
-//         )}
+//         <button className="export-btn">Export</button>
 //       </div>
+
+//       {loadingPage ? (
+//         <div className="loading-spinner">
+//           <div className="spinner"></div>
+//           <p>Loading history...</p>
+//         </div>
+//       ) : filteredOrders.length === 0 ? (
+//         <p className="no-orders">No orders found.</p>
+//       ) : (
+//         <>
+//           <div className="order-table-scroll">
+//             <table className="order-history-table">
+//               <thead>
+//                 <tr>
+//                   <th>Date</th>
+//                   <th>Number</th>
+//                   <th>Service</th>
+//                   <th>Country</th>
+//                   <th>OTP</th>
+//                   <th>Status</th>
+//                   <th>Action</th>
+//                 </tr>
+//               </thead>
+
+//               <tbody>
+//                 {paginatedOrders.map((order) => (
+//                   <tr key={order._id}>
+//                     <td data-label="Date">
+//                       {formatDate(order.createdAt)}
+//                     </td>
+
+//                     <td data-label="Number">{order.number}</td>
+
+//                     <td data-label="Service">
+//                       {getServiceName(order.service)}
+//                     </td>
+
+//                     <td data-label="Country">
+//                       {order.country?.code || "-"}
+//                     </td>
+
+//                     <td data-label="OTP">
+//                       {order.otp ? (
+//                         <span className="otp-success">{order.otp}</span>
+//                       ) : (
+//                         <span className="otp-waiting">Waiting...</span>
+//                       )}
+//                     </td>
+
+//                     <td data-label="Status">
+//                       <span className={`status-badge ${order.status}`}>
+//                         {order.status}
+//                       </span>
+//                     </td>
+
+//                     <td data-label="Action">
+//                       {order.status === "waiting" ? (
+//                         <button
+//                           className="refund-btn"
+//                           disabled={loadingId === order.orderid}
+//                           onClick={() => handleRefund(order.orderid)}
+//                         >
+//                           {loadingId === order.orderid
+//                             ? "Processing..."
+//                             : "Refund"}
+//                         </button>
+//                       ) : order.status === "received" ? (
+//                         <button
+//                           className="resend-btn"
+//                           disabled={loadingId === order.orderid}
+//                           onClick={() => handleResend(order.orderid)}
+//                         >
+//                           {loadingId === order.orderid
+//                             ? "Sending..."
+//                             : "Resend"}
+//                         </button>
+//                       ) : (
+//                         "-"
+//                       )}
+//                     </td>
+//                   </tr>
+//                 ))}
+//               </tbody>
+//             </table>
+//           </div>
+
+//           {totalPages > 1 && (
+//             <div className="pagination">
+//               <button
+//                 onClick={() => changePage(currentPage - 1)}
+//                 disabled={currentPage === 1}
+//               >
+//                 Prev
+//               </button>
+
+//               <span>
+//                 Page {currentPage} of {totalPages}
+//               </span>
+
+//               <button
+//                 onClick={() => changePage(currentPage + 1)}
+//                 disabled={currentPage === totalPages}
+//               >
+//                 Next
+//               </button>
+//             </div>
+//           )}
+//         </>
+//       )}
 //     </div>
-//   );
+//   </div>
+// );
 // };
 
 // export default NumberHistory;
@@ -368,44 +401,41 @@ const NumberHistory = ({ darkMode }) => {
     return new Date(date).toLocaleString();
   };
 
- return (
+return (
   <div className={`order-history-page ${darkMode ? "dark" : ""}`}>
     <div className="order-history-card">
-      {/* Header */}
+      {/* HEADER */}
       <div className="history-header">
-        <div>
-          <h1 className="order-history-title">Number History</h1>
-          <p className="history-subtitle">
-            View your purchased numbers and their statuses.
-          </p>
-        </div>
+        <h1>Number History</h1>
+        <p>View all your purchased numbers and their statuses</p>
       </div>
 
-      {/* Toolbar */}
-      <div className="history-toolbar">
-        <div className="toolbar-left">
-          <select
-            value={filter}
-            onChange={(e) => {
-              setFilter(e.target.value);
-              setCurrentPage(1);
-            }}
-          >
-            <option value="all">All Services</option>
-            <option value="waiting">Waiting</option>
-            <option value="received">Received</option>
-            <option value="refunded">Refunded</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
-
-          <select>
-            <option>All Time</option>
-            <option>Today</option>
-            <option>Last 7 Days</option>
-          </select>
+      {/* FILTERS */}
+      <div className="history-filters">
+        <div className="history-search">
+          <input type="text" placeholder="Search by number..." />
         </div>
 
-        <button className="export-btn">Export</button>
+        <select
+          value={filter}
+          onChange={(e) => {
+            setFilter(e.target.value);
+            setCurrentPage(1);
+          }}
+        >
+          <option value="all">All Status</option>
+          <option value="waiting">Waiting</option>
+          <option value="received">Received</option>
+          <option value="refunded">Refunded</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+
+        <select>
+          <option>All Time</option>
+          <option>Today</option>
+          <option>Last 7 Days</option>
+          <option>Last 30 Days</option>
+        </select>
       </div>
 
       {loadingPage ? (
@@ -421,7 +451,7 @@ const NumberHistory = ({ darkMode }) => {
             <table className="order-history-table">
               <thead>
                 <tr>
-                  <th>Date</th>
+                  <th>Date & Time</th>
                   <th>Number</th>
                   <th>Service</th>
                   <th>Country</th>
@@ -452,7 +482,7 @@ const NumberHistory = ({ darkMode }) => {
                       {order.otp ? (
                         <span className="otp-success">{order.otp}</span>
                       ) : (
-                        <span className="otp-waiting">Waiting...</span>
+                        <span className="otp-waiting">—</span>
                       )}
                     </td>
 
@@ -495,23 +525,29 @@ const NumberHistory = ({ darkMode }) => {
 
           {totalPages > 1 && (
             <div className="pagination">
-              <button
-                onClick={() => changePage(currentPage - 1)}
-                disabled={currentPage === 1}
-              >
-                Prev
-              </button>
+              <p>
+                Showing {(currentPage - 1) * ORDERS_PER_PAGE + 1} to{" "}
+                {Math.min(currentPage * ORDERS_PER_PAGE, filteredOrders.length)} of{" "}
+                {filteredOrders.length} results
+              </p>
 
-              <span>
-                Page {currentPage} of {totalPages}
-              </span>
+              <div className="page-buttons">
+                <button
+                  onClick={() => changePage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  Prev
+                </button>
 
-              <button
-                onClick={() => changePage(currentPage + 1)}
-                disabled={currentPage === totalPages}
-              >
-                Next
-              </button>
+                <button className="active">{currentPage}</button>
+
+                <button
+                  onClick={() => changePage(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </button>
+              </div>
             </div>
           )}
         </>
@@ -522,6 +558,8 @@ const NumberHistory = ({ darkMode }) => {
 };
 
 export default NumberHistory;
+
+
 
 
 
