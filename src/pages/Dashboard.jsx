@@ -254,6 +254,8 @@ const Dashboard = ({ darkMode }) => {
                             Any issue not reported within 24 hours may not be attended to.
                         </p>
 
+                         <p>Wallet funding available via Flutterwave & Korapay.</p>
+
                         <div className="notice-channel">
                             <p>Join our Telegram channel for updates and announcements:</p>
 
@@ -277,7 +279,6 @@ const Dashboard = ({ darkMode }) => {
     </a>
                         </div>
 
-                        <p>Wallet funding available via Flutterwave & Korapay.</p>
                     </div>
                 </div>
             )}
