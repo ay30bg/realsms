@@ -73,22 +73,6 @@
 }
 
 /* EMPTY STATE */
-/* .no-orders {
-  width: 100%;
-  min-height: 320px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 40px 24px;
-  border-radius: 24px;
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  box-shadow: var(--shadow);
-  animation: fadeIn 0.3s ease;
-} */
-
 .no-orders {
   display: flex;
   flex-direction: column;
@@ -314,7 +298,7 @@
   display: flex;
   gap: 14px;
   padding: 18px;
-  border-radius: 20px;
+  border-radius: 14px;
   background: var(--card-bg);
   border: 1px solid var(--border-color);
   box-shadow: var(--shadow);
