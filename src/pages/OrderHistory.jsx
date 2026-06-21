@@ -236,11 +236,11 @@ const NumberHistory = ({ darkMode }) => {
         setCurrentPage(1);
     }}
 >
-                        <option>All Time</option>
-                        <option>Today</option>
-                        <option>Last 7 Days</option>
-                        <option>Last 30 Days</option>
-                    </select>
+    <option value="all">All Time</option>
+    <option value="today">Today</option>
+    <option value="7days">Last 7 Days</option>
+    <option value="30days">Last 30 Days</option>
+</select>
                 </div>
                 {loadingPage ? (
                     <div className="loading-spinner">
