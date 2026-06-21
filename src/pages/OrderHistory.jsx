@@ -112,63 +112,63 @@ const NumberHistory = ({ darkMode }) => {
     // ================================
     // FILTERED ORDERS
     // ================================
-const filteredOrders = useMemo(() => {
-    let filtered = orders;
+    const filteredOrders = useMemo(() => {
+        let filtered = orders;
 
-    // Search filter
-    if (searchTerm.trim()) {
-        const query = searchTerm.toLowerCase();
+        // Search filter
+        if (searchTerm.trim()) {
+            const query = searchTerm.toLowerCase();
 
-        filtered = filtered.filter((order) => {
-            const number = order.number?.toString().toLowerCase() || "";
-            const service = getServiceName(order.service).toLowerCase();
-            const country =
-                order.country?.code?.toLowerCase() ||
-                order.country?.name?.toLowerCase() ||
-                "";
+            filtered = filtered.filter((order) => {
+                const number = order.number?.toString().toLowerCase() || "";
+                const service = getServiceName(order.service).toLowerCase();
+                const country =
+                    order.country?.code?.toLowerCase() ||
+                    order.country?.name?.toLowerCase() ||
+                    "";
 
-            return (
-                number.includes(query) ||
-                service.includes(query) ||
-                country.includes(query)
+                return (
+                    number.includes(query) ||
+                    service.includes(query) ||
+                    country.includes(query)
+                );
+            });
+        }
+
+        // Status filter
+        if (filter !== "all") {
+            filtered = filtered.filter(
+                (o) => o.status?.toLowerCase() === filter.toLowerCase()
             );
-        });
-    }
+        }
 
-    // Status filter
-    if (filter !== "all") {
-        filtered = filtered.filter(
-            (o) => o.status?.toLowerCase() === filter.toLowerCase()
-        );
-    }
+        // Date filter
+        if (dateFilter !== "all") {
+            const now = new Date();
 
-    // Date filter
-    if (dateFilter !== "all") {
-        const now = new Date();
+            filtered = filtered.filter((order) => {
+                const created = new Date(order.createdAt);
+                const diffMs = now - created;
+                const diffDays = diffMs / (1000 * 60 * 60 * 24);
 
-        filtered = filtered.filter((order) => {
-            const created = new Date(order.createdAt);
-            const diffMs = now - created;
-            const diffDays = diffMs / (1000 * 60 * 60 * 24);
+                if (dateFilter === "today") {
+                    return created.toDateString() === now.toDateString();
+                }
 
-            if (dateFilter === "today") {
-                return created.toDateString() === now.toDateString();
-            }
+                if (dateFilter === "7days") {
+                    return diffDays <= 7;
+                }
 
-            if (dateFilter === "7days") {
-                return diffDays <= 7;
-            }
+                if (dateFilter === "30days") {
+                    return diffDays <= 30;
+                }
 
-            if (dateFilter === "30days") {
-                return diffDays <= 30;
-            }
+                return true;
+            });
+        }
 
-            return true;
-        });
-    }
-
-    return filtered;
-}, [orders, searchTerm, filter, dateFilter]);
+        return filtered;
+    }, [orders, searchTerm, filter, dateFilter]);
 
     // ================================
     // PAGINATION
@@ -229,14 +229,14 @@ const filteredOrders = useMemo(() => {
                 <div className="history-filters">
                     <div className="history-search">
                         <input
-  type="text"
-  placeholder="Search by number, service, country..."
-  value={searchTerm}
-  onChange={(e) => {
-    setSearchTerm(e.target.value);
-    setCurrentPage(1);
-  }}
-/>
+                            type="text"
+                            placeholder="Search by number, service, country..."
+                            value={searchTerm}
+                            onChange={(e) => {
+                                setSearchTerm(e.target.value);
+                                setCurrentPage(1);
+                            }}
+                        />
                     </div>
 
                     <select
@@ -253,18 +253,18 @@ const filteredOrders = useMemo(() => {
                         <option value="cancelled">Cancelled</option>
                     </select>
 
-                   <select
-    value={dateFilter}
-    onChange={(e) => {
-        setDateFilter(e.target.value);
-        setCurrentPage(1);
-    }}
->
-    <option value="all">All Time</option>
-    <option value="today">Today</option>
-    <option value="7days">Last 7 Days</option>
-    <option value="30days">Last 30 Days</option>
-</select>
+                    <select
+                        value={dateFilter}
+                        onChange={(e) => {
+                            setDateFilter(e.target.value);
+                            setCurrentPage(1);
+                        }}
+                    >
+                        <option value="all">All Time</option>
+                        <option value="today">Today</option>
+                        <option value="7days">Last 7 Days</option>
+                        <option value="30days">Last 30 Days</option>
+                    </select>
                 </div>
                 {loadingPage ? (
                     <div className="loading-spinner">
@@ -272,7 +272,13 @@ const filteredOrders = useMemo(() => {
                         <p>Loading history...</p>
                     </div>
                 ) : filteredOrders.length === 0 ? (
-                    <p className="no-orders">No orders found.</p>
+                    <div className="no-orders">
+                        <div className="no-orders-icon">📭</div>
+                        <h3>No Orders Found</h3>
+                        <p>
+                            We couldn’t find any orders matching your current filters or search.
+                        </p>
+                    </div>
                 ) : (
                     <>
                         {/* DESKTOP TABLE */}
