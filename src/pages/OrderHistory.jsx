@@ -38,33 +38,7 @@ const NumberHistory = ({ darkMode }) => {
             setLoadingPage(false);
         }
     };
-
-    const handleRefund = async (orderid) => {
-        try {
-            setLoadingId(orderid);
-
-            const res = await axios.post(
-                `${API_URL}/api/smspool/cancel`,
-                { orderid },
-                {
-                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-                }
-            );
-
-            if (res.data.success) {
-                alert(`Refunded ₦${res.data.refundedAmount}`);
-                fetchOrders();
-            } else {
-                alert(res.data.message);
-            }
-        } catch (err) {
-            alert("Failed to refund order");
-        } finally {
-            setLoadingId(null);
-        }
-    };
     
-     
      // ================================
     //  HANDLE RESEND
     // ================================
