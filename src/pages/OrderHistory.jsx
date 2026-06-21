@@ -38,8 +38,8 @@ const NumberHistory = ({ darkMode }) => {
             setLoadingPage(false);
         }
     };
-    
-     // ================================
+
+    // ================================
     //  HANDLE RESEND
     // ================================
     // const handleResend = async (orderid) => {
@@ -68,36 +68,36 @@ const NumberHistory = ({ darkMode }) => {
     // };
 
     const handleResend = async (orderid) => {
-    try {
-        setLoadingId(orderid);
+        try {
+            setLoadingId(orderid);
 
-        const res = await axios.post(
-            `${API_URL}/api/smspool/resend`,
-            { orderid },
-            {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
-                },
+            const res = await axios.post(
+                `${API_URL}/api/smspool/resend`,
+                { orderid },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                }
+            );
+
+            if (res.data.success) {
+                if (res.data.otp) {
+                    alert(`New OTP: ${res.data.otp}`);
+                } else {
+                    alert(res.data.message);
+                }
+
+                fetchOrders();
             }
-        );
-
-        if (res.data.success) {
-            if (res.data.otp) {
-                alert(`New OTP: ${res.data.otp}`);
-            } else {
-                alert(res.data.message);
-            }
-
-            fetchOrders();
+        } catch (err) {
+            alert("Failed to resend OTP");
+        } finally {
+            setLoadingId(null);
         }
-    } catch (err) {
-        alert("Failed to resend OTP");
-    } finally {
-        setLoadingId(null);
-    }
-};
+    };
 
-     // ================================
+    // ================================
     //  GET SERVICE NAME
     // ================================
     const getServiceName = (service) => {
@@ -202,175 +202,175 @@ const NumberHistory = ({ darkMode }) => {
                         <option>Last 30 Days</option>
                     </select>
                 </div>
-{loadingPage ? (
-    <div className="loading-spinner">
-        <div className="spinner"></div>
-        <p>Loading history...</p>
-    </div>
-) : filteredOrders.length === 0 ? (
-    <p className="no-orders">No orders found.</p>
-) : (
-    <>
-        {/* DESKTOP TABLE */}
-        <div className="desktop-view">
-            <div className="order-table-scroll">
-                <table className="order-history-table">
-                    <thead>
-                        <tr>
-                            <th>Number</th>
-                            <th>Service</th>
-                            <th>Country</th>
-                            <th>OTP</th>
-                            <th>Status</th>
-                            <th>Date & Time</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
+                {loadingPage ? (
+                    <div className="loading-spinner">
+                        <div className="spinner"></div>
+                        <p>Loading history...</p>
+                    </div>
+                ) : filteredOrders.length === 0 ? (
+                    <p className="no-orders">No orders found.</p>
+                ) : (
+                    <>
+                        {/* DESKTOP TABLE */}
+                        <div className="desktop-view">
+                            <div className="order-table-scroll">
+                                <table className="order-history-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Number</th>
+                                            <th>Service</th>
+                                            <th>Country</th>
+                                            <th>OTP</th>
+                                            <th>Status</th>
+                                            <th>Date & Time</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
 
-                    <tbody>
-                        {paginatedOrders.map((order) => {
-                            const dateInfo = formatDate(order.createdAt);
+                                    <tbody>
+                                        {paginatedOrders.map((order) => {
+                                            const dateInfo = formatDate(order.createdAt);
 
-                            return (
-                                <tr key={order._id}>
-                                    <td>{order.number}</td>
+                                            return (
+                                                <tr key={order._id}>
+                                                    <td>{order.number}</td>
 
-                                    <td>{getServiceName(order.service)}</td>
+                                                    <td>{getServiceName(order.service)}</td>
 
-                                    <td>{order.country?.code || "-"}</td>
+                                                    <td>{order.country?.code || "-"}</td>
 
-                                    <td>
-                                        {order.otp ? (
-                                            <span className="otp-success">{order.otp}</span>
-                                        ) : (
-                                            <span className="otp-waiting">—</span>
-                                        )}
-                                    </td>
+                                                    <td>
+                                                        {order.otp ? (
+                                                            <span className="otp-success">{order.otp}</span>
+                                                        ) : (
+                                                            <span className="otp-waiting">—</span>
+                                                        )}
+                                                    </td>
 
-                                    <td>
-                                        <span className={`status-badge ${order.status}`}>
-                                            {order.status}
-                                        </span>
-                                    </td>
+                                                    <td>
+                                                        <span className={`status-badge ${order.status}`}>
+                                                            {order.status}
+                                                        </span>
+                                                    </td>
 
-                                    <td>
-                                        <div className="date-cell">
-                                            <span className="main-date">
-                                                {dateInfo.formattedDate}
-                                            </span>
-                                            <span className="relative-time">
-                                                {dateInfo.relativeTime}
-                                            </span>
-                                        </div>
-                                    </td>
+                                                    <td>
+                                                        <div className="date-cell">
+                                                            <span className="main-date">
+                                                                {dateInfo.formattedDate}
+                                                            </span>
+                                                            <span className="relative-time">
+                                                                {dateInfo.relativeTime}
+                                                            </span>
+                                                        </div>
+                                                    </td>
 
-                                    <td>
-                                        {["waiting", "received"].includes(order.status) ? (
-    <button
-        className="resend-btn"
-        disabled={loadingId === order.orderid}
-        onClick={() => handleResend(order.orderid)}
-    >
-        {loadingId === order.orderid ? "Sending..." : "Resend"}
-    </button>
-) : (
-    "-"
-)}
-                                    </td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        {/* MOBILE TIMELINE */}
-        <div className="mobile-view">
-            <div className="timeline-list">
-                {paginatedOrders.map((order) => {
-                    const dateInfo = formatDate(order.createdAt);
-
-                    return (
-                        <div className="timeline-card" key={order._id}>
-                            <div className="timeline-dot"></div>
-
-                            <div className="timeline-content">
-                                <div className="timeline-top">
-                                    <h3>{getServiceName(order.service)}</h3>
-
-                                    <span className={`status-badge ${order.status}`}>
-                                        {order.status}
-                                    </span>
-                                </div>
-
-                                <p className="timeline-number">
-                                    {order.number}
-                                </p>
-
-                                <p className="timeline-country">
-                                    {order.country?.code || "-"}
-                                </p>
-
-                                {order.otp && (
-                                    <p className="timeline-otp">
-                                        OTP: <strong>{order.otp}</strong>
-                                    </p>
-                                )}
-
-                                <div className="timeline-bottom">
-                                    <span>{dateInfo.relativeTime}</span>
-
-                                    {["waiting", "received"].includes(order.status) && (
-    <button
-        className="resend-btn"
-        disabled={loadingId === order.orderid}
-        onClick={() => handleResend(order.orderid)}
-    >
-        {loadingId === order.orderid ? "Sending..." : "Resend"}
-    </button>
-)}
-                                </div>
+                                                    <td>
+                                                        {["waiting", "received"].includes(order.status) ? (
+                                                            <button
+                                                                className="resend-btn"
+                                                                disabled={loadingId === order.orderid}
+                                                                onClick={() => handleResend(order.orderid)}
+                                                            >
+                                                                {loadingId === order.orderid ? "Sending..." : "Resend"}
+                                                            </button>
+                                                        ) : (
+                                                            "-"
+                                                        )}
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                    );
-                })}
-            </div>
-        </div>
 
-        {/* PAGINATION */}
-        {totalPages > 1 && (
-            <div className="pagination">
-                <p>
-                    Showing {(currentPage - 1) * ORDERS_PER_PAGE + 1} to{" "}
-                    {Math.min(
-                        currentPage * ORDERS_PER_PAGE,
-                        filteredOrders.length
-                    )}{" "}
-                    of {filteredOrders.length} results
-                </p>
+                        {/* MOBILE TIMELINE */}
+                        <div className="mobile-view">
+                            <div className="timeline-list">
+                                {paginatedOrders.map((order) => {
+                                    const dateInfo = formatDate(order.createdAt);
 
-                <div className="page-buttons">
-                    <button
-                        onClick={() => changePage(currentPage - 1)}
-                        disabled={currentPage === 1}
-                    >
-                        <FiChevronLeft />
-                    </button>
+                                    return (
+                                        <div className="timeline-card" key={order._id}>
+                                            <div className="timeline-dot"></div>
 
-                    <button className="active">{currentPage}</button>
+                                            <div className="timeline-content">
+                                                <div className="timeline-top">
+                                                    <h3>{getServiceName(order.service)}</h3>
 
-                    <button
-                        onClick={() => changePage(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                    >
-                        <FiChevronRight />
-                    </button>
-                </div>
-            </div>
-        )}
-    </>
-)}
+                                                    <span className={`status-badge ${order.status}`}>
+                                                        {order.status}
+                                                    </span>
+                                                </div>
+
+                                                <p className="timeline-number">
+                                                    {order.number}
+                                                </p>
+
+                                                <p className="timeline-country">
+                                                    {order.country?.code || "-"}
+                                                </p>
+
+                                                {order.otp && (
+                                                    <p className="timeline-otp">
+                                                        OTP: <strong>{order.otp}</strong>
+                                                    </p>
+                                                )}
+
+                                                <div className="timeline-bottom">
+                                                    <span>{dateInfo.relativeTime}</span>
+
+                                                    {["waiting", "received"].includes(order.status) && (
+                                                        <button
+                                                            className="resend-btn"
+                                                            disabled={loadingId === order.orderid}
+                                                            onClick={() => handleResend(order.orderid)}
+                                                        >
+                                                            {loadingId === order.orderid ? "Sending..." : "Resend"}
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        {/* PAGINATION */}
+                        {totalPages > 1 && (
+                            <div className="pagination">
+                                <p>
+                                    Showing {(currentPage - 1) * ORDERS_PER_PAGE + 1} to{" "}
+                                    {Math.min(
+                                        currentPage * ORDERS_PER_PAGE,
+                                        filteredOrders.length
+                                    )}{" "}
+                                    of {filteredOrders.length} results
+                                </p>
+
+                                <div className="page-buttons">
+                                    <button
+                                        onClick={() => changePage(currentPage - 1)}
+                                        disabled={currentPage === 1}
+                                    >
+                                        <FiChevronLeft />
+                                    </button>
+
+                                    <button className="active">{currentPage}</button>
+
+                                    <button
+                                        onClick={() => changePage(currentPage + 1)}
+                                        disabled={currentPage === totalPages}
+                                    >
+                                        <FiChevronRight />
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </>
+                )}
             </div>
         </div>
     );
