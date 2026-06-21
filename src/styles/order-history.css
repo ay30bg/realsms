@@ -73,7 +73,7 @@
 }
 
 /* EMPTY STATE */
-.no-orders {
+/* .no-orders {
   width: 100%;
   min-height: 320px;
   display: flex;
@@ -86,6 +86,16 @@
   background: var(--card-bg);
   border: 1px solid var(--border-color);
   box-shadow: var(--shadow);
+  animation: fadeIn 0.3s ease;
+} */
+
+.no-orders {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 40px 24px;
   animation: fadeIn 0.3s ease;
 }
 
