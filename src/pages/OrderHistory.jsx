@@ -17,6 +17,7 @@ const NumberHistory = ({ darkMode }) => {
 
     const [filter, setFilter] = useState("all");
     const [dateFilter, setDateFilter] = useState("all");
+    const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
@@ -111,13 +112,28 @@ const NumberHistory = ({ darkMode }) => {
     // ================================
     // FILTERED ORDERS
     // ================================
-    // const filteredOrders = useMemo(() => {
-    //     if (filter === "all") return orders;
-    //     return orders.filter((o) => o.status?.toLowerCase() === filter.toLowerCase());
-    // }, [orders, filter]);
-
-    const filteredOrders = useMemo(() => {
+const filteredOrders = useMemo(() => {
     let filtered = orders;
+
+    // Search filter
+    if (searchTerm.trim()) {
+        const query = searchTerm.toLowerCase();
+
+        filtered = filtered.filter((order) => {
+            const number = order.number?.toString().toLowerCase() || "";
+            const service = getServiceName(order.service).toLowerCase();
+            const country =
+                order.country?.code?.toLowerCase() ||
+                order.country?.name?.toLowerCase() ||
+                "";
+
+            return (
+                number.includes(query) ||
+                service.includes(query) ||
+                country.includes(query)
+            );
+        });
+    }
 
     // Status filter
     if (filter !== "all") {
@@ -152,7 +168,7 @@ const NumberHistory = ({ darkMode }) => {
     }
 
     return filtered;
-}, [orders, filter, dateFilter]);
+}, [orders, searchTerm, filter, dateFilter]);
 
     // ================================
     // PAGINATION
@@ -212,7 +228,15 @@ const NumberHistory = ({ darkMode }) => {
                 {/* FILTERS */}
                 <div className="history-filters">
                     <div className="history-search">
-                        <input type="text" placeholder="Search by number..." />
+                        <input
+  type="text"
+  placeholder="Search by number, service, country..."
+  value={searchTerm}
+  onChange={(e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1);
+  }}
+/>
                     </div>
 
                     <select
