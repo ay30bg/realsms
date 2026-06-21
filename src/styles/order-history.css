@@ -179,22 +179,14 @@
 }
 
 /* BUTTONS */
-.refund-btn,
 .resend-btn {
   border: none;
   color: white;
   padding: 8px 14px;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 12px;
   font-weight: 600;
-}
-
-.refund-btn {
-  background: linear-gradient(135deg, #be123c, #e11d48);
-}
-
-.resend-btn {
   background: linear-gradient(135deg, #4338ca, #6366f1);
 }
 
