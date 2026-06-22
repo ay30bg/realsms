@@ -181,7 +181,7 @@
 
 .payment-item.selected{
   border:2px solid var(--primary);
-  background: rgba(90, 75, 255, 0.6);
+  background: rgba(90, 75, 255, 0.12);
 }
 
 .summary-box{
