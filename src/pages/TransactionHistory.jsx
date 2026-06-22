@@ -160,7 +160,63 @@
 
 // export default TransactionHistory;
 
-return (
+import React, { useEffect, useState, useMemo } from "react";
+import axios from "axios";
+import "../styles/transaction-history.css";
+
+const API_URL = process.env.REACT_APP_API_URL;
+const TRANSACTIONS_PER_PAGE = 10;
+
+const TransactionHistory = ({ darkMode }) => {
+  const [transactions, setTransactions] = useState([]);
+  const [loadingPage, setLoadingPage] = useState(true);
+  const [filter, setFilter] = useState("all"); // status filter
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    document.title = "Transaction History - RealSMS";
+    fetchTransactions();
+  }, []);
+
+  const fetchTransactions = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/api/transactions`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      if (res.data.success) setTransactions(res.data.data);
+    } catch (err) {
+      console.error("Fetch Transactions Error:", err.response?.data);
+    } finally {
+      setLoadingPage(false);
+    }
+  };
+
+  // Filter transactions by status
+  const filteredTransactions = useMemo(() => {
+    if (filter === "all") return transactions;
+    return transactions.filter(
+      (t) => t.status?.toLowerCase() === filter.toLowerCase()
+    );
+  }, [transactions, filter]);
+
+  const totalPages = Math.ceil(filteredTransactions.length / TRANSACTIONS_PER_PAGE);
+
+  const paginatedTransactions = filteredTransactions.slice(
+    (currentPage - 1) * TRANSACTIONS_PER_PAGE,
+    currentPage * TRANSACTIONS_PER_PAGE
+  );
+
+  const changePage = (page) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+  };
+
+  const formatDate = (date) => {
+    if (!date) return "-";
+    return new Date(date).toLocaleString();
+  };
+
+ return (
   <div className={`transaction-page ${darkMode ? "dark" : ""}`}>
     <div className="transaction-card">
       {/* HEADER */}
@@ -314,3 +370,6 @@ return (
     </div>
   </div>
 );
+
+export default TransactionHistory;
+
