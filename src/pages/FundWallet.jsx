@@ -242,10 +242,43 @@ const FundWallet = () => {
               />
             </div>
 
-            <button className="payment-btn">
-              Continue To Payment
-              <FiArrowRight />
-            </button>
+           <hr />
+
+<div className="step-title">
+  <span>3</span>
+  Top-Up Summary
+</div>
+
+<div className="summary-box">
+
+  <div className="summary-row">
+    <span>Amount</span>
+    <strong>
+      ₦{Number(amount).toLocaleString()}
+    </strong>
+  </div>
+
+  <div className="summary-row">
+    <span>Processing Fee</span>
+    <strong>₦0</strong>
+  </div>
+
+  <hr />
+
+  <div className="summary-row total">
+    <span>You will receive</span>
+
+    <h2>
+      ₦{Number(amount).toLocaleString()}
+    </h2>
+  </div>
+
+</div>
+
+<button className="payment-btn">
+  Continue To Payment
+  <FiArrowRight />
+</button>
 
           </div>
 
