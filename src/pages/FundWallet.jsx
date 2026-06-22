@@ -256,7 +256,7 @@ import React, { useState } from "react";
 import { FiArrowRight } from "react-icons/fi";
 import "../styles/fundwallet.css";
 
-const quickAmounts = [1000, 5000, 10000, 25000, 50000];
+const quickAmounts = [1000, 5000, 10000, 50000];
 
 const FundWallet = () => {
     const [amount, setAmount] = useState(5000);
