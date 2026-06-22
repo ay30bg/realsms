@@ -112,12 +112,27 @@
   cursor:pointer;
 }
 
+.payment-left{
+display:flex;
+align-items:center;
+gap:14px;
+}
+
+.payment-logo{
+width:40px;
+height:40px;
+object-fit:contain;
+border-radius:8px;
+}
+
 .payment-item h4{
-  font-size:14px;
+font-size:14px;
+margin-bottom:4px;
 }
 
 .payment-item small{
-  font-size:12px;
+font-size:12px;
+color:var(--secondary-text);
 }
 
 .payment-item.selected{
