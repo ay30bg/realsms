@@ -87,13 +87,20 @@ const NumberHistory = ({ darkMode }) => {
                     </thead>
 
                     <tbody>
-                        {[...Array(6)].map((_, i) => (
+                        {[...Array(8)].map((_, i) => (
                             <tr key={i}>
-                                {[...Array(7)].map((_, j) => (
-                                    <td key={j}>
-                                        <div className="skeleton-line"></div>
-                                    </td>
-                                ))}
+                                <td><div className="sk number"></div></td>
+                                <td><div className="sk service"></div></td>
+                                <td><div className="sk country"></div></td>
+                                <td><div className="sk otp"></div></td>
+                                <td><div className="sk badge"></div></td>
+                                <td>
+                                    <div className="date-skeleton">
+                                        <div className="sk date"></div>
+                                        <div className="sk time"></div>
+                                    </div>
+                                </td>
+                                <td><div className="sk button"></div></td>
                             </tr>
                         ))}
                     </tbody>
@@ -107,14 +114,23 @@ const MobileSkeleton = () => {
     return (
         <div className="mobile-view">
             <div className="timeline-list">
-                {[...Array(4)].map((_, i) => (
+                {[...Array(5)].map((_, i) => (
                     <div className="timeline-card skeleton-card" key={i}>
-                        <div className="skeleton-dot"></div>
+                        <div className="timeline-dot skeleton-dot"></div>
 
                         <div className="timeline-content">
-                            <div className="skeleton-line large"></div>
-                            <div className="skeleton-line medium"></div>
-                            <div className="skeleton-line small"></div>
+                            <div className="timeline-top">
+                                <div className="sk mobile-title"></div>
+                                <div className="sk badge"></div>
+                            </div>
+
+                            <div className="sk mobile-number"></div>
+                            <div className="sk mobile-country"></div>
+
+                            <div className="timeline-bottom">
+                                <div className="sk mobile-time"></div>
+                                <div className="sk button"></div>
+                            </div>
                         </div>
                     </div>
                 ))}
