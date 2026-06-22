@@ -18,11 +18,11 @@ background: var(--bg-color);
   font-size: 14px;
 }
 
-.fund-grid{
+/* .fund-grid{
 display:grid;
 grid-template-columns:2fr 1fr;
 gap:24px;
-}
+} */
 
 .fund-card{
 background:var(--card-bg,#fff);
