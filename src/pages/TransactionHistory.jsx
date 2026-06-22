@@ -18,6 +18,85 @@ const TransactionHistory = ({ darkMode }) => {
         fetchTransactions();
     }, []);
 
+    const TransactionTableSkeleton = () => {
+    return (
+        <div className="desktop-view">
+            <div className="transaction-table-scroll">
+                <table className="transaction-table">
+                    <thead>
+                        <tr>
+                            <th>Reference</th>
+                            <th>Payment Method</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {[...Array(8)].map((_, i) => (
+                            <tr key={i}>
+                                <td>
+                                    <div className="sk tx-reference"></div>
+                                </td>
+
+                                <td>
+                                    <div className="sk badge"></div>
+                                </td>
+
+                                <td>
+                                    <div className="sk tx-amount"></div>
+                                </td>
+
+                                <td>
+                                    <div className="date-skeleton">
+                                        <div className="sk date"></div>
+                                        <div className="sk time"></div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div className="sk badge"></div>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+};
+
+
+const TransactionMobileSkeleton = () => {
+    return (
+        <div className="mobile-view">
+            <div className="timeline-list">
+                {[...Array(5)].map((_, i) => (
+                    <div className="timeline-card skeleton-card" key={i}>
+                        <div className="timeline-dot skeleton-dot"></div>
+
+                        <div className="timeline-content">
+                            <div className="timeline-top">
+                                <div className="sk mobile-amount"></div>
+                                <div className="sk badge"></div>
+                            </div>
+
+                            <div className="sk mobile-reference"></div>
+
+                            <div className="sk mobile-provider"></div>
+
+                            <div className="timeline-bottom">
+                                <div className="sk mobile-time"></div>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
     const fetchTransactions = async () => {
         try {
             const res = await axios.get(`${API_URL}/api/transactions`, {
@@ -185,12 +264,12 @@ const TransactionHistory = ({ darkMode }) => {
                     </select>
                 </div>
 
-                {loadingPage ? (
-                    <div className="loading-spinner">
-                        <div className="spinner"></div>
-                        <p>Loading transactions...</p>
-                    </div>
-                ) : filteredTransactions.length === 0 ? (
+               {loadingPage ? (
+    <>
+        <TransactionTableSkeleton />
+        <TransactionMobileSkeleton />
+    </>
+) : filteredTransactions.length === 0 ? (
                     <div className="no-transactions">
                         <div className="no-orders-icon">💳</div>
                         <h3>No Transactions Found</h3>
