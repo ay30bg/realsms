@@ -5,10 +5,6 @@ font-size: 14px;
 background: var(--bg-color);
 }
 
-/* .fund-header{
-margin-bottom:25px;
-} */
-
 .fund-wallet-header h1 {
   font-size: 32px;
   font-weight: 800;
@@ -123,6 +119,34 @@ cursor:pointer;
 border:2px solid #5b3df5;
 }
 
+.summary-box{
+padding:20px;
+border:1px solid #e5e7eb;
+border-radius:18px;
+margin-bottom:25px;
+background:rgba(255,255,255,.02);
+}
+
+.summary-row{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:18px;
+}
+
+.summary-row span{
+color:#94a3b8;
+}
+
+.summary-row h2{
+font-size:28px;
+color:#5b3df5;
+}
+
+.summary-row.total{
+margin-bottom:0;
+}
+
 .payment-btn{
 width:100%;
 padding:18px;
@@ -142,16 +166,6 @@ justify-content:center;
 align-items:center;
 gap:10px;
 cursor:pointer;
-}
-
-.summary-row{
-display:flex;
-justify-content:space-between;
-margin-bottom:18px;
-}
-
-.summary-row h2{
-color:#5b3df5;
 }
 
 .benefit{
