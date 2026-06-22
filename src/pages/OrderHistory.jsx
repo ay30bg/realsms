@@ -363,7 +363,7 @@ const NumberHistory = ({ darkMode }) => {
 
                                     return (
                                         <div className="timeline-card" key={order._id}>
-                                            <div className="timeline-dot"></div>
+                                            <div className={`timeline-dot ${order.status}`}></div>
 
                                             <div className="timeline-content">
                                                 <div className="timeline-top">
