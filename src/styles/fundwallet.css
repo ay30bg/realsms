@@ -47,7 +47,7 @@
   width:24px;
   height:24px;
   border-radius:50%;
-  background:var(--primary);
+  background: linear-gradient(90deg, #6f5eff, #563bff);
   color:#fff;
   display:flex;
   justify-content:center;
@@ -210,8 +210,7 @@
 
 .summary-row h2{
   font-size:22px;
-  /* color:var(--primary); */
-  background: linear-gradient(90deg, #6f5eff, #563bff);
+  color: linear-gradient(90deg, #6f5eff, #563bff);
 }
 
 .summary-row.total{
