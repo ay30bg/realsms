@@ -107,10 +107,33 @@ const TransactionHistory = ({ darkMode }) => {
     setCurrentPage(page);
   };
 
-  const formatDate = (date) => {
-    if (!date) return "-";
-    return new Date(date).toLocaleString();
-  };
+ const formatDate = (date) => {
+  if (!date) return { formattedDate: "-", relativeTime: "-" };
+
+  const created = new Date(date);
+  const now = new Date();
+
+  const diffMs = now - created;
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
+
+  let relativeTime = "";
+
+  if (diffMins < 1) {
+    relativeTime = "Just now";
+  } else if (diffMins < 60) {
+    relativeTime = `${diffMins} min${diffMins > 1 ? "s" : ""} ago`;
+  } else if (diffHours < 24) {
+    relativeTime = `${diffHours} hr${diffHours > 1 ? "s" : ""} ago`;
+  } else {
+    relativeTime = `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
+  }
+
+  const formattedDate = created.toLocaleDateString();
+
+  return { formattedDate, relativeTime };
+};
 
   return (
     <div className={`transaction-page ${darkMode ? "dark" : ""}`}>
@@ -192,7 +215,18 @@ const TransactionHistory = ({ darkMode }) => {
                   <tbody>
                     {paginatedTransactions.map((tx) => (
                       <tr key={tx._id}>
-                        <td>{formatDate(tx.createdAt)}</td>
+                        <td>
+  {(() => {
+    const dateInfo = formatDate(tx.createdAt);
+
+    return (
+      <div className="date-cell">
+        <span className="main-date">{dateInfo.formattedDate}</span>
+        <span className="relative-time">{dateInfo.relativeTime}</span>
+      </div>
+    );
+  })()}
+</td>
 
                         <td>
                           <span
@@ -261,7 +295,7 @@ const TransactionHistory = ({ darkMode }) => {
                       </p>
 
                       <div className="timeline-bottom">
-                        <span>{formatDate(tx.createdAt)}</span>
+                        <span>{formatDate(tx.createdAt).relativeTime}</span>
                       </div>
                     </div>
                   </div>
