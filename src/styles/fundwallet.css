@@ -7,14 +7,14 @@ color:var(--text-color);
 margin-bottom:25px;
 } */
 
-.history-header h1 {
+.fund-header h1 {
   font-size: 32px;
   font-weight: 800;
   margin-bottom: 6px;
   color: var(--text-color);
 }
 
-.history-header p {
+.fund-header p {
   color: var(--secondary-text);
   margin-bottom: 22px;
   font-size: 14px;
