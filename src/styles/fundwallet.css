@@ -47,7 +47,7 @@
   width:24px;
   height:24px;
   border-radius:50%;
-  background: linear-gradient(90deg, #6f5eff, #563bff);
+  background: var(--primary);
   color:#fff;
   display:flex;
   justify-content:center;
@@ -175,13 +175,13 @@
 .payment-item input[type="radio"]{
   width:18px;
   height:18px;
-  accent-color: #5A4BFF;
+  accent-color: var(--primary);
   cursor:pointer;
 }
 
 .payment-item.selected{
-  border:2px solid #5A4BFF;
-  background: rgba(90, 75, 255, 0.12);
+  border:2px solid var(--primary);
+  background: var(--primary-soft);
 }
 
 .summary-box{
@@ -223,7 +223,7 @@
   border:none;
   border-radius:12px;
   margin-top:16px;
-  background: linear-gradient(90deg, #6f5eff, #563bff);
+  background: var(--primary);
   color:#fff;
   font-size:14px;
   font-weight:600;
