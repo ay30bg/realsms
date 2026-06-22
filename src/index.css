@@ -82,13 +82,13 @@ body[data-theme="dark"] {
   --shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
 
    
-  --primary: #5A4BFF;
+  --primary: #7C6CFF;
   --success: #22c55e;
   --danger: #ef4444;
   --info: #3b82f6;
   --warning: #fb923c;
 
-  --primary-soft: rgba(90, 75, 255, 0.12);
+  --primary-soft: rgba(124, 108, 255, 0.2);
   --danger-soft: rgba(239, 68, 68, 0.18);
 
   --skeleton-bg: #1e293b;
