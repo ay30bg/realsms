@@ -204,10 +204,10 @@ const TransactionHistory = ({ darkMode }) => {
                 <table className="transaction-table">
                   <thead>
                     <tr>
-                      <th>Date</th>
                       <th>Reference</th>
                       <th>Payment Method</th>
                       <th>Amount</th>
+                      <th>Date</th>
                       <th>Status</th>
                     </tr>
                   </thead>
@@ -218,15 +218,6 @@ const TransactionHistory = ({ darkMode }) => {
                         <td>
   {(() => {
     const dateInfo = formatDate(tx.createdAt);
-
-    return (
-      <div className="date-cell">
-        <span className="main-date">{dateInfo.formattedDate}</span>
-        <span className="relative-time">{dateInfo.relativeTime}</span>
-      </div>
-    );
-  })()}
-</td>
 
                         <td>
                           <span
@@ -251,6 +242,15 @@ const TransactionHistory = ({ darkMode }) => {
                         </td>
 
                         <td>₦{tx.amount?.toLocaleString() || 0}</td>
+
+                           return (
+      <div className="date-cell">
+        <span className="main-date">{dateInfo.formattedDate}</span>
+        <span className="relative-time">{dateInfo.relativeTime}</span>
+      </div>
+    );
+  })()}
+</td>
 
                         <td>
                           <span
