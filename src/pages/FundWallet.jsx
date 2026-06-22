@@ -253,7 +253,7 @@
 // export default FundWallet;
 
 import React, { useState } from "react";
-import { FiArrowRight, FiShield, FiZap } from "react-icons/fi";
+import { FiArrowRight } from "react-icons/fi";
 import "../styles/fundwallet.css";
 
 const quickAmounts = [1000, 5000, 10000, 25000, 50000];
