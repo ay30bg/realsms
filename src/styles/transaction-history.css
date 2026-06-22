@@ -2,20 +2,15 @@
    PAGE
 ========================= */
 .transaction-page {
-  padding: 20px;
-
-  background: var(--bg-color);
   color: var(--text-color);
-
-  transition:
-    background 0.3s ease,
-    color 0.3s ease;
+  font-size: 14px;
+  background: var(--bg-color);
 }
 
 /* =========================
    CARD
 ========================= */
-.transaction-card {
+/* .transaction-card {
   background: var(--card-bg);
 
   color: var(--text-color);
@@ -32,7 +27,7 @@
     background 0.3s ease,
     color 0.3s ease,
     border-color 0.3s ease;
-}
+} */
 
 /* =========================
    TITLE
