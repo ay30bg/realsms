@@ -254,6 +254,10 @@
 
 import React, { useState } from "react";
 import { FiArrowRight } from "react-icons/fi";
+
+import flutterwaveLogo from "../assets/flutterwave.png";
+import korapayLogo from "../assets/korapay.png";
+
 import "../styles/fundwallet.css";
 
 const quickAmounts = [1000, 5000, 10000, 50000];
@@ -328,16 +332,25 @@ const FundWallet = () => {
                         </div>
 
                         <div
-                            className={`payment-item ${payment === "flutterwave"
-                                ? "selected" : ""
+                            className={`payment-item ${payment === "flutterwave" ? "selected" : ""
                                 }`}
                             onClick={() => setPayment("flutterwave")}
                         >
-                            <div>
-                                <h4>Flutterwave</h4>
-                                <small>
-                                    Cards • Bank Transfer • USSD
-                                </small>
+                            <div className="payment-left">
+
+                                <img
+                                    src={flutterwaveLogo}
+                                    alt="Flutterwave"
+                                    className="payment-logo"
+                                />
+
+                                <div>
+                                    <h4>Flutterwave</h4>
+                                    <small>
+                                        Cards • Bank Transfer • USSD
+                                    </small>
+                                </div>
+
                             </div>
 
                             <input
@@ -347,17 +360,27 @@ const FundWallet = () => {
                             />
                         </div>
 
+
                         <div
-                            className={`payment-item ${payment === "korapay"
-                                ? "selected" : ""
+                            className={`payment-item ${payment === "korapay" ? "selected" : ""
                                 }`}
                             onClick={() => setPayment("korapay")}
                         >
-                            <div>
-                                <h4>Korapay</h4>
-                                <small>
-                                    Cards • Bank Transfer
-                                </small>
+                            <div className="payment-left">
+
+                                <img
+                                    src={korapayLogo}
+                                    alt="Korapay"
+                                    className="payment-logo"
+                                />
+
+                                <div>
+                                    <h4>Korapay</h4>
+                                    <small>
+                                        Cards • Bank Transfer
+                                    </small>
+                                </div>
+
                             </div>
 
                             <input
