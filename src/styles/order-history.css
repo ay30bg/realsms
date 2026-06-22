@@ -145,6 +145,68 @@
   }
 }
 
+/* Skeleton Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -500px 0;
+  }
+  100% {
+    background-position: 500px 0;
+  }
+}
+
+.skeleton-line,
+.skeleton-dot {
+  background: linear-gradient(
+    90deg,
+    var(--hover-bg, #e5e7eb) 25%,
+    rgba(255,255,255,0.35) 50%,
+    var(--hover-bg, #e5e7eb) 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 1.6s infinite linear;
+}
+
+/* Desktop row skeleton */
+.skeleton-line {
+  height: 14px;
+  width: 100%;
+  border-radius: 8px;
+  min-width: 70px;
+}
+
+/* Mobile skeleton */
+.skeleton-card {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.skeleton-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.skeleton-line.large {
+  height: 16px;
+  width: 60%;
+  margin-bottom: 12px;
+}
+
+.skeleton-line.medium {
+  height: 14px;
+  width: 80%;
+  margin-bottom: 10px;
+}
+
+.skeleton-line.small {
+  height: 12px;
+  width: 40%;
+}
+
 /* VIEW SWITCH */
 .desktop-view {
   display: block;
