@@ -200,6 +200,12 @@
   margin-top:10px;
 }
 
+.mobile-time{
+  width:70px;
+  height:14px;
+  margin-top:12px;
+}
+
 .date-skeleton{
   display:flex;
   flex-direction:column;
