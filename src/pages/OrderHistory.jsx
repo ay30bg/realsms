@@ -110,6 +110,7 @@ const NumberHistory = ({ darkMode }) => {
     );
 };
 
+    
 const MobileSkeleton = () => {
     return (
         <div className="mobile-view">
@@ -336,26 +337,12 @@ const MobileSkeleton = () => {
                         <option value="30days">Last 30 Days</option>
                     </select>
                 </div>
-               {loadingPage ? (
-  window.innerWidth <= 768 ? (
-    <>
-      <div className="history-header-skeleton">
-        <div className="sk title"></div>
-        <div className="sk subtitle"></div>
-
-        <div className="history-filter-skeleton mobile">
-          <div className="sk search"></div>
-          <div className="sk select"></div>
-          <div className="sk select"></div>
-        </div>
-      </div>
-
-      <MobileSkeleton />
-    </>
-  ) : (
+              {loadingPage ? (
+<>
     <TableSkeleton />
-  )
-) : filteredOrders.length === 0 ? (
+    <MobileSkeleton />
+</>
+): filteredOrders.length === 0 ? (
                     <div className="no-orders">
                         <div className="no-orders-icon">📭</div>
                         <h3>No Orders Found</h3>
