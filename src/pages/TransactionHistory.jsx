@@ -216,7 +216,7 @@ const TransactionHistory = ({ darkMode }) => {
     return new Date(date).toLocaleString();
   };
 
- return (
+return (
   <div className={`transaction-page ${darkMode ? "dark" : ""}`}>
     <div className="transaction-card">
       {/* HEADER */}
