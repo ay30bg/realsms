@@ -19,16 +19,18 @@
 }
 
 .fund-card{
-  background:var(--card-bg,#fff);
+  background:var(--card-bg);
   border-radius:16px;
   padding:22px;
-  border:1px solid rgba(255,255,255,.05);
+  border:1px solid var(--border-color);
   margin-bottom:18px;
+  box-shadow:var(--shadow);
 }
 
 .section-heading{
   margin-bottom:22px;
   font-size:17px;
+  color:var(--text-color);
 }
 
 .step-title{
@@ -38,13 +40,14 @@
   font-size:13px;
   font-weight:600;
   margin-bottom:12px;
+  color:var(--text-color);
 }
 
 .step-title span{
   width:24px;
   height:24px;
   border-radius:50%;
-  background:#5b3df5;
+  background:var(--primary);
   color:#fff;
   display:flex;
   justify-content:center;
@@ -56,13 +59,15 @@
   display:flex;
   overflow:hidden;
   border-radius:12px;
-  border:1px solid #e2e8f0;
+  border:1px solid var(--border-color);
   margin-bottom:14px;
+  background:var(--input-bg);
 }
 
 .amount-box span{
   padding:14px;
-  background:#f8fafc;
+  background:var(--hover-bg);
+  color:var(--text-color);
   font-weight:600;
 }
 
@@ -73,6 +78,11 @@
   outline:none;
   font-size:14px;
   background:transparent;
+  color:var(--text-color);
+}
+
+.amount-box input::placeholder{
+  color:var(--secondary-text);
 }
 
 .quick-amounts{
@@ -85,20 +95,27 @@
 .amount-btn{
   padding:10px 16px;
   border-radius:10px;
-  background:none;
-  border:1px solid #ddd;
+  background:var(--card-bg);
+  border:1px solid var(--border-color);
+  color:var(--text-color);
   font-size:12px;
   cursor:pointer;
+  transition:.3s;
+}
+
+.amount-btn:hover{
+  background:var(--hover-bg);
 }
 
 .amount-btn.active{
-  border-color:#5b3df5;
-  color:#5b3df5;
+  border-color:var(--primary);
+  color:var(--primary);
+  background:var(--primary-soft);
 }
 
 .limit{
   font-size:12px;
-  color:#94a3b8;
+  color:var(--secondary-text);
 }
 
 .payment-item{
@@ -107,44 +124,38 @@
   align-items:center;
   padding:16px;
   border-radius:12px;
-  border:1px solid #e5e7eb;
+  border:1px solid var(--border-color);
   margin-bottom:12px;
   cursor:pointer;
+  background:var(--card-bg);
+  transition:.3s;
 }
 
-.payment-left{
-display:flex;
-align-items:center;
-gap:14px;
-}
-
-.payment-logo{
-width:40px;
-height:40px;
-object-fit:contain;
-border-radius:8px;
+.payment-item:hover{
+  background:var(--hover-bg);
 }
 
 .payment-item h4{
-font-size:14px;
-margin-bottom:4px;
+  font-size:14px;
+  color:var(--text-color);
 }
 
 .payment-item small{
-font-size:12px;
-color:var(--secondary-text);
+  font-size:12px;
+  color:var(--secondary-text);
 }
 
 .payment-item.selected{
-  border:2px solid #5b3df5;
+  border:2px solid var(--primary);
+  background:var(--primary-soft);
 }
 
 .summary-box{
   padding:16px;
-  border:1px solid #e5e7eb;
+  border:1px solid var(--border-color);
   border-radius:12px;
   margin-bottom:18px;
-  background:rgba(255,255,255,.02);
+  background:var(--hover-bg);
 }
 
 .summary-row{
@@ -156,12 +167,16 @@ color:var(--secondary-text);
 }
 
 .summary-row span{
-  color:#94a3b8;
+  color:var(--secondary-text);
+}
+
+.summary-row p{
+  color:var(--text-color);
 }
 
 .summary-row h2{
   font-size:22px;
-  color:#5b3df5;
+  color:var(--primary);
 }
 
 .summary-row.total{
@@ -176,10 +191,10 @@ color:var(--secondary-text);
   margin-top:16px;
   background:linear-gradient(
     90deg,
-    #5b3df5,
-    #6a5af9
+    var(--primary),
+    color-mix(in srgb, var(--primary) 80%, white)
   );
-  color:white;
+  color:#fff;
   font-size:14px;
   font-weight:600;
   display:flex;
@@ -187,11 +202,16 @@ color:var(--secondary-text);
   align-items:center;
   gap:8px;
   cursor:pointer;
+  transition:.3s;
+}
+
+.payment-btn:hover{
+  opacity:.9;
 }
 
 hr{
   border:none;
   height:1px;
-  background:#eee;
+  background:var(--border-color);
   margin:18px 0;
 }
