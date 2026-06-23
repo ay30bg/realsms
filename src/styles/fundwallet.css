@@ -245,3 +245,20 @@ hr{
   background:var(--border-color);
   margin:18px 0;
 }
+
+@media (max-width: 768px){
+
+  .fund-card,
+  .payment-item,
+  .summary-box,
+  .payment-btn{
+    border-radius:10px;
+  }
+
+  .amount-box,
+  .amount-btn,
+  .payment-logo{
+    border-radius:8px;
+  }
+
+}
