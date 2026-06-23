@@ -454,68 +454,70 @@ const FundWallet = () => {
     const [payment, setPayment] = useState("flutterwave");
     const [loading, setLoading] = useState(false);
 
-    const handlePayment = async () => {
-        try {
-            if (!amount || Number(amount) < 1000) {
-                return alert("Minimum funding amount is ₦1,000");
-            }
-
-            setLoading(true);
-
-            const token = localStorage.getItem("token");
-
-            let endpoint = "";
-
-            if (payment === "flutterwave") {
-                endpoint = "/api/flutterwave/init";
-            }
-
-            if (payment === "korapay") {
-                endpoint = "/api/korapay/init";
-            }
-
-            const response = await axios.post(
-                `${API_URL}${endpoint}`,
-                {
-                    amount: Number(amount)
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            );
-
-            /*
-            Backend should return:
-            {
-               paymentLink:"https://checkout..."
-            }
-            */
-
-            const paymentLink =
-                response.data.paymentLink ||
-                response.data.checkout_url ||
-                response.data.link;
-
-            if (!paymentLink) {
-                throw new Error("Checkout URL missing");
-            }
-
-            window.location.href = paymentLink;
-
-        } catch (err) {
-            console.log(err);
-
-            alert(
-                err?.response?.data?.message ||
-                "Payment initialization failed"
-            );
-        } finally {
-            setLoading(false);
+const handlePayment = async () => {
+    try {
+        if (!amount || Number(amount) < 1000) {
+            return alert("Minimum funding amount is ₦1,000");
         }
-    };
 
+        setLoading(true);
+
+        const token = localStorage.getItem("token");
+
+        let endpoint = "";
+
+        if (payment === "flutterwave") {
+            endpoint = "/api/flutterwave/init";
+        }
+
+        if (payment === "korapay") {
+            endpoint = "/api/korapay/init";
+        }
+
+        const response = await axios.post(
+            `${API_URL}${endpoint}`,
+            {
+                amount: Number(amount)
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        console.log("Payment Response:", response.data);
+
+        // Match your current backend controllers
+        let checkoutUrl = "";
+
+        if (payment === "flutterwave") {
+            checkoutUrl = response.data.paymentUrl;
+        }
+
+        if (payment === "korapay") {
+            checkoutUrl = response.data.checkout_url;
+        }
+
+        if (!checkoutUrl) {
+            throw new Error("Checkout URL missing");
+        }
+
+        window.location.href = checkoutUrl;
+
+    } catch (err) {
+        console.log(err);
+
+        alert(
+            err?.response?.data?.message ||
+            "Payment initialization failed"
+        );
+    } finally {
+        setLoading(false);
+    }
+};
+   
+    
     return (
         <div className="fund-page">
 
@@ -703,17 +705,17 @@ const FundWallet = () => {
 
                         </div>
 
-                        <button
-                            className="payment-btn"
-                            onClick={handlePayment}
-                            disabled={loading}
-                        >
-                            {loading
-                                ? "Redirecting..."
-                                : "Continue To Payment"}
+                       <button
+    className="payment-btn"
+    onClick={handlePayment}
+    disabled={loading}
+>
+    {loading
+        ? "Redirecting..."
+        : "Continue To Payment"}
 
-                            <FiArrowRight />
-                        </button>
+    <FiArrowRight />
+</button>
 
                     </div>
 
