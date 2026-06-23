@@ -44,45 +44,6 @@ const slides = [
     { image: banner3 },
 ];
 
-// const activities = [
-//     {
-//         icon: <FiMessageSquare />,
-//         iconClass: "sms-icon",
-//         email: "johndoe@gmail.com",
-//         action: "purchased US Signal Number",
-//         status: "Completed",
-//         time: "20 mins ago",
-//         success: true,
-//     },
-//     {
-//         icon: <FiShield />,
-//         iconClass: "vpn-icon",
-//         email: "marysmith@yahoo.com",
-//         action: "purchased IP Vanish Logs",
-//         status: "Completed",
-//         time: "30 mins ago",
-//         success: true,
-//     },
-//     {
-//         icon: <FiMessageSquare />,
-//         iconClass: "sms-icon",
-//         email: "alexbrown@hotmail.com",
-//         action: "purchased US WhatsApp Number",
-//         status: "Completed",
-//         time: "50 mins ago",
-//         success: true,
-//     },
-//     {
-//         icon: <FaWallet />,
-//         iconClass: "wallet-icon",
-//         email: "samwilson@gmail.com",
-//         action: "funded 5000 successfully",
-//         status: "Success",
-//         time: "1 hour ago",
-//         success: true,
-//     },
-// ];
-
 const Dashboard = ({ darkMode }) => {
     const { balance, loading } = useBalance();
 
@@ -401,7 +362,7 @@ const Dashboard = ({ darkMode }) => {
     <p className="empty-text">No recent activities</p>
 ) : (
     <>
-        {liveActivities.map((activity, index) => (
+       liveActivities.slice(0, 4).map((activity, index) => (
             <div key={index} className="activity-row">
                 <div className="activity-left">
                     <div
