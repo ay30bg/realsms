@@ -136,7 +136,7 @@ const Dashboard = ({ darkMode }) => {
             const token = localStorage.getItem("token");
 
             const { data } = await axios.get(
-                `${API_URL}/api/dashboard/overview`,
+                `${API_URL}/api/smspool/overview`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
