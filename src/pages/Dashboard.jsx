@@ -495,24 +495,6 @@ const Dashboard = ({ darkMode }) => {
                     </div>
 
                     <div className="overview-grid">
-                        {/* <div className="overview-box">
-                            <FiSmartphone />
-                            <h2>3</h2>
-                            <p>Numbers Owned</p>
-                        </div>
-
-                        <div className="overview-box">
-                            <FiGlobe />
-                            <h2>5</h2>
-                            <p>Countries Covered</p>
-                        </div>
-
-                        <div className="overview-box">
-                            <FiTrendingUp />
-                            <h2>98.7%</h2>
-                            <p>Success Rate</p>
-                        </div>*/
-
                             <div className="overview-box">
         <FiSmartphone />
         <h2>{accountOverview.numbersOwned}</h2>
