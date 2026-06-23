@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   FiUser,
-  FiLock,
   FiMoon,
-  FiShield,
-  FiMonitor,
   FiChevronRight,
   FiPlayCircle,
   FiLogOut,
@@ -72,12 +69,6 @@ export default function Settings() {
       path: "/profile",
     },
     {
-      icon: <FiLock />,
-      title: "Password",
-      desc: "Change account password",
-      path: "/password",
-    },
-    {
       icon: <FiMoon />,
       title: "Appearance",
       desc: "Customize theme and colors",
@@ -89,25 +80,13 @@ export default function Settings() {
      desc: "Watch guides and learn how to use RealSMS",
      path: "/tutorials",
     },
-    {
-      icon: <FiShield />,
-      title: "Security",
-      desc: "2FA and protection settings",
-      path: "/security",
-    },
-    {
-      icon: <FiMonitor />,
-      title: "Sessions",
-      desc: "Manage logged-in devices",
-      path: "/sessions",
-    },
   ];
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
 
-    window.location.href = "/login";
+    window.location.href = "/";
   };
 
   return (
