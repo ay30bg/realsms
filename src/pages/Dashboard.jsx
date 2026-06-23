@@ -362,51 +362,51 @@ const Dashboard = ({ darkMode }) => {
     <p className="empty-text">No recent activities</p>
 ) : (
     <>
-       liveActivities.slice(0, 4).map((activity, index) => (
-            <div key={index} className="activity-row">
-                <div className="activity-left">
-                    <div
-                        className={`activity-icon ${
-                            activity.type === "wallet"
-                                ? "wallet-icon"
-                                : activity.type === "sms"
-                                ? "sms-icon"
-                                : "vpn-icon"
-                        }`}
-                    >
-                        {activity.type === "wallet" && <FaWallet />}
-                        {activity.type === "sms" && <FiMessageSquare />}
-                        {activity.type === "vpn" && <FiShield />}
-                    </div>
-
-                    <div className="activity-content">
-                        <p className="activity-text">
-                            <span className="activity-email-inline">
-                                {maskEmail(activity.email)}
-                            </span>{" "}
-                            {activity.action}
-                        </p>
-                    </div>
+    {liveActivities.slice(0, 4).map((activity, index) => (
+        <div key={index} className="activity-row">
+            <div className="activity-left">
+                <div
+                    className={`activity-icon ${
+                        activity.type === "wallet"
+                            ? "wallet-icon"
+                            : activity.type === "sms"
+                            ? "sms-icon"
+                            : "vpn-icon"
+                    }`}
+                >
+                    {activity.type === "wallet" && <FaWallet />}
+                    {activity.type === "sms" && <FiMessageSquare />}
+                    {activity.type === "vpn" && <FiShield />}
                 </div>
 
-                <div className="activity-right">
-                    <span
-                        className={
-                            activity.success
-                                ? "status success"
-                                : "status failed"
-                        }
-                    >
-                        {activity.status}
-                    </span>
-
-                    <small className="activity-time">
-                        {new Date(activity.createdAt).toLocaleString()}
-                    </small>
+                <div className="activity-content">
+                    <p className="activity-text">
+                        <span className="activity-email-inline">
+                            {maskEmail(activity.email)}
+                        </span>{" "}
+                        {activity.action}
+                    </p>
                 </div>
             </div>
-        ))}
-    </>
+
+            <div className="activity-right">
+                <span
+                    className={
+                        activity.success
+                            ? "status success"
+                            : "status failed"
+                    }
+                >
+                    {activity.status}
+                </span>
+
+                <small className="activity-time">
+                    {new Date(activity.createdAt).toLocaleString()}
+                </small>
+            </div>
+        </div>
+    ))}
+</>
 )}
                 </div>
 
