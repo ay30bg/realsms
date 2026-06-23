@@ -105,66 +105,37 @@ const Dashboard = ({ darkMode }) => {
         return () => clearInterval(interval);
     }, []);
 
-//     useEffect(() => {
-//     const fetchActivities = async () => {
-//         try {
-//             const token = localStorage.getItem("token");
-
-//             const { data } = await axios.get(
-//                 `${API_URL}/api/activity/live`,
-//                 {
-//                     headers: {
-//                         Authorization: `Bearer ${token}`,
-//                     },
-//                 }
-//             );
-
-//             setLiveActivities(data || []);
-//         } catch (err) {
-//             console.error(
-//                 "Failed to fetch live activities:",
-//                 err.response?.data || err.message
-//             );
-//             setLiveActivities([]);
-//         } finally {
-//             setLoadingActivities(false);
-//         }
-//     };
-
-//     fetchActivities();
-// }, []);
-
     useEffect(() => {
-    const fetchActivities = async () => {
-        try {
-            const token = localStorage.getItem("token");
+        const fetchActivities = async () => {
+            try {
+                const token = localStorage.getItem("token");
 
-            const { data } = await axios.get(
-                `${API_URL}/api/activity/live`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
+                const { data } = await axios.get(
+                    `${API_URL}/api/activity/live`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
 
-            setLiveActivities(data || []);
-        } catch (err) {
-            console.error(err);
-            setLiveActivities([]);
-        } finally {
-            setLoadingActivities(false);
-        }
-    };
+                setLiveActivities(data || []);
+            } catch (err) {
+                console.error(err);
+                setLiveActivities([]);
+            } finally {
+                setLoadingActivities(false);
+            }
+        };
 
-    // initial fetch
-    fetchActivities();
+        // initial fetch
+        fetchActivities();
 
-    // 🔥 auto refresh every 5 seconds
-    const interval = setInterval(fetchActivities, 5000);
+        // 🔥 auto refresh every 5 seconds
+        const interval = setInterval(fetchActivities, 5000);
 
-    return () => clearInterval(interval);
-}, []);
+        return () => clearInterval(interval);
+    }, []);
 
     const nextSlide = () =>
         setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -175,21 +146,21 @@ const Dashboard = ({ darkMode }) => {
         );
 
     const timeAgo = (date) => {
-    const now = new Date();
-    const past = new Date(date);
-    const diff = Math.floor((now - past) / 1000); // seconds
+        const now = new Date();
+        const past = new Date(date);
+        const diff = Math.floor((now - past) / 1000); // seconds
 
-    if (diff < 60) return `${diff}s ago`;
+        if (diff < 60) return `${diff}s ago`;
 
-    const mins = Math.floor(diff / 60);
-    if (mins < 60) return `${mins}m ago`;
+        const mins = Math.floor(diff / 60);
+        if (mins < 60) return `${mins}m ago`;
 
-    const hrs = Math.floor(mins / 60);
-    if (hrs < 24) return `${hrs}h ago`;
+        const hrs = Math.floor(mins / 60);
+        if (hrs < 24) return `${hrs}h ago`;
 
-    const days = Math.floor(hrs / 24);
-    return `${days}d ago`;
-};
+        const days = Math.floor(hrs / 24);
+        return `${days}d ago`;
+    };
 
     if (loading || loadingStats) {
         return (
@@ -295,7 +266,7 @@ const Dashboard = ({ darkMode }) => {
                             Any issue not reported within 24 hours may not be attended to.
                         </p>
 
-                         <p>Wallet funding available via Flutterwave & Korapay.</p>
+                        <p>Wallet funding available via Flutterwave & Korapay.</p>
 
                         <div className="notice-channel">
                             <p>Join our Telegram channel for updates and announcements:</p>
@@ -310,7 +281,7 @@ const Dashboard = ({ darkMode }) => {
                                 <span>Join Telegram Channel</span>
                             </a>
 
-                             
+
                         </div>
 
                     </div>
@@ -405,58 +376,57 @@ const Dashboard = ({ darkMode }) => {
                     <div className="section-header">
                         <h3>Live Activities</h3>
                     </div>
-{loadingActivities ? (
-    <p className="loading-text">Loading activities...</p>
-) : liveActivities.length === 0 ? (
-    <p className="empty-text">No recent activities</p>
-) : (
-    <>
-    {liveActivities.slice(0, 4).map((activity, index) => (
-        <div key={index} className="activity-row">
-            <div className="activity-left">
-                <div
-                    className={`activity-icon ${
-                        activity.type === "wallet"
-                            ? "wallet-icon"
-                            : activity.type === "sms"
-                            ? "sms-icon"
-                            : "vpn-icon"
-                    }`}
-                >
-                    {activity.type === "wallet" && <FaWallet />}
-                    {activity.type === "sms" && <FiMessageSquare />}
-                    {activity.type === "vpn" && <FiShield />}
-                </div>
+                    {loadingActivities ? (
+                        <p className="loading-text">Loading activities...</p>
+                    ) : liveActivities.length === 0 ? (
+                        <p className="empty-text">No recent activities</p>
+                    ) : (
+                        <>
+                            {liveActivities.slice(0, 4).map((activity, index) => (
+                                <div key={index} className="activity-row">
+                                    <div className="activity-left">
+                                        <div
+                                            className={`activity-icon ${activity.type === "wallet"
+                                                    ? "wallet-icon"
+                                                    : activity.type === "sms"
+                                                        ? "sms-icon"
+                                                        : "vpn-icon"
+                                                }`}
+                                        >
+                                            {activity.type === "wallet" && <FaWallet />}
+                                            {activity.type === "sms" && <FiMessageSquare />}
+                                            {activity.type === "vpn" && <FiShield />}
+                                        </div>
 
-                <div className="activity-content">
-                    <p className="activity-text">
-                        <span className="activity-email-inline">
-                            {maskEmail(activity.email)}
-                        </span>{" "}
-                        {activity.action}
-                    </p>
-                </div>
-            </div>
+                                        <div className="activity-content">
+                                            <p className="activity-text">
+                                                <span className="activity-email-inline">
+                                                    {maskEmail(activity.email)}
+                                                </span>{" "}
+                                                {activity.action}
+                                            </p>
+                                        </div>
+                                    </div>
 
-            <div className="activity-right">
-                <span
-                    className={
-                        activity.success
-                            ? "status success"
-                            : "status failed"
-                    }
-                >
-                    {activity.status}
-                </span>
+                                    <div className="activity-right">
+                                        <span
+                                            className={
+                                                activity.success
+                                                    ? "status success"
+                                                    : "status failed"
+                                            }
+                                        >
+                                            {activity.status}
+                                        </span>
 
-                <small className="activity-time">
-                   {timeAgo(activity.createdAt)}
-                </small>
-            </div>
-        </div>
-    ))}
-</>
-)}
+                                        <small className="activity-time">
+                                            {timeAgo(activity.createdAt)}
+                                        </small>
+                                    </div>
+                                </div>
+                            ))}
+                        </>
+                    )}
                 </div>
 
                 <div className="overview-card">
