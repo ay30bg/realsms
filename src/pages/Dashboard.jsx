@@ -52,6 +52,10 @@ const Dashboard = ({ darkMode }) => {
         totalTransactions: 0,
     });
 
+    const [smsStats, setSmsStats] = useState({
+    smsReceived: 0,
+});
+
     const [loadingStats, setLoadingStats] = useState(true);
     const [showNotice, setShowNotice] = useState(false);
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -96,6 +100,29 @@ const Dashboard = ({ darkMode }) => {
 
         fetchTransactionStats();
     }, []);
+
+    useEffect(() => {
+    const fetchSmsStats = async () => {
+        try {
+            const token = localStorage.getItem("token");
+
+            const { data } = await axios.get(
+                `${API_URL}/api/sms/stats`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            setSmsStats(data);
+        } catch (err) {
+            console.error("SMS stats error:", err);
+        }
+    };
+
+    fetchSmsStats();
+}, []);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -364,7 +391,7 @@ const Dashboard = ({ darkMode }) => {
                     </div>
                     <div>
                         <p>SMS Received</p>
-                        <h2>1,284</h2>
+                        <h2>{smsStats.smsReceived.toLocaleString()}</h2>
                         <span>All time</span>
                     </div>
                 </div>
