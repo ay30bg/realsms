@@ -56,6 +56,12 @@ const Dashboard = ({ darkMode }) => {
     smsReceived: 0,
 });
 
+    const [accountOverview, setAccountOverview] = useState({
+    numbersOwned: 0,
+    countriesCovered: 0,
+    successRate: 0,
+});
+
     const [loadingStats, setLoadingStats] = useState(true);
     const [showNotice, setShowNotice] = useState(false);
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -122,6 +128,33 @@ const Dashboard = ({ darkMode }) => {
     };
 
     fetchSmsStats();
+}, []);
+
+    useEffect(() => {
+    const fetchOverview = async () => {
+        try {
+            const token = localStorage.getItem("token");
+
+            const { data } = await axios.get(
+                `${API_URL}/api/dashboard/overview`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            setAccountOverview({
+                numbersOwned: data?.numbersOwned ?? 0,
+                countriesCovered: data?.countriesCovered ?? 0,
+                successRate: data?.successRate ?? 0,
+            });
+        } catch (err) {
+            console.error("Overview error:", err);
+        }
+    };
+
+    fetchOverview();
 }, []);
 
     useEffect(() => {
@@ -462,7 +495,7 @@ const Dashboard = ({ darkMode }) => {
                     </div>
 
                     <div className="overview-grid">
-                        <div className="overview-box">
+                        {/* <div className="overview-box">
                             <FiSmartphone />
                             <h2>3</h2>
                             <p>Numbers Owned</p>
@@ -478,13 +511,33 @@ const Dashboard = ({ darkMode }) => {
                             <FiTrendingUp />
                             <h2>98.7%</h2>
                             <p>Success Rate</p>
-                        </div>
+                        </div>*/
+
+                            <div className="overview-box">
+        <FiSmartphone />
+        <h2>{accountOverview.numbersOwned}</h2>
+        <p>Numbers Owned</p>
+    </div>
+
+    <div className="overview-box">
+        <FiGlobe />
+        <h2>{accountOverview.countriesCovered}</h2>
+        <p>Countries Covered</p>
+    </div>
+
+    <div className="overview-box">
+        <FiTrendingUp />
+        <h2>{accountOverview.successRate}%</h2>
+        <p>Success Rate</p>
+    </div>
 
                         <div className="overview-box">
                             <FiZap />
                             <h2>8.4s</h2>
                             <p>Avg Delivery Time</p>
-                        </div>
+                        </div> 
+
+                        
                     </div>
                 </div>
             </div>
