@@ -1,5 +1,5 @@
 import React from "react";
-import "./videoTutorials.css";
+import "../styles/videoTutorials.css";
 import {
   FiSearch,
   FiPlay,
