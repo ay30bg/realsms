@@ -50,17 +50,6 @@
   margin-bottom: 30px;
 }
 
-/* .search-box {
-  flex: 1;
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  padding: 14px 18px;
-} */
-
-
 .search-box {
   flex: 1;
   height: 46px;
@@ -85,6 +74,10 @@
   outline: none;
   color: var(--text-color);
   font-size: 16px;
+}
+
+.search-box input::placeholder {
+  font-size: 13px;
 }
 
 .tutorial-actions select  {
