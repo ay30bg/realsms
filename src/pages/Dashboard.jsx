@@ -341,7 +341,7 @@ const Dashboard = ({ darkMode }) => {
                                 <span>Join Telegram Channel</span>
                             </a>
       <a
-        href="‎https://whatsapp.com/channel/0029Vb7gYbk2UPBOlyQZDl0Q"
+        href="‎whatsapp.com/channel/0029Vb7gYbk2UPBOlyQZDl0Q"
         target="_blank"
         rel="noopener noreferrer"
         className="notice-whatsapp-link"
