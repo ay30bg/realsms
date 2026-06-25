@@ -587,6 +587,7 @@
     white-space:nowrap;
     overflow:hidden;
     text-overflow:ellipsis;
+    color: var(--secondary-text);
     flex:1;
   }
 
