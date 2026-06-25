@@ -9,8 +9,6 @@ import {
   FiBookOpen,
 } from "react-icons/fi";
 
-const navigate = useNavigate();
-
 const tutorials = [
   {
     title: "1. Getting Started",
