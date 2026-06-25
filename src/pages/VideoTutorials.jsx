@@ -63,6 +63,9 @@ const tutorials = [
 ];
 
 const VideoTutorials = () => {
+
+  const navigate = useNavigate();
+  
   return (
     <div className="video-page">
 
