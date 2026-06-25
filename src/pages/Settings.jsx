@@ -78,7 +78,7 @@ export default function Settings() {
      icon: <FiPlayCircle />,
      title: "Video Tutorials",
      desc: "Watch guides and learn how to use RealSMS",
-     path: "/tutorials",
+     path: "/settings/video-tutorials",
     },
   ];
 
