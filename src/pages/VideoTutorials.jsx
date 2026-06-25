@@ -1,11 +1,15 @@
 import React from "react";
 import "../styles/videoTutorials.css";
+import { useNavigate } from "react-router-dom";
 import {
+  FiArrowLeft,
   FiSearch,
   FiPlay,
   FiArrowRight,
   FiBookOpen,
 } from "react-icons/fi";
+
+const navigate = useNavigate();
 
 const tutorials = [
   {
