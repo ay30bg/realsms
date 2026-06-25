@@ -95,6 +95,10 @@
   border: none;
   outline: none;
   color: var(--text-color);
+  font-size: 16px;
+}
+
+.search-container input::placeholder {
   font-size: 13px;
 }
 
