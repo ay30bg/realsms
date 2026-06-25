@@ -560,7 +560,7 @@
     display: block;
   }
 
-  .pagination {
+  /* .pagination {
     flex-direction: column;
     gap: 12px;
     align-items: flex-start;
@@ -570,5 +570,31 @@
     margin-left: 0;
     width: 100%;
     justify-content: flex-end;
+  } */
+
+  .pagination {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: nowrap;
+  }
+
+  .pagination p {
+    flex: 1;
+    font-size: 11px;
+    margin: 0;
+  }
+
+  .page-buttons {
+    margin-left: auto;
+    width: auto;
+    justify-content: flex-end;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .page-buttons button {
+    padding: 6px 10px;
   }
 }
