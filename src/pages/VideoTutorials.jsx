@@ -130,16 +130,15 @@ const VideoTutorials = () => {
           </div>
 
           <div>
-            <h3>New to SMS Marketing?</h3>
+            <h3>Need More Help?</h3>
             <p>
-              Watch our complete tutorial playlist to
-              master the platform.
+              Contact support if you need assistance.
             </p>
           </div>
         </div>
 
         <button>
-          Watch Full Playlist
+         Contact Support
           <FiArrowRight />
         </button>
       </div>
