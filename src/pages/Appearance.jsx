@@ -23,7 +23,7 @@ export default function Appearance() {
     <div className="appearance-page">
       <div className="appearance-header">
         <button
-          className="back-btn"
+          className="back-button"
           onClick={() => navigate(-1)}
         >
           <FiArrowLeft />
