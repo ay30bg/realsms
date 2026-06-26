@@ -69,6 +69,33 @@ const NumberHistory = ({ darkMode }) => {
     //     }
     // };
 
+//     const handleRefund = async (orderid) => {
+//     try {
+//         setLoadingId(orderid);
+
+//         const res = await axios.post(
+//             `${API_URL}/api/smspool/cancel`,
+//             { orderid },
+//             {
+//                 headers: {
+//                     Authorization: `Bearer ${localStorage.getItem("token")}`,
+//                 },
+//             }
+//         );
+
+//         if (res.data.success) {
+//             alert("Refund successful");
+//             fetchOrders();
+//         } else {
+//             alert(res.data.message || "Refund failed");
+//         }
+//     } catch (err) {
+//         alert("Failed to process refund");
+//     } finally {
+//         setLoadingId(null);
+//     }
+// };
+
     const handleRefund = async (orderid) => {
     try {
         setLoadingId(orderid);
@@ -84,13 +111,44 @@ const NumberHistory = ({ darkMode }) => {
         );
 
         if (res.data.success) {
-            alert("Refund successful");
-            fetchOrders();
+
+            // Update order immediately
+            setOrders(prev =>
+                prev.map(order =>
+                    order.orderid === orderid
+                        ? {
+                              ...order,
+                              status: "refunded",
+                          }
+                        : order
+                )
+            );
+
+            // Update wallet immediately
+            if (res.data.newBalance !== undefined) {
+                localStorage.setItem(
+                    "walletBalance",
+                    res.data.newBalance
+                );
+
+                window.dispatchEvent(
+                    new CustomEvent("balanceUpdated", {
+                        detail: res.data.newBalance,
+                    })
+                );
+            }
+
+            alert(
+                `Refunded ₦${res.data.refundedAmount || ""}`
+            );
+
         } else {
             alert(res.data.message || "Refund failed");
         }
+
     } catch (err) {
-        alert("Failed to process refund");
+        console.error(err);
+        alert("Refund failed");
     } finally {
         setLoadingId(null);
     }
