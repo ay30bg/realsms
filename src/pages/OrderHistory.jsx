@@ -74,7 +74,7 @@ const NumberHistory = ({ darkMode }) => {
         setLoadingId(orderid);
 
         const res = await axios.post(
-            `${API_URL}/api/smspool/refund`,
+            `${API_URL}/api/smspool/cancel`,
             { orderid },
             {
                 headers: {
