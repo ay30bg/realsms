@@ -416,7 +416,7 @@
   cursor: pointer;
   font-size: 12px;
   font-weight: 600;
-  background: linear-gradient(135deg, var(--primary), #ef4444);
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
 }
 
 /* PAGINATION */
