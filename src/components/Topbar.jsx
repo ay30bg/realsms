@@ -223,17 +223,31 @@ const Topbar = ({ toggleSidebar }) => {
                   </div>
                 )}
 
-              {[...notifications.support,
-                ...notifications.activity,
-                ...notifications.admin
-              ].map((n, i) => (
-                <div key={i} className="notif-item">
-                  <div className="notif-content">
-                    <span>{n.text}</span>
-                    <small>{formatNotifDate(n.time)}</small>
-                  </div>
-                </div>
-              ))}
+             {[
+  ...notifications.support.map((n) => ({
+    ...n,
+    type: "support",
+  })),
+  ...notifications.activity.map((n) => ({
+    ...n,
+    type: "activity",
+  })),
+  ...notifications.admin.map((n) => ({
+    ...n,
+    type: "admin",
+  })),
+].map((n, i) => (
+  <div
+    key={n._id || i}
+    className="notif-item"
+    onClick={() => handleNotificationClick(n, n.type)}
+  >
+    <div className="notif-content">
+      <span>{n.text}</span>
+      <small>{formatNotifDate(n.time)}</small>
+    </div>
+  </div>
+))}
             </div>
           )}
         </div>
