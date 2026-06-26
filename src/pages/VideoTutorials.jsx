@@ -95,8 +95,8 @@ const VideoTutorials = () => {
         <select>
           <option>All Categories</option>
           <option>SMS</option>
-          <option>API</option>
-          <option>Campaigns</option>
+          <option>Logs</option>
+          <option>Deposit</option>
         </select>
       </div>
 
