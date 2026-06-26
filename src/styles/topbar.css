@@ -215,23 +215,6 @@
   color: #ef4444 !important;
 }
 
-/* =========================
-   NOTIFICATION DROPDOWN
-========================= */
-/* .notification-dropdown {
-  position: absolute;
-  top: 52px;
-  right: 0;
-  width: 300px;
-  max-height: 400px;
-  overflow-y: auto;
-  background: var(--card-bg);
-  border-radius: 12px;
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border-color);
-  padding: 14px;
-} */
-
   /* =========================
    NOTIFICATION DROPDOWN
 ========================= */
@@ -389,6 +372,26 @@
 
   .notif-header {
     text-align: center;
+  }
+
+   .notif-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .notif-text {
+    flex: 1;
+    max-width: 65%;
+  }
+
+  .notif-time {
+    min-width: 85px;
+    text-align: right;
+    white-space: nowrap;
+    font-size: 10px;
+    color: var(--secondary-text);
   }
 }
 
