@@ -327,14 +327,13 @@ useEffect(() => {
 
         try {
             const res = await axios.get(
-                `${API_URL}/api/smspool/services`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Cache-Control": "no-cache",
-                    },
-                }
-            );
+    `${API_URL}/api/smspool/services`,
+    {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+);
 
             const data = Array.isArray(res.data)
                 ? res.data
