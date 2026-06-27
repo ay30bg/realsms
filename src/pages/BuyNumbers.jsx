@@ -339,52 +339,6 @@ const BuyNumbers = ({ darkMode }) => {
 //                 ? res.data
 //                 : [];
 
-//             // const withPrice = data.map((s) => {
-
-//             //     // Get all pricing for selected country
-//             //     const countryPrices =
-//             //         s.pricing?.filter(
-//             //             (p) =>
-//             //                 String(p.countryID) ===
-//             //                 String(selectedCountry.ID)
-//             //         ) || [];
-
-//             //     // Sort prices low → high
-//             //     const priceObj = countryPrices.sort(
-//             //         (a, b) =>
-//             //             Number(a.priceNGN) -
-//             //             Number(b.priceNGN)
-//             //     )[0];
-
-//             //     const serviceName =
-//             //         s.name?.toLowerCase();
-
-//             //     return {
-//             //         ...s,
-
-//             //         // use lowest available price
-//             //         price:
-//             //             priceObj?.priceNGN || null,
-
-//             //         logo:
-//             //             SERVICE_LOGOS[
-//             //                 serviceName
-//             //             ] ||
-//             //             `https://img.logo.dev/search?query=${encodeURIComponent(
-//             //                 s.name || ""
-//             //             )}&token=${
-//             //                 process.env.REACT_APP_LOGO_DEV_KEY
-//             //             }`,
-
-//             //         popular:
-//             //             POPULAR_SERVICES.some(
-//             //                 (name) =>
-//             //                     name.toLowerCase() ===
-//             //                     serviceName
-//             //             ),
-//             //     };
-//             // });
-
 //             const withPrice = data.map((s) => {
 
 //     const countryPrices =
@@ -457,10 +411,7 @@ const BuyNumbers = ({ darkMode }) => {
 useEffect(() => {
     if (!selectedCountry || !token) return;
 
-    const fetchServices = async (
-        showLoader = true
-    ) => {
-
+    const fetchServices = async (showLoader = true) => {
         if (showLoader) {
             setLoadingServices(true);
         }
@@ -475,85 +426,105 @@ useEffect(() => {
                 }
             );
 
-            const data = Array.isArray(
-                res.data
-            )
+            const data = Array.isArray(res.data)
                 ? res.data
                 : [];
 
-            const withPrice = data.map(
-                (s) => {
+            const withPrice = data
+                .map((s) => {
 
+                    // Get all prices for selected country
                     const countryPrices =
                         s.pricing?.filter(
                             (p) =>
-                                String(
-                                    p.countryID
-                                ) ===
-                                String(
-                                    selectedCountry.ID
-                                )
+                                String(p.countryID) ===
+                                String(selectedCountry.ID)
                         ) || [];
 
+                    // Get cheapest pool
                     const priceObj =
                         countryPrices.sort(
                             (a, b) =>
-                                Number(
-                                    a.priceNGN
-                                ) -
-                                Number(
-                                    b.priceNGN
-                                )
+                                Number(a.priceNGN) -
+                                Number(b.priceNGN)
                         )[0];
+
+                    const serviceName =
+                        s.name?.toLowerCase();
 
                     return {
                         ...s,
+
+                        // Lowest available price
                         price:
-                            priceObj?.priceNGN ||
-                            null,
+                            priceObj?.priceNGN || null,
+
+                        // Save pool
                         pool:
-                            priceObj?.pool ||
-                            null,
+                            priceObj?.pool || null,
+
+                        logo:
+                            SERVICE_LOGOS[
+                                serviceName
+                            ] ||
+                            `https://img.logo.dev/search?query=${encodeURIComponent(
+                                s.name || ""
+                            )}&token=${
+                                process.env.REACT_APP_LOGO_DEV_KEY
+                            }`,
+
+                        popular:
+                            POPULAR_SERVICES.some(
+                                (name) =>
+                                    name.toLowerCase() ===
+                                    serviceName
+                            ),
                     };
-                }
-            );
+                })
+
+                // Services with available prices first
+                .sort((a, b) => {
+                    if (a.price && !b.price)
+                        return -1;
+
+                    if (!a.price && b.price)
+                        return 1;
+
+                    return 0;
+                });
 
             setServices(withPrice);
 
         } catch (err) {
-
             console.error(
                 "Fetch services error:",
                 err
             );
 
+            setServices([]);
         } finally {
-
             if (showLoader) {
                 setLoadingServices(false);
             }
         }
     };
 
-    // Initial fetch
+    // Initial load
     fetchServices();
 
-    // Refresh prices every 30s
-    const interval = setInterval(
-        () => {
-            fetchServices(false);
-        },
-        30000
-    );
+    // Refresh prices every 30 seconds
+    const interval = setInterval(() => {
+        fetchServices(false);
+    }, 30000);
 
-    return () =>
-        clearInterval(interval);
+    return () => clearInterval(interval);
 
 }, [
     selectedCountry,
     token,
     API_URL
 ]);
+
 
     // ---------------- COUNTRY CHANGE ----------------
     const handleCountryChange = (e) => {
