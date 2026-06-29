@@ -211,15 +211,24 @@ const VideoTutorials = () => {
             Loading...
           </h3>
 
-        ) : filteredTutorials
-          .length ===
-          0 ? (
+      ) : filteredTutorials.length === 0 ? (
 
-          <h3>
-            No tutorials found
-          </h3>
+  <div className="no-tutorials">
+    <div className="no-tutorials-icon">
+      🎬
+    </div>
 
-        ) : (
+    <h3>
+      No Tutorials Found
+    </h3>
+
+    <p>
+      We couldn’t find any tutorials matching your
+      search or selected category.
+    </p>
+  </div>
+
+) : (
 
           filteredTutorials.map(
             (
