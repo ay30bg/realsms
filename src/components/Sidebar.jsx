@@ -10,7 +10,6 @@ import {
   FiPlusCircle,
   FiHeadphones,
   FiFileText,
-  FiLogOut,
   FiPlayCircle,
   FiChevronDown,
   FiSettings,
@@ -108,12 +107,12 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
   }, [setUnreadMessages]);
 
   // LOGOUT
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+  // const handleLogout = () => {
+  //   localStorage.removeItem("token");
+  //   localStorage.removeItem("user");
 
-    window.location.href = "/";
-  };
+  //   window.location.href = "/";
+  // };
 
   const handleNavClick = () => {
     if (isMobile) toggleSidebar();
