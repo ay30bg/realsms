@@ -202,7 +202,7 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
             <span>Fund Wallet</span>
           </NavLink>
 
-          <NavLink to="/video-tutorial" className={({ isActive }) =>
+          <NavLink to="/video-tutorials" className={({ isActive }) =>
             isActive ? "sidebar__link active" : "sidebar__link"
           } onClick={handleNavClick}>
             <FiPlayCircle />
