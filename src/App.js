@@ -31,6 +31,7 @@ import KorapayFund from "./pages/KorapayFund";
 import FlutterwaveFund from "./pages/FlutterwaveFund";
 import USDTFund from "./pages/FundWalletUSDT";
 import Settings from "./pages/Settings";
+import Profile from "./pages/Profile";
 import Appearance from "./pages/Appearance";
 import VideoTutorials from "./pages/VideoTutorials";
 
@@ -68,6 +69,7 @@ function App() {
                     <Route path="/order-history" element={<OrderHistory />} />
                     <Route path="/logs-history" element={<LogsHistory />} />
                     <Route path="/settings" element={<Settings />} />
+                    <Route path="/settings/profile" element={<Profile />} />
                     <Route path="/settings/appearance" element={<Appearance />} />
                     <Route path="/video-tutorials" element={<VideoTutorials />} />
                     <Route path="/transaction-history" element={<TransactionHistory />} />
