@@ -1,5 +1,7 @@
 // ProfileSettings.jsx
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FiArrowLeft } from "react-icons/fi";
 import "../styles/profile.css";
 
 const Profile = () => {
@@ -7,6 +9,8 @@ const Profile = () => {
     firstName: "John",
     lastName: "Doe",
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
