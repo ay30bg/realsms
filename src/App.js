@@ -69,7 +69,7 @@ function App() {
                     <Route path="/logs-history" element={<LogsHistory />} />
                     <Route path="/settings" element={<Settings />} />
                     <Route path="/settings/appearance" element={<Appearance />} />
-                    <Route path="/settings/video-tutorials" element={<VideoTutorials />} />
+                    <Route path="/video-tutorials" element={<VideoTutorials />} />
                     <Route path="/transaction-history" element={<TransactionHistory />} />
                     <Route path="/fund-wallet" element={<FundWallet />} />
                     <Route
