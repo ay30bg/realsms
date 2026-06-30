@@ -1,6 +1,6 @@
 // ProfileSettings.jsx
 import React, { useState } from "react";
-import "./profileSettings.css";
+import "../styles/profile.css";
 
 const Profile = () => {
   const [formData, setFormData] = useState({
