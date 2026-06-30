@@ -142,19 +142,50 @@
 
 /* Mobile */
 @media (max-width: 768px) {
-   .appearance-card {
+   /* .appearance-card {
     flex-direction: column;
     align-items: flex-start;
     gap: 14px;
     border-radius: 14px;
+  } */
+
+   /* Mobile */
+@media (max-width:768px){
+
+  .appearance-card{
+    flex-direction: row; /* keep horizontal */
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    border-radius: 14px;
+    padding: 16px;
   }
 
-  .theme-selector {
+  .setting-content{
+    flex: 1;
+    min-width: 0;
+  }
+
+  .setting-content h4{
+    font-size: 13px;
+  }
+
+  .setting-content p{
+    font-size: 11px;
+  }
+
+  .theme-selector{
     width: 100%;
   }
 
-  .theme-selector button {
+  .theme-selector button{
     flex: 1;
     justify-content: center;
   }
+
+  .switch{
+    flex-shrink: 0;
+  }
+
+}
 }
