@@ -1,23 +1,27 @@
 .profile-settings{
-width:100%;
-background:var(--bg-color,#f7f8fc);
-min-height:100vh;
+  min-height: 100vh;
+  padding: 0;
+  background: var(--bg-color);
+  color: var(--text-color);
 }
 
-.settings-header{
-margin-bottom:30px;
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
 }
 
-.settings-header h1{
-font-size:38px;
-font-weight:700;
-margin-bottom:8px;
-color:var(--text-color,#111827);
+.profile-header h1 {
+  margin: 0;
+  font-size: 22px;
+  color: var(--text-color);
 }
 
-.settings-header p{
-font-size:15px;
-color:#6b7280;
+.profile-header p {
+  margin: 4px 0 0;
+  color: var(--secondary-text);
+  font-size: 12px;
 }
 
 .settings-card{
