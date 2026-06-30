@@ -194,23 +194,6 @@
   }
 }
 
-/* Mobile */
-
-@media (max-width:768px){
-
-  .tutorial-skeleton .thumbnail{
-    height:160px;
-  }
-
-  .tutorial-title{
-    height:14px;
-  }
-
-  .tutorial-desc{
-    height:10px;
-  }
-}
-
 /* GRID */
 .tutorial-grid {
   display: grid;
@@ -541,6 +524,18 @@
 
   .tutorial-actions select {
     width: 100%;
+  }
+
+  .tutorial-skeleton .thumbnail{
+    height:160px;
+  }
+
+  .tutorial-title{
+    height:14px;
+  }
+
+  .tutorial-desc{
+    height:10px;
   }
 
   .tutorial-footer {
